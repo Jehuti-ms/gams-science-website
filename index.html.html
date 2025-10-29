@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gams Science Department</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --secondary: #159895;
+            --accent: #57C5B6;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            padding: 0;
+            line-height: 1.2;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 140px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: var(--shadow);
+            padding: 1.5rem 0;
+        }
+
+        .sidebar-menu {
+            padding: 0 1rem;
+        }
+
+        .sidebar-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-item > a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--dark);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .sidebar-item > a:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-item > a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-submenu {
+            padding-left: 2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .sidebar-item.active .sidebar-submenu {
+            max-height: 1000px;
+        }
+
+        .sidebar-submenu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: var(--transition);
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .sidebar-submenu a:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--dark);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            background-color: white;
+            margin: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .content-header h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            gap: 0.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--gray);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            padding: 1rem;
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-footer {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #144c63;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .compact-calendar {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+            max-width: 400px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            background: #e9ecef;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .calendar-day-header {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .calendar-day {
+            background: white;
+            padding: 0.5rem;
+            min-height: 40px;
+            border: 1px solid #e9ecef;
+            position: relative;
+            font-size: 0.8rem;
+        }
+
+        .calendar-day.empty {
+            background: #f8f9fa;
+        }
+
+        .day-number {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .event-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+
+        .event-form {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(26, 95, 122, 0.25);
+            outline: none;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .file-item {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .file-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .file-name {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-meta {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .drive-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .shop-item {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .shop-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .shop-icon {
+            font-size: 3rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+
+        .coming-soon {
+            background: var(--light);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .coming-soon i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: block;
+            }
+
+            nav {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary);
+                padding: 1rem;
+                box-shadow: var(--shadow);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+            }
+
+            nav.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .main-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+
+            .content {
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .compact-calendar {
+                max-width: 100%;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h1>Gams Science Department</h1>
+            </div>
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="admin">Department Admin</a></li>
+                    <li><a href="#" class="nav-link" data-page="resources">Subject Resources</a></li>
+                    <li><a href="#" class="nav-link" data-page="exams">Examinations</a></li>
+                    <li><a href="#" class="nav-link" data-page="hr">Human Resources</a></li>
+                    <li><a href="#" class="nav-link" data-page="library">Library</a></li>
+                    <li><a href="#" class="nav-link" data-page="shop">Shop</a></li>
+                    <li><a href="#" class="nav-link" data-page="blog">Blog</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <div class="sidebar-item active">
+                    <a href="#" class="sidebar-link" data-page="home"><i class="fas fa-home"></i> Home</a>
+                </div>
+                
+                <div class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-page="admin"><i class="fas fa-cogs"></i> Department Admin</a>
+                    <div class="sidebar-submenu">
+                        <a href="#" class="sidebar-link" data-page="meetings">Meetings</a>
+                        <a href="#" class="sidebar-link" data-page="documents">Documents</a>
+                        <a href="#" class="sidebar-link" data-page="timetables">Timetables</a>
+                        <a href="#" class="sidebar-link" data-page="estimates">Estimates</a>
+                        <a href="#" class="sidebar-link" data-page="budget">Budget</a>
+                        <a href="#" class="sidebar-link" data-page="marksheets">Marksheets</a>
+                        <a href="#" class="sidebar-link" data-page="appraisals">Teacher Appraisals</a>
+                        <a href="#" class="sidebar-link" data-page="inventory">Inventory</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-page="resources"><i class="fas fa-book"></i> Subject Resources</a>
+                    <div class="sidebar-submenu">
+                        <a href="#" class="sidebar-link" data-page="curriculum">Curriculum</a>
+                        <a href="#" class="sidebar-link" data-page="schemes">Schemes of work</a>
+                        <a href="#" class="sidebar-link" data-page="syllabus">Syllabus</a>
+                        <a href="#" class="sidebar-link" data-page="lesson-plans">Lesson plans</a>
+                        <a href="#" class="sidebar-link" data-page="work-log">Work log</a>
+                        <a href="#" class="sidebar-link" data-page="subject-resources">Resources by Subject</a>
+                        <a href="#" class="sidebar-link" data-page="notes">Notes, Videos & Powerpoints</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-page="subjects"><i class="fas fa-atom"></i> Science Subjects</a>
+                    <div class="sidebar-submenu">
+                        <a href="#" class="sidebar-link" data-page="integrated">Integrated Science</a>
+                        <a href="#" class="sidebar-link" data-page="human-bio">Human & Social Biology</a>
+                        <a href="#" class="sidebar-link" data-page="biology">Biology</a>
+                        <a href="#" class="sidebar-link" data-page="chemistry">Chemistry</a>
+                        <a href="#" class="sidebar-link" data-page="physics">Physics</a>
+                        <a href="#" class="sidebar-link" data-page="agricultural">Agricultural Science</a>
+                        <a href="#" class="sidebar-link" data-page="horticulture">Amenity Horticulture</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-page="exams"><i class="fas fa-file-alt"></i> Examinations</a>
+                    <div class="sidebar-submenu">
+                        <a href="#" class="sidebar-link" data-page="exam-admin">Exam Admin</a>
+                        <a href="#" class="sidebar-link" data-page="internal">Internal Examinations</a>
+                        <a href="#" class="sidebar-link" data-page="external">External Examinations</a>
+                        <a href="#" class="sidebar-link" data-page="ccslc">CCSLC</a>
+                        <a href="#" class="sidebar-link" data-page="csec">CSEC</a>
+                        <a href="#" class="sidebar-link" data-page="ccslc-sbas">CCSLC SBAs</a>
+                        <a href="#" class="sidebar-link" data-page="csec-sbas">CSEC SBAs</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-page="csec"><i class="fas fa-graduation-cap"></i> CSEC Subjects</a>
+                    <div class="sidebar-submenu">
+                        <a href="#" class="sidebar-link" data-page="csec-integrated">Integrated Science</a>
+                        <a href="#" class="sidebar-link" data-page="csec-human">Human & Social Biology</a>
+                        <a href="#" class="sidebar-link" data-page="csec-biology">Biology</a>
+                        <a href="#" class="sidebar-link" data-page="csec-chemistry">Chemistry</a>
+                        <a href="#" class="sidebar-link" data-page="csec-physics">Physics</a>
+                        <a href="#" class="sidebar-link" data-page="csec-agricultural">Agricultural Science</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-page="hr"><i class="fas fa-users"></i> Human Resources</a>
+                    <div class="sidebar-submenu">
+                        <a href="#" class="sidebar-link" data-page="training">Training Opportunities</a>
+                        <a href="#" class="sidebar-link" data-page="jobs">Job Opportunities</a>
+                        <a href="#" class="sidebar-link" data-page="suggestions">Suggestions/Complaints</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-page="library"><i class="fas fa-book-open"></i> Library</a>
+                    <div class="sidebar-submenu">
+                        <a href="#" class="sidebar-link" data-page="textbooks">Text Books Order</a>
+                        <a href="#" class="sidebar-link" data-page="book-resources">Book Resources</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-page="shop"><i class="fas fa-shopping-cart"></i> Shop</a>
+                    <div class="sidebar-submenu">
+                        <a href="#" class="sidebar-link" data-page="vegetables">Vegetables</a>
+                        <a href="#" class="sidebar-link" data-page="plants">Plants</a>
+                        <a href="#" class="sidebar-link" data-page="chickens">Chickens</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="#" class="sidebar-link" data-page="blog"><i class="fas fa-blog"></i> Blog</a>
+                    <div class="sidebar-submenu">
+                        <a href="#" class="sidebar-link" data-page="instagram">Instagram</a>
+                        <a href="#" class="sidebar-link" data-page="facebook">Facebook</a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="content">
+            <div id="home-page" class="page-section active">
+                <div class="content-header">
+                    <h2>Welcome to Gams Science Department</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>Dashboard</span>
+                    </div>
+                </div>
+
+                <div class="compact-calendar">
+                    <div class="calendar-header">
+                        <h3><i class="fas fa-calendar-alt"></i> Department Calendar</h3>
+                        <div class="calendar-nav">
+                            <button class="btn btn-sm btn-primary" id="prevMonth">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <h4 id="currentMonth">March 2024</h4>
+                            <button class="btn btn-sm btn-primary" id="nextMonth">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="calendar-grid" id="calendar"></div>
+
+                    <div class="event-form">
+                        <h4>Add New Event</h4>
+                        <form id="eventForm">
+                            <div class="form-group">
+                                <label class="form-label">Event Title</label>
+                                <input type="text" class="form-control" id="eventTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Event Date</label>
+                                <input type="date" class="form-control" id="eventDate" required>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-sm">Add Event</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-cogs"></i> Department Admin</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Access meetings, documents, timetables, budgets, and administrative resources.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary nav-link" data-page="admin">Access Admin</a>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-book"></i> Subject Resources</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Lesson plans, curriculum materials, and teaching resources for all science subjects.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary nav-link" data-page="resources">View Resources</a>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-file-alt"></i> Examinations</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Internal and external examination resources, past papers, and SBA materials.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary nav-link" data-page="exams">Exam Resources</a>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-seedling"></i> Science Subjects</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Resources for Integrated Science, Biology, Chemistry, Physics, Agricultural Science, and more.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary nav-link" data-page="subjects">Browse Subjects</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="drive-section">
+                    <h3><i class="fas fa-atom"></i> Our Science Subjects</h3>
+                    <div class="cards">
+                        <div class="card">
+                            <div class="card-header" style="background: var(--success);">
+                                <h4>Integrated Science</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Forms:</strong> 1st Form - U5th Form</p>
+                                <p>Foundational science education covering basic principles.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header" style="background: var(--primary);">
+                                <h4>Biology</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                                <p>Study of living organisms and life processes.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header" style="background: #6f42c1;">
+                                <h4>Chemistry</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                                <p>Properties and interactions of matter and substances.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header" style="background: #fd7e14;">
+                                <h4>Physics</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                                <p>Fundamental forces, matter, energy, and motion.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header" style="background: #20c997;">
+                                <h4>Agricultural Science</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                                <p>Soil science, crop production, and agricultural techniques.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header" style="background: #e83e8c;">
+                                <h4>Human & Social Biology</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                                <p>Human body systems and health sciences.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header" style="background: #ffc107; color: var(--dark);">
+                                <h4>Amenity Horticulture</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                                <p>Ornamental plants, landscape design, and horticultural science.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="drive-section">
+                    <h3><i class="fas fa-file-download"></i> Recent Resources</h3>
+                    <div class="file-grid">
+                        <a href="#" class="file-item">
+                            <div class="file-icon">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div class="file-name">Chemistry Syllabus</div>
+                            <div class="file-meta">PDF • 2.4 MB</div>
+                        </a>
+                        
+                        <a href="#" class="file-item">
+                            <div class="file-icon">
+                                <i class="fas fa-file-word"></i>
+                            </div>
+                            <div class="file-name">Physics Lesson Plan</div>
+                            <div class="file-meta">DOCX • 1.2 MB</div>
+                        </a>
+                        
+                        <a href="#" class="file-item">
+                            <div class="file-icon">
+                                <i class="fas fa-file-excel"></i>
+                            </div>
+                            <div class="file-name">Exam Timetable</div>
+                            <div class="file-meta">XLSX • 0.8 MB</div>
+                        </a>
+                        
+                        <a href="#" class="file-item">
+                            <div class="file-icon">
+                                <i class="fas fa-file-powerpoint"></i>
+                            </div>
+                            <div class="file-name">Biology Presentation</div>
+                            <div class="file-meta">PPTX • 5.7 MB</div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="drive-section">
+                    <h3><i class="fas fa-shopping-cart"></i> Science Department Shop</h3>
+                    <p>Fresh produce and plants available for purchase</p>
+                    <div class="shop-grid">
+                        <div class="shop-item">
+                            <div class="shop-icon">
+                                <i class="fas fa-carrot"></i>
+                            </div>
+                            <h4>Vegetables</h4>
+                            <p>Fresh, locally grown vegetables</p>
+                        </div>
+                        
+                        <div class="shop-item">
+                            <div class="shop-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <h4>Plants</h4>
+                            <p>Ornamental and edible plants</p>
+                        </div>
+                        
+                        <div class="shop-item">
+                            <div class="shop-icon">
+                                <i class="fas fa-egg"></i>
+                            </div>
+                            <h4>Chickens</h4>
+                            <p>Fresh eggs and poultry</p>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="#" class="btn btn-success nav-link" data-page="shop">Visit Shop</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Pages -->
+            <div id="admin-page" class="page-section">
+                <div class="content-header">
+                    <h2>Department Administration</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>Department Admin</span>
+                    </div>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-cogs"></i>
+                    <h3>Department Admin Section</h3>
+                    <p>This section is under development. You'll be able to access meetings, documents, timetables, and administrative resources here.</p>
+                </div>
+            </div>
+
+            <div id="resources-page" class="page-section">
+                <div class="content-header">
+                    <h2>Subject Resources</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>Subject Resources</span>
+                    </div>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-book"></i>
+                    <h3>Subject Resources Section</h3>
+                    <p>This section is under development. You'll find lesson plans, curriculum materials, and teaching resources here.</p>
+                </div>
+            </div>
+
+            <div id="exams-page" class="page-section">
+                <div class="content-header">
+                    <h2>Examinations</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>Examinations</span>
+                    </div>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Examinations Section</h3>
+                    <p>This section is under development. You'll find exam resources, past papers, and SBA materials here.</p>
+                </div>
+            </div>
+
+            <div id="hr-page" class="page-section">
+                <div class="content-header">
+                    <h2>Human Resources</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>Human Resources</span>
+                    </div>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-users"></i>
+                    <h3>Human Resources Section</h3>
+                    <p>This section is under development. You'll find training opportunities, job postings, and staff resources here.</p>
+                </div>
+            </div>
+
+            <div id="library-page" class="page-section">
+                <div class="content-header">
+                    <h2>Library Resources</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>Library</span>
+                    </div>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-book-open"></i>
+                    <h3>Library Section</h3>
+                    <p>This section is under development. You'll find textbooks, reading materials, and book orders here.</p>
+                </div>
+            </div>
+
+            <div id="shop-page" class="page-section">
+                <div class="content-header">
+                    <h2>Science Department Shop</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>Shop</span>
+                    </div>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Shop Section</h3>
+                    <p>This section is under development. You'll be able to purchase vegetables, plants, and chickens here.</p>
+                </div>
+            </div>
+
+            <div id="blog-page" class="page-section">
+                <div class="content-header">
+                    <h2>Department Blog</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>Blog</span>
+                    </div>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-blog"></i>
+                    <h3>Blog Section</h3>
+                    <p>This section is under development. You'll find our Instagram and Facebook updates here.</p>
+                </div>
+            </div>
+
+            <div id="subjects-page" class="page-section">
+                <div class="content-header">
+                    <h2>Science Subjects</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>Science Subjects</span>
+                    </div>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-atom"></i>
+                    <h3>Science Subjects Section</h3>
+                    <p>This section is under development. You'll find resources for all science subjects here.</p>
+                </div>
+            </div>
+
+            <div id="csec-page" class="page-section">
+                <div class="content-header">
+                    <h2>CSEC Subjects</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>CSEC Subjects</span>
+                    </div>
+                </div>
+                <div class="coming-soon">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>CSEC Subjects Section</h3>
+                    <p>This section is under development. You'll find CSEC-specific resources and materials here.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="copyright">
+                <p>&copy; 2023 Gams Science Department. All rights reserved.</p>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId + '-page').classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-link[data-page="' + pageId + '"]').forEach(link => {
+                link.classList.add('active');
+            });
+            
+            const breadcrumb = document.querySelector('.breadcrumb');
+            if (pageId === 'home') {
+                breadcrumb.innerHTML = '<a href="#" class="nav-link" data-page="home">Home</a> / <span>Dashboard</span>';
+            } else {
+                const pageTitle = document.getElementById(pageId + '-page').querySelector('h2').textContent;
+                breadcrumb.innerHTML = '<a href="#" class="nav-link" data-page="home">Home</a> / <span>' + pageTitle + '</span>';
+            }
+        }
+
+        document.querySelectorAll('.nav-link, .sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.getAttribute('data-page');
+                showPage(page);
+                document.querySelector('nav').classList.remove('active');
+            });
+        });
+
+        let currentDate = new Date();
+        let events = JSON.parse(localStorage.getItem('departmentEvents')) || [];
+
+        function generateCalendar() {
+            const calendar = document.getElementById('calendar');
+            const currentMonth = document.getElementById('currentMonth');
+            
+            currentMonth.textContent = currentDate.toLocaleDateString('en-US', { 
+                month: 'long', 
+                year: 'numeric' 
+            });
+
+            calendar.innerHTML = '';
+
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            days.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-day-header';
+                dayHeader.textContent = day;
+                calendar.appendChild(dayHeader);
+            });
+
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const totalDays = lastDay.getDate();
+            const startingDay = firstDay.getDay();
+
+            for (let i = 0; i < startingDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendar.appendChild(emptyDay);
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = day;
+                dayElement.appendChild(dayNumber);
+
+                const dayEvents = events.filter(event => {
+                    const eventDate = new Date(event.date);
+                    return eventDate.getDate() === day && 
+                           eventDate.getMonth() === currentDate.getMonth() && 
+                           eventDate.getFullYear() === currentDate.getFullYear();
+                });
+
+                if (dayEvents.length > 0) {
+                    const eventDot = document.createElement('div');
+                    eventDot.className = 'event-dot';
+                    eventDot.title = dayEvents.map(event => event.title).join(', ');
+                    dayElement.appendChild(eventDot);
+                }
+
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const title = document.getElementById('eventTitle').value;
+            const date = document.getElementById('eventDate').value;
+
+            const newEvent = {
+                id: Date.now().toString(),
+                title: title,
+                date: date
+            };
+
+            events.push(newEvent);
+            localStorage.setItem('departmentEvents', JSON.stringify(events));
+            this.reset();
+            generateCalendar();
+            alert('Event added successfully!');
+        });
+
+        document.getElementById('prevMonth').addEventListener('click', function() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        });
+
+        document.getElementById('nextMonth').addEventListener('click', function() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        });
+
+        document.querySelector('.nav-toggle').addEventListener('click', function() {
+            document.querySelector('nav').classList.toggle('active');
+        });
+
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        sidebarItems.forEach(item => {
+            const link = item.querySelector('a');
+            link.addEventListener('click', function(e) {
+                if (item.querySelector('.sidebar-submenu')) {
+                    e.preventDefault();
+                    sidebarItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    item.classList.toggle('active');
+                }
+            });
+        });
+
+        document.querySelectorAll('.file-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const fileName = this.querySelector('.file-name').textContent;
+                alert('This would download: ' + fileName + '\n\nFor now, this is a demo. When you add real files, this will work!');
+            });
+        });
+
+        generateCalendar();
+    </script>
+</body>
+</html>
