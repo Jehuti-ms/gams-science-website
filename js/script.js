@@ -1,18 +1,22 @@
-// Navigation and Sidebar functionality
+// Multi-page navigation and interactivity
 document.addEventListener('DOMContentLoaded', function() {
     initializeNavigation();
     initializeSidebar();
     initializeMobileMenu();
     
-    // Initialize specific page functionality
-    if (document.getElementById('calendar')) {
+    // Page-specific initializations
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    if (currentPage === 'index.html' || currentPage === '') {
         initializeCalendar();
+        initializeFileDownloads();
     }
     
-    if (document.getElementById('shop-page')) {
+    if (currentPage === 'shop.html') {
         initializeShop();
     }
     
+    // Initialize file downloads on all pages that have them
     if (document.querySelector('.file-item')) {
         initializeFileDownloads();
     }
@@ -25,7 +29,7 @@ function initializeNavigation() {
     
     navLinks.forEach(link => {
         const linkHref = link.getAttribute('href');
-        if (linkHref === currentPage) {
+        if (linkHref === currentPage || (currentPage === '' && linkHref === 'index.html')) {
             link.classList.add('active');
         } else {
             link.classList.remove('active');
@@ -43,17 +47,19 @@ function initializeSidebar() {
         
         if (submenu) {
             link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Close other open submenus
-                sidebarItems.forEach(otherItem => {
-                    if (otherItem !== item && otherItem.classList.contains('active')) {
-                        otherItem.classList.remove('active');
-                    }
-                });
-                
-                // Toggle current item
-                item.classList.toggle('active');
+                if (this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    
+                    // Close other open submenus
+                    sidebarItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                }
             });
         }
     });
@@ -64,7 +70,7 @@ function initializeSidebar() {
     
     sidebarLinks.forEach(link => {
         const linkHref = link.getAttribute('href');
-        if (linkHref === currentPage) {
+        if (linkHref === currentPage || (currentPage === '' && linkHref === 'index.html')) {
             link.parentElement.classList.add('active');
         }
     });
@@ -84,7 +90,9 @@ function initializeMobileMenu() {
         const navLinks = document.querySelectorAll('nav a');
         navLinks.forEach(link => {
             link.addEventListener('click', function() {
-                nav.classList.remove('active');
+                if (window.innerWidth <= 768) {
+                    nav.classList.remove('active');
+                }
             });
         });
     }
@@ -233,13 +241,19 @@ function initializeShop() {
         });
         
         // Show selected category
-        document.getElementById(category + '-shop').classList.add('active');
+        const categoryElement = document.getElementById(category + '-shop');
+        if (categoryElement) {
+            categoryElement.classList.add('active');
+        }
         
         // Update active tab
         document.querySelectorAll('.shop-tab').forEach(tab => {
             tab.classList.remove('active');
         });
-        document.querySelector(`.shop-tab[data-category="${category}"]`).classList.add('active');
+        const activeTab = document.querySelector(`.shop-tab[data-category="${category}"]`);
+        if (activeTab) {
+            activeTab.classList.add('active');
+        }
         
         renderShopItems(category);
     }
@@ -430,111 +444,11 @@ function initializeFileDownloads() {
 }
 
 // Make functions globally available for HTML onclick attributes
-window.increaseQuantity = increaseQuantity;
-window.decreaseQuantity = decreaseQuantity;
-window.addToCart = addToCart;
-window.updateCartQuantity = updateCartQuantity;
-window.removeFromCart = removeFromCart;
-window.clearCart = clearCart;
-window.checkout = checkout;
-window.showShopCategory = showShopCategory;
-
-// Multi-page navigation and interactivity
-document.addEventListener('DOMContentLoaded', function() {
-    initializeNavigation();
-    initializeSidebar();
-    initializeMobileMenu();
-    
-    // Page-specific initializations
-    const currentPage = window.location.pathname.split('/').pop();
-    
-    if (currentPage === 'index.html' || currentPage === '') {
-        initializeCalendar();
-        initializeFileDownloads();
-    }
-    
-    if (currentPage === 'shop.html') {
-        initializeShop();
-    }
-});
-
-function initializeNavigation() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const navLinks = document.querySelectorAll('nav a');
-    
-    navLinks.forEach(link => {
-        const linkHref = link.getAttribute('href');
-        if (linkHref === currentPage || (currentPage === '' && linkHref === 'index.html')) {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active');
-        }
-    });
-}
-
-function initializeSidebar() {
-    const sidebarItems = document.querySelectorAll('.sidebar-item');
-    
-    sidebarItems.forEach(item => {
-        const link = item.querySelector('a');
-        const submenu = item.querySelector('.sidebar-submenu');
-        
-        if (submenu) {
-            link.addEventListener('click', function(e) {
-                if (this.getAttribute('href') === '#') {
-                    e.preventDefault();
-                    
-                    // Close other open submenus
-                    sidebarItems.forEach(otherItem => {
-                        if (otherItem !== item && otherItem.classList.contains('active')) {
-                            otherItem.classList.remove('active');
-                        }
-                    });
-                    
-                    // Toggle current item
-                    item.classList.toggle('active');
-                }
-            });
-        }
-    });
-}
-
-function initializeMobileMenu() {
-    const navToggle = document.querySelector('.nav-toggle');
-    const nav = document.querySelector('nav');
-    
-    if (navToggle && nav) {
-        navToggle.addEventListener('click', function() {
-            nav.classList.toggle('active');
-        });
-    }
-}
-
-function initializeCalendar() {
-    // Your existing calendar code here
-    let currentDate = new Date();
-    let events = JSON.parse(localStorage.getItem('departmentEvents')) || [];
-
-    function generateCalendar() {
-        const calendar = document.getElementById('calendar');
-        const currentMonth = document.getElementById('currentMonth');
-        
-        if (!calendar || !currentMonth) return;
-        
-        // ... rest of your calendar code
-    }
-
-    // Initialize calendar
-    generateCalendar();
-    
-    // Add event listeners for calendar
-    const eventForm = document.getElementById('eventForm');
-    if (eventForm) {
-        eventForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // ... your event form handling
-        });
-    }
-}
-
-// Add other initialization functions as needed
+window.increaseQuantity = window.increaseQuantity || function() {};
+window.decreaseQuantity = window.decreaseQuantity || function() {};
+window.addToCart = window.addToCart || function() {};
+window.updateCartQuantity = window.updateCartQuantity || function() {};
+window.removeFromCart = window.removeFromCart || function() {};
+window.clearCart = window.clearCart || function() {};
+window.checkout = window.checkout || function() {};
+window.showShopCategory = window.showShopCategory || function() {};
