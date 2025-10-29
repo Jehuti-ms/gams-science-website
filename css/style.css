@@ -196,14 +196,6 @@ nav a:hover, nav a.active {
     color: var(--primary);
 }
 
-.page-section {
-    display: none;
-}
-
-.page-section.active {
-    display: block;
-}
-
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
