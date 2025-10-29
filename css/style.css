@@ -1439,4 +1439,396 @@ footer {
     text-align: right;
 }
 
+/* Subject Resources specific styles */
+.subject-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stat {
+    text-align: center;
+    flex: 1;
+}
+
+.stat strong {
+    display: block;
+    font-size: 1.2rem;
+    color: var(--primary);
+}
+
+.stat span {
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
+.resource-count {
+    background: rgba(0,0,0,0.05);
+    padding: 0.5rem;
+    border-radius: 4px;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.resource-count strong {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.subject-overview {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.overview-card h4 {
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: var(--light);
+    border-radius: 8px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.resource-info {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: rgba(0,0,0,0.03);
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.resource-info strong {
+    color: var(--primary);
+}
+
+/* File grid enhancements for resources */
+.file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.file-item {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    border-left: 4px solid var(--primary);
+}
+
+.file-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.file-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.file-name {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+}
+
+.file-meta {
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
+/* Drive section enhancements */
+.drive-section {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--primary);
+}
+
+.drive-section h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.drive-section h3 i {
+    color: var(--secondary);
+}
+
+/* Resource category cards */
+.resource-category {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--success);
+}
+
+.resource-category h4 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Multimedia resources specific styles */
+.multimedia-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.multimedia-item {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border-left: 4px solid var(--accent);
+}
+
+.multimedia-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.multimedia-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+}
+
+.multimedia-name {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+}
+
+.multimedia-meta {
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
+/* Curriculum section styles */
+.curriculum-levels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.curriculum-level {
+    background: var(--light);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid var(--warning);
+}
+
+.curriculum-level h5 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.curriculum-level p {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin: 0;
+}
+
+/* Lesson plan templates */
+.template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.template-item {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--info);
+}
+
+.template-item h5 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.template-features {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.template-features li {
+    padding: 0.25rem 0;
+    color: var(--gray);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.template-features li:before {
+    content: "✓";
+    color: var(--success);
+    font-weight: bold;
+}
+
+/* Responsive adjustments for subject resources */
+@media (max-width: 768px) {
+    .file-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .multimedia-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .curriculum-levels {
+        grid-template-columns: 1fr;
+    }
+    
+    .template-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .subject-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* Animation for resource items */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.file-item, .multimedia-item, .template-item {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Staggered animation for grid items */
+.file-item:nth-child(1) { animation-delay: 0.1s; }
+.file-item:nth-child(2) { animation-delay: 0.2s; }
+.file-item:nth-child(3) { animation-delay: 0.3s; }
+.file-item:nth-child(4) { animation-delay: 0.4s; }
+
+/* Hover effects for resource cards */
+.resource-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.resource-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.resource-card:hover::before {
+    left: 100%;
+}
+
+/* Download button styles */
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.download-btn:hover {
+    background: var(--secondary);
+    transform: translateY(-2px);
+}
+
+/* Resource preview styles */
+.resource-preview {
+    background: var(--light);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 4px solid var(--primary);
+}
+
+.resource-preview h5 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.resource-preview p {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin: 0;
+}
+
+
 
