@@ -1305,3 +1305,138 @@ footer {
     color: var(--primary);
 }
 
+/* CSEC Subjects specific styles */
+.csec-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.csec-stats .stat {
+    text-align: center;
+    flex: 1;
+}
+
+.csec-stats .stat strong {
+    display: block;
+    font-size: 1.2rem;
+    color: var(--primary);
+}
+
+.csec-stats .stat span {
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
+.syllabus-code {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: rgba(0,0,0,0.05);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.syllabus-code strong {
+    color: var(--primary);
+}
+
+.syllabus-info {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-top: 0.25rem;
+}
+
+.performance-overview {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.performance-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.performance-card {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    background: var(--light);
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.performance-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.performance-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-right: 1rem;
+}
+
+.performance-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1;
+}
+
+.performance-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-top: 0.25rem;
+}
+
+.subject-performance h4 {
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.performance-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.performance-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.subject-name {
+    min-width: 120px;
+    font-weight: 500;
+    color: var(--dark);
+}
+
+.bar-container {
+    flex: 1;
+    height: 20px;
+    background: #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.pass-rate {
+    min-width: 40px;
+    font-weight: 600;
+    color: var(--primary);
+    text-align: right;
+}
+
+
