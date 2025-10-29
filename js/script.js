@@ -438,3 +438,103 @@ window.removeFromCart = removeFromCart;
 window.clearCart = clearCart;
 window.checkout = checkout;
 window.showShopCategory = showShopCategory;
+
+// Multi-page navigation and interactivity
+document.addEventListener('DOMContentLoaded', function() {
+    initializeNavigation();
+    initializeSidebar();
+    initializeMobileMenu();
+    
+    // Page-specific initializations
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    if (currentPage === 'index.html' || currentPage === '') {
+        initializeCalendar();
+        initializeFileDownloads();
+    }
+    
+    if (currentPage === 'shop.html') {
+        initializeShop();
+    }
+});
+
+function initializeNavigation() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navLinks = document.querySelectorAll('nav a');
+    
+    navLinks.forEach(link => {
+        const linkHref = link.getAttribute('href');
+        if (linkHref === currentPage || (currentPage === '' && linkHref === 'index.html')) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+}
+
+function initializeSidebar() {
+    const sidebarItems = document.querySelectorAll('.sidebar-item');
+    
+    sidebarItems.forEach(item => {
+        const link = item.querySelector('a');
+        const submenu = item.querySelector('.sidebar-submenu');
+        
+        if (submenu) {
+            link.addEventListener('click', function(e) {
+                if (this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    
+                    // Close other open submenus
+                    sidebarItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                }
+            });
+        }
+    });
+}
+
+function initializeMobileMenu() {
+    const navToggle = document.querySelector('.nav-toggle');
+    const nav = document.querySelector('nav');
+    
+    if (navToggle && nav) {
+        navToggle.addEventListener('click', function() {
+            nav.classList.toggle('active');
+        });
+    }
+}
+
+function initializeCalendar() {
+    // Your existing calendar code here
+    let currentDate = new Date();
+    let events = JSON.parse(localStorage.getItem('departmentEvents')) || [];
+
+    function generateCalendar() {
+        const calendar = document.getElementById('calendar');
+        const currentMonth = document.getElementById('currentMonth');
+        
+        if (!calendar || !currentMonth) return;
+        
+        // ... rest of your calendar code
+    }
+
+    // Initialize calendar
+    generateCalendar();
+    
+    // Add event listeners for calendar
+    const eventForm = document.getElementById('eventForm');
+    if (eventForm) {
+        eventForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // ... your event form handling
+        });
+    }
+}
+
+// Add other initialization functions as needed
