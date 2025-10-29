@@ -151,7 +151,6 @@ nav a:hover, nav a.active {
     color: var(--gray);
     text-decoration: none;
     font-size: 0.9rem;
-    cursor: pointer;
 }
 
 .sidebar-submenu a:hover {
@@ -189,7 +188,6 @@ nav a:hover, nav a.active {
 .breadcrumb a {
     color: var(--gray);
     text-decoration: none;
-    cursor: pointer;
 }
 
 .breadcrumb a:hover {
@@ -261,6 +259,7 @@ nav a:hover, nav a.active {
     background: #218838;
 }
 
+/* Calendar Styles */
 .compact-calendar {
     background: white;
     border-radius: 8px;
@@ -454,42 +453,6 @@ nav a:hover, nav a.active {
     font-size: 3rem;
     color: var(--primary);
     margin-bottom: 1rem;
-}
-
-footer {
-    background-color: var(--dark);
-    color: white;
-    padding: 2rem 0;
-    margin-top: 2rem;
-}
-
-.footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.social-links {
-    display: flex;
-    gap: 1rem;
-}
-
-.social-links a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    transition: var(--transition);
-    color: white;
-    text-decoration: none;
-}
-
-.social-links a:hover {
-    background-color: var(--primary);
-    transform: translateY(-3px);
 }
 
 /* Shop Styles */
@@ -905,6 +868,42 @@ footer {
     text-align: right;
 }
 
+footer {
+    background-color: var(--dark);
+    color: white;
+    padding: 2rem 0;
+    margin-top: 2rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: var(--transition);
+    color: white;
+    text-decoration: none;
+}
+
+.social-links a:hover {
+    background-color: var(--primary);
+    transform: translateY(-3px);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-toggle {
@@ -997,4 +996,3 @@ footer {
         margin-left: 0;
     }
 }
-
