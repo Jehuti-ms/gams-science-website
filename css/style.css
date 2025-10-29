@@ -1008,3 +1008,228 @@ footer {
     color: var(--primary);
     font-size: 1.2rem;
 }
+
+/* Science Subjects specific styles */
+.subject-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stat {
+    text-align: center;
+    flex: 1;
+}
+
+.stat strong {
+    display: block;
+    font-size: 1.2rem;
+    color: var(--primary);
+}
+
+.stat span {
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
+.subject-overview {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.overview-card h4 {
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: var(--light);
+    border-radius: 8px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.resource-info {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: rgba(0,0,0,0.03);
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.resource-info strong {
+    color: var(--primary);
+}
+
+/* Examinations specific styles */
+.exam-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.exam-stats .stat {
+    text-align: center;
+    flex: 1;
+}
+
+.exam-stats .stat strong {
+    display: block;
+    font-size: 1.2rem;
+    color: var(--primary);
+}
+
+.exam-stats .stat span {
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
+.exam-schedule {
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.exam-item {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+    transition: var(--transition);
+}
+
+.exam-item:hover {
+    background-color: #f8f9fa;
+}
+
+.exam-item:last-child {
+    border-bottom: none;
+}
+
+.exam-item.urgent {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+}
+
+.exam-date {
+    text-align: center;
+    min-width: 60px;
+    margin-right: 1rem;
+}
+
+.exam-day {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.exam-month {
+    font-size: 0.8rem;
+    color: var(--gray);
+    text-transform: uppercase;
+}
+
+.exam-details {
+    flex: 1;
+}
+
+.exam-details h4 {
+    margin: 0 0 0.25rem 0;
+    color: var(--dark);
+}
+
+.exam-details p {
+    margin: 0;
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.exam-status {
+    margin-left: 1rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-badge.urgent {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.scheduled {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.exam-stats-overview {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    background: var(--light);
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-right: 1rem;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin-top: 0.25rem;
+}
+
