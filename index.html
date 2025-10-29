@@ -331,6 +331,12 @@
             background: #f8f9fa;
         }
 
+        .calendar-day.today {
+            background: var(--accent);
+            color: white;
+            font-weight: bold;
+        }
+
         .day-number {
             font-weight: 600;
             margin-bottom: 0.25rem;
@@ -339,7 +345,7 @@
         .event-dot {
             width: 6px;
             height: 6px;
-            background: var(--accent);
+            background: var(--warning);
             border-radius: 50%;
             margin: 0 auto;
         }
@@ -521,6 +527,7 @@
             display: flex;
             background: var(--light);
             border-bottom: 1px solid #e9ecef;
+            flex-wrap: wrap;
         }
 
         .drive-tab {
@@ -530,6 +537,7 @@
             cursor: pointer;
             transition: var(--transition);
             font-weight: 500;
+            white-space: nowrap;
         }
 
         .drive-tab.active {
@@ -648,6 +656,11 @@
             .drive-container {
                 height: 400px;
             }
+
+            .drive-tab {
+                padding: 0.75rem 1rem;
+                text-align: left;
+            }
         }
     </style>
 </head>
@@ -666,11 +679,9 @@
                     <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
                     <li><a href="#" class="nav-link" data-page="admin">Department Admin</a></li>
                     <li><a href="#" class="nav-link" data-page="resources">Subject Resources</a></li>
+                    <li><a href="#" class="nav-link" data-page="subjects">Science Subjects</a></li>
                     <li><a href="#" class="nav-link" data-page="exams">Examinations</a></li>
-                    <li><a href="#" class="nav-link" data-page="hr">Human Resources</a></li>
-                    <li><a href="#" class="nav-link" data-page="library">Library</a></li>
-                    <li><a href="#" class="nav-link" data-page="shop">Shop</a></li>
-                    <li><a href="#" class="nav-link" data-page="blog">Blog</a></li>
+                    <li><a href="#" class="nav-link" data-page="collaboration">Teacher Collaboration</a></li>
                 </ul>
             </nav>
         </div>
@@ -686,106 +697,57 @@
                 <div class="sidebar-item">
                     <a href="#" class="sidebar-link" data-page="admin"><i class="fas fa-cogs"></i> Department Admin</a>
                     <div class="sidebar-submenu">
-                        <a href="#" class="sidebar-link" data-page="meetings">Meetings</a>
-                        <a href="#" class="sidebar-link" data-page="documents">Documents</a>
-                        <a href="#" class="sidebar-link" data-page="timetables">Timetables</a>
-                        <a href="#" class="sidebar-link" data-page="estimates">Estimates</a>
-                        <a href="#" class="sidebar-link" data-page="budget">Budget</a>
-                        <a href="#" class="sidebar-link" data-page="marksheets">Marksheets</a>
-                        <a href="#" class="sidebar-link" data-page="appraisals">Teacher Appraisals</a>
-                        <a href="#" class="sidebar-link" data-page="inventory">Inventory</a>
+                        <a href="#" class="sidebar-link" data-tab="meetings">Meetings</a>
+                        <a href="#" class="sidebar-link" data-tab="documents">Documents</a>
+                        <a href="#" class="sidebar-link" data-tab="timetables">Timetables</a>
+                        <a href="#" class="sidebar-link" data-tab="budget">Budget</a>
+                        <a href="#" class="sidebar-link" data-tab="appraisals">Teacher Appraisals</a>
                     </div>
                 </div>
 
                 <div class="sidebar-item">
                     <a href="#" class="sidebar-link" data-page="resources"><i class="fas fa-book"></i> Subject Resources</a>
                     <div class="sidebar-submenu">
-                        <a href="#" class="sidebar-link" data-page="curriculum">Curriculum</a>
-                        <a href="#" class="sidebar-link" data-page="schemes">Schemes of work</a>
-                        <a href="#" class="sidebar-link" data-page="syllabus">Syllabus</a>
-                        <a href="#" class="sidebar-link" data-page="lesson-plans">Lesson plans</a>
-                        <a href="#" class="sidebar-link" data-page="work-log">Work log</a>
-                        <a href="#" class="sidebar-link" data-page="subject-resources">Resources by Subject</a>
-                        <a href="#" class="sidebar-link" data-page="notes">Notes, Videos & Powerpoints</a>
+                        <a href="#" class="sidebar-link" data-tab="lesson-plans">Lesson Plans</a>
+                        <a href="#" class="sidebar-link" data-tab="curriculum">Curriculum</a>
+                        <a href="#" class="sidebar-link" data-tab="schemes">Schemes of Work</a>
+                        <a href="#" class="sidebar-link" data-tab="syllabus">Syllabus</a>
                     </div>
                 </div>
 
                 <div class="sidebar-item">
                     <a href="#" class="sidebar-link" data-page="subjects"><i class="fas fa-atom"></i> Science Subjects</a>
                     <div class="sidebar-submenu">
-                        <a href="#" class="sidebar-link" data-page="integrated">Integrated Science</a>
-                        <a href="#" class="sidebar-link" data-page="human-bio">Human & Social Biology</a>
-                        <a href="#" class="sidebar-link" data-page="biology">Biology</a>
-                        <a href="#" class="sidebar-link" data-page="chemistry">Chemistry</a>
-                        <a href="#" class="sidebar-link" data-page="physics">Physics</a>
-                        <a href="#" class="sidebar-link" data-page="agricultural">Agricultural Science</a>
-                        <a href="#" class="sidebar-link" data-page="horticulture">Amenity Horticulture</a>
+                        <a href="#" class="sidebar-link" data-tab="integrated">Integrated Science</a>
+                        <a href="#" class="sidebar-link" data-tab="biology">Biology</a>
+                        <a href="#" class="sidebar-link" data-tab="chemistry">Chemistry</a>
+                        <a href="#" class="sidebar-link" data-tab="physics">Physics</a>
+                        <a href="#" class="sidebar-link" data-tab="agricultural">Agricultural Science</a>
+                        <a href="#" class="sidebar-link" data-tab="human-bio">Human & Social Biology</a>
                     </div>
                 </div>
 
                 <div class="sidebar-item">
                     <a href="#" class="sidebar-link" data-page="exams"><i class="fas fa-file-alt"></i> Examinations</a>
                     <div class="sidebar-submenu">
-                        <a href="#" class="sidebar-link" data-page="exam-admin">Exam Admin</a>
-                        <a href="#" class="sidebar-link" data-page="internal">Internal Examinations</a>
-                        <a href="#" class="sidebar-link" data-page="external">External Examinations</a>
-                        <a href="#" class="sidebar-link" data-page="ccslc">CCSLC</a>
-                        <a href="#" class="sidebar-link" data-page="csec">CSEC</a>
-                        <a href="#" class="sidebar-link" data-page="ccslc-sbas">CCSLC SBAs</a>
-                        <a href="#" class="sidebar-link" data-page="csec-sbas">CSEC SBAs</a>
+                        <a href="#" class="sidebar-link" data-tab="past-papers">Past Papers</a>
+                        <a href="#" class="sidebar-link" data-tab="sba-materials">SBA Materials</a>
+                        <a href="#" class="sidebar-link" data-tab="mark-schemes">Mark Schemes</a>
                     </div>
                 </div>
 
                 <div class="sidebar-item">
-                    <a href="#" class="sidebar-link" data-page="csec"><i class="fas fa-graduation-cap"></i> CSEC Subjects</a>
+                    <a href="#" class="sidebar-link" data-page="collaboration"><i class="fas fa-users"></i> Teacher Collaboration</a>
                     <div class="sidebar-submenu">
-                        <a href="#" class="sidebar-link" data-page="csec-integrated">Integrated Science</a>
-                        <a href="#" class="sidebar-link" data-page="csec-human">Human & Social Biology</a>
-                        <a href="#" class="sidebar-link" data-page="csec-biology">Biology</a>
-                        <a href="#" class="sidebar-link" data-page="csec-chemistry">Chemistry</a>
-                        <a href="#" class="sidebar-link" data-page="csec-physics">Physics</a>
-                        <a href="#" class="sidebar-link" data-page="csec-agricultural">Agricultural Science</a>
-                    </div>
-                </div>
-
-                <div class="sidebar-item">
-                    <a href="#" class="sidebar-link" data-page="hr"><i class="fas fa-users"></i> Human Resources</a>
-                    <div class="sidebar-submenu">
-                        <a href="#" class="sidebar-link" data-page="training">Training Opportunities</a>
-                        <a href="#" class="sidebar-link" data-page="jobs">Job Opportunities</a>
-                        <a href="#" class="sidebar-link" data-page="suggestions">Suggestions/Complaints</a>
-                    </div>
-                </div>
-
-                <div class="sidebar-item">
-                    <a href="#" class="sidebar-link" data-page="library"><i class="fas fa-book-open"></i> Library</a>
-                    <div class="sidebar-submenu">
-                        <a href="#" class="sidebar-link" data-page="textbooks">Text Books Order</a>
-                        <a href="#" class="sidebar-link" data-page="book-resources">Book Resources</a>
-                    </div>
-                </div>
-
-                <div class="sidebar-item">
-                    <a href="#" class="sidebar-link" data-page="shop"><i class="fas fa-shopping-cart"></i> Shop</a>
-                    <div class="sidebar-submenu">
-                        <a href="#" class="sidebar-link" data-page="vegetables">Vegetables</a>
-                        <a href="#" class="sidebar-link" data-page="plants">Plants</a>
-                        <a href="#" class="sidebar-link" data-page="chickens">Chickens</a>
-                    </div>
-                </div>
-
-                <div class="sidebar-item">
-                    <a href="#" class="sidebar-link" data-page="blog"><i class="fas fa-blog"></i> Blog</a>
-                    <div class="sidebar-submenu">
-                        <a href="#" class="sidebar-link" data-page="instagram">Instagram</a>
-                        <a href="#" class="sidebar-link" data-page="facebook">Facebook</a>
+                        <a href="#" class="sidebar-link" data-tab="shared-resources">Shared Resources</a>
+                        <a href="#" class="sidebar-link" data-tab="work-progress">Work in Progress</a>
                     </div>
                 </div>
             </div>
         </aside>
 
         <section class="content">
-            <!-- Home Page - UNCHANGED -->
+            <!-- Home Page -->
             <div id="home-page" class="page-section active">
                 <div class="content-header">
                     <h2>Welcome to Gams Science Department</h2>
@@ -802,7 +764,7 @@
                                 <i class="fas fa-chevron-left"></i>
                             </button>
                             <h4 id="currentMonth">March 2024</h4>
-                            <button class="btn btn-sm btn-primary" data-page="home">
+                            <button class="btn btn-sm btn-primary" id="nextMonth">
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                         </div>
@@ -876,6 +838,7 @@
                     </div>
                 </div>
 
+                <!-- Rest of your home page content remains exactly the same -->
                 <div class="drive-section">
                     <h3><i class="fas fa-atom"></i> Our Science Subjects</h3>
                     <div class="cards">
@@ -938,91 +901,11 @@
                                 <p>Human body systems and health sciences.</p>
                             </div>
                         </div>
-
-                        <div class="card">
-                            <div class="card-header" style="background: #ffc107; color: var(--dark);">
-                                <h4>Amenity Horticulture</h4>
-                            </div>
-                            <div class="card-body">
-                                <p><strong>Forms:</strong> 4th Year - U5th Year</p>
-                                <p>Ornamental plants, landscape design, and horticultural science.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="drive-section">
-                    <h3><i class="fas fa-file-download"></i> Recent Resources</h3>
-                    <div class="file-grid">
-                        <a href="#" class="file-item">
-                            <div class="file-icon">
-                                <i class="fas fa-file-pdf"></i>
-                            </div>
-                            <div class="file-name">Chemistry Syllabus</div>
-                            <div class="file-meta">PDF • 2.4 MB</div>
-                        </a>
-                        
-                        <a href="#" class="file-item">
-                            <div class="file-icon">
-                                <i class="fas fa-file-word"></i>
-                            </div>
-                            <div class="file-name">Physics Lesson Plan</div>
-                            <div class="file-meta">DOCX • 1.2 MB</div>
-                        </a>
-                        
-                        <a href="#" class="file-item">
-                            <div class="file-icon">
-                                <i class="fas fa-file-excel"></i>
-                            </div>
-                            <div class="file-name">Exam Timetable</div>
-                            <div class="file-meta">XLSX • 0.8 MB</div>
-                        </a>
-                        
-                        <a href="#" class="file-item">
-                            <div class="file-icon">
-                                <i class="fas fa-file-powerpoint"></i>
-                            </div>
-                            <div class="file-name">Biology Presentation</div>
-                            <div class="file-meta">PPTX • 5.7 MB</div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="drive-section">
-                    <h3><i class="fas fa-shopping-cart"></i> Science Department Shop</h3>
-                    <p>Fresh produce and plants available for purchase</p>
-                    <div class="shop-grid">
-                        <div class="shop-item">
-                            <div class="shop-icon">
-                                <i class="fas fa-carrot"></i>
-                            </div>
-                            <h4>Vegetables</h4>
-                            <p>Fresh, locally grown vegetables</p>
-                        </div>
-                        
-                        <div class="shop-item">
-                            <div class="shop-icon">
-                                <i class="fas fa-leaf"></i>
-                            </div>
-                            <h4>Plants</h4>
-                            <p>Ornamental and edible plants</p>
-                        </div>
-                        
-                        <div class="shop-item">
-                            <div class="shop-icon">
-                                <i class="fas fa-egg"></i>
-                            </div>
-                            <h4>Chickens</h4>
-                            <p>Fresh eggs and poultry</p>
-                        </div>
-                    </div>
-                    <div style="text-align: center; margin-top: 1rem;">
-                        <a href="#" class="btn btn-success nav-link" data-page="shop">Visit Shop</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Department Admin Page - WITH STYLED DRIVE INTEGRATION -->
+            <!-- Department Admin Page -->
             <div id="admin-page" class="page-section">
                 <div class="content-header">
                     <h2>Department Administration</h2>
@@ -1031,7 +914,6 @@
                     </div>
                 </div>
 
-                <!-- Tabbed Drive Interface -->
                 <div class="tabbed-drive">
                     <div class="drive-tabs">
                         <button class="drive-tab active" data-tab="meetings">Meetings</button>
@@ -1045,16 +927,12 @@
                         <div class="drive-integration">
                             <div class="drive-header">
                                 <h4><i class="fas fa-users"></i> Meeting Documents</h4>
-                                <a href="https://drive.google.com/drive/folders/1r_KWV2Hmr6TL9mIqGvs1_U5Ypg38JrlD?usp=drive_link" 
-                                   class="btn btn-primary btn-sm" target="_blank">
+                                <a href="https://drive.google.com/drive/folders/1r_KWV2Hmr6TL9mIqGvs1_U5Ypg38JrlD" class="btn btn-primary btn-sm" target="_blank">
                                     Open in New Tab
                                 </a>
                             </div>
                             <div class="drive-container">
-                                <iframe src="https://drive.google.com/embeddedfolderview?id=1r_KWV2Hmr6TL9mIqGvs1_U5Ypg38JrlD#list" 
-                                        class="drive-iframe"
-                                        loading="lazy">
-                                </iframe>
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1r_KWV2Hmr6TL9mIqGvs1_U5Ypg38JrlD#list" class="drive-iframe" loading="lazy"></iframe>
                             </div>
                         </div>
                     </div>
@@ -1063,16 +941,12 @@
                         <div class="drive-integration">
                             <div class="drive-header">
                                 <h4><i class="fas fa-file-alt"></i> Department Documents</h4>
-                                <a href="https://drive.google.com/drive/folders/1xmripG03kOTrRRE-ZKTe9g50bBXBTmQP?usp=drive_link" 
-                                   class="btn btn-primary btn-sm" target="_blank">
+                                <a href="https://drive.google.com/drive/folders/1xmripG03kOTrRRE-ZKTe9g50bBXBTmQP" class="btn btn-primary btn-sm" target="_blank">
                                     Open in New Tab
                                 </a>
                             </div>
                             <div class="drive-container">
-                                <iframe src="https://drive.google.com/embeddedfolderview?id=1xmripG03kOTrRRE-ZKTe9g50bBXBTmQP#list" 
-                                        class="drive-iframe"
-                                        loading="lazy">
-                                </iframe>
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1xmripG03kOTrRRE-ZKTe9g50bBXBTmQP#list" class="drive-iframe" loading="lazy"></iframe>
                             </div>
                         </div>
                     </div>
@@ -1081,16 +955,12 @@
                         <div class="drive-integration">
                             <div class="drive-header">
                                 <h4><i class="fas fa-calendar-alt"></i> Timetables</h4>
-                                <a href="https://drive.google.com/drive/folders/1pIcnOXAlMGRMWUOpB79_A0uMKh57-qyb?usp=drive_link" 
-                                   class="btn btn-primary btn-sm" target="_blank">
+                                <a href="https://drive.google.com/drive/folders/1pIcnOXAlMGRMWUOpB79_A0uMKh57-qyb" class="btn btn-primary btn-sm" target="_blank">
                                     Open in New Tab
                                 </a>
                             </div>
                             <div class="drive-container">
-                                <iframe src="https://drive.google.com/embeddedfolderview?id=1pIcnOXAlMGRMWUOpB79_A0uMKh57-qyb#list" 
-                                        class="drive-iframe"
-                                        loading="lazy">
-                                </iframe>
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1pIcnOXAlMGRMWUOpB79_A0uMKh57-qyb#list" class="drive-iframe" loading="lazy"></iframe>
                             </div>
                         </div>
                     </div>
@@ -1099,16 +969,12 @@
                         <div class="drive-integration">
                             <div class="drive-header">
                                 <h4><i class="fas fa-chart-pie"></i> Budget Documents</h4>
-                                <a href="https://drive.google.com/drive/folders/1fRJTkb3vkGjQ9JsOkur-SA2Leml_las8?usp=drive_link" 
-                                   class="btn btn-primary btn-sm" target="_blank">
+                                <a href="https://drive.google.com/drive/folders/1fRJTkb3vkGjQ9JsOkur-SA2Leml_las8" class="btn btn-primary btn-sm" target="_blank">
                                     Open in New Tab
                                 </a>
                             </div>
                             <div class="drive-container">
-                                <iframe src="https://drive.google.com/embeddedfolderview?id=1fRJTkb3vkGjQ9JsOkur-SA2Leml_las8#list" 
-                                        class="drive-iframe"
-                                        loading="lazy">
-                                </iframe>
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1fRJTkb3vkGjQ9JsOkur-SA2Leml_las8#list" class="drive-iframe" loading="lazy"></iframe>
                             </div>
                         </div>
                     </div>
@@ -1117,38 +983,19 @@
                         <div class="drive-integration">
                             <div class="drive-header">
                                 <h4><i class="fas fa-user-check"></i> Teacher Appraisals</h4>
-                                <a href="https://drive.google.com/drive/folders/1ZP4bfAlQzmceOyc_xMGJsDXnwslQnXaO?usp=drive_link" 
-                                   class="btn btn-primary btn-sm" target="_blank">
+                                <a href="https://drive.google.com/drive/folders/1ZP4bfAlQzmceOyc_xMGJsDXnwslQnXaO" class="btn btn-primary btn-sm" target="_blank">
                                     Open in New Tab
                                 </a>
                             </div>
                             <div class="drive-container">
-                                <iframe src="https://drive.google.com/embeddedfolderview?id=1ZP4bfAlQzmceOyc_xMGJsDXnwslQnXaO#list" 
-                                        class="drive-iframe"
-                                        loading="lazy">
-                                </iframe>
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1ZP4bfAlQzmceOyc_xMGJsDXnwslQnXaO#list" class="drive-iframe" loading="lazy"></iframe>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Keep your existing admin cards -->
-                <div class="cards">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4><i class="fas fa-calendar-alt"></i> Quick Access</h4>
-                        </div>
-                        <div class="card-body">
-                            <p>Access all administrative documents in one place</p>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-primary" data-tab="meetings">View All Documents</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Subject Resources Page - WITH STYLED DRIVE INTEGRATION -->
+            <!-- Subject Resources Page -->
             <div id="resources-page" class="page-section">
                 <div class="content-header">
                     <h2>Subject Resources</h2>
@@ -1157,31 +1004,178 @@
                     </div>
                 </div>
 
-                <div class="drive-integration">
-                    <div class="drive-header">
-                        <h4><i class="fas fa-book"></i> Teaching Resources</h4>
-                        <a href="https://drive.google.com/drive/folders/1rsieM8FGuRoJqWlNM0G_p7HwqeGTXwsl?usp=drive_link" 
-                           class="btn btn-primary btn-sm" target="_blank">
-                            Open in New Tab
-                        </a>
+                <div class="tabbed-drive">
+                    <div class="drive-tabs">
+                        <button class="drive-tab active" data-tab="lesson-plans">Lesson Plans</button>
+                        <button class="drive-tab" data-tab="curriculum">Curriculum</button>
+                        <button class="drive-tab" data-tab="schemes">Schemes of Work</button>
+                        <button class="drive-tab" data-tab="syllabus">Syllabus</button>
                     </div>
-                    <div class="drive-container">
-                        <iframe src="https://drive.google.com/embeddedfolderview?id=1rsieM8FGuRoJqWlNM0G_p7HwqeGTXwsl#grid" 
-                                class="drive-iframe"
-                                loading="lazy">
-                        </iframe>
-                    </div>
-                </div>
 
-                <!-- Keep your existing resources content -->
-                <div class="coming-soon">
-                    <i class="fas fa-book"></i>
-                    <h3>Subject Resources Section</h3>
-                    <p>Access lesson plans, curriculum materials, schemes of work, and syllabus documents through the integrated Drive viewer above.</p>
+                    <div class="tab-content active" id="lesson-plans-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-chalkboard-teacher"></i> Lesson Plans</h4>
+                                <a href="https://drive.google.com/drive/folders/1SrJnz7hgI43gXLKpzYuM4G20v9Wvs74S" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1SrJnz7hgI43gXLKpzYuM4G20v9Wvs74S#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="curriculum-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-graduation-cap"></i> Curriculum</h4>
+                                <a href="https://drive.google.com/drive/folders/1IBeXZrzax0RBPr_daPtc3ebDLIw2aW-L" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1IBeXZrzax0RBPr_daPtc3ebDLIw2aW-L#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="schemes-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-tasks"></i> Schemes of Work</h4>
+                                <a href="https://drive.google.com/drive/folders/1ro_Y2WmUPo1_FcqtDtmVsJhyPphwqMFd" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1ro_Y2WmUPo1_FcqtDtmVsJhyPphwqMFd#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="syllabus-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-book"></i> Syllabus</h4>
+                                <a href="https://drive.google.com/drive/folders/1qTVyw9dBSbSHolS3hcG3wybCSTU2uIZa" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1qTVyw9dBSbSHolS3hcG3wybCSTU2uIZa#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Keep all your other existing pages exactly as they were -->
+            <!-- Science Subjects Page -->
+            <div id="subjects-page" class="page-section">
+                <div class="content-header">
+                    <h2>Science Subjects</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>Science Subjects</span>
+                    </div>
+                </div>
+
+                <div class="tabbed-drive">
+                    <div class="drive-tabs">
+                        <button class="drive-tab active" data-tab="integrated">Integrated Science</button>
+                        <button class="drive-tab" data-tab="biology">Biology</button>
+                        <button class="drive-tab" data-tab="chemistry">Chemistry</button>
+                        <button class="drive-tab" data-tab="physics">Physics</button>
+                        <button class="drive-tab" data-tab="agricultural">Agricultural Science</button>
+                        <button class="drive-tab" data-tab="human-bio">Human & Social Biology</button>
+                    </div>
+
+                    <div class="tab-content active" id="integrated-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-vial"></i> Integrated Science</h4>
+                                <a href="https://drive.google.com/drive/folders/1s-He1WfkxyD8oX5mItBksTAfGtstHlmQ" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1s-He1WfkxyD8oX5mItBksTAfGtstHlmQ#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="biology-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-dna"></i> Biology</h4>
+                                <a href="https://drive.google.com/drive/folders/1A-1L-MfGhZ6DQPINJYu-9madsE691G1E" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1A-1L-MfGhZ6DQPINJYu-9madsE691G1E#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="chemistry-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-flask"></i> Chemistry</h4>
+                                <a href="https://drive.google.com/drive/folders/1zCeFKvY68qLhxZwtgyVShCsBHLogKQbx" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1zCeFKvY68qLhxZwtgyVShCsBHLogKQbx#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="physics-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-bolt"></i> Physics</h4>
+                                <a href="https://drive.google.com/drive/folders/1Sv6_H1qr3otCyipYdRzhoiErvWga6oct" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1Sv6_H1qr3otCyipYdRzhoiErvWga6oct#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="agricultural-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-tractor"></i> Agricultural Science</h4>
+                                <a href="https://drive.google.com/drive/folders/1reZANveBar1gPPbyBZc6D6199W12LkiV" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1reZANveBar1gPPbyBZc6D6199W12LkiV#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="human-bio-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-user-md"></i> Human & Social Biology</h4>
+                                <a href="https://drive.google.com/drive/folders/16i0xt0eGkirTMUEh2DDK9blGJwrZIORo" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=16i0xt0eGkirTMUEh2DDK9blGJwrZIORo#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Examinations Page -->
             <div id="exams-page" class="page-section">
                 <div class="content-header">
                     <h2>Examinations</h2>
@@ -1189,15 +1183,102 @@
                         <a href="#" class="nav-link" data-page="home">Home</a> / <span>Examinations</span>
                     </div>
                 </div>
-                <div class="coming-soon">
-                    <i class="fas fa-file-alt"></i>
-                    <h3>Examinations Section</h3>
-                    <p>This section is under development. You'll find exam resources, past papers, and SBA materials here.</p>
+
+                <div class="tabbed-drive">
+                    <div class="drive-tabs">
+                        <button class="drive-tab active" data-tab="past-papers">Past Papers</button>
+                        <button class="drive-tab" data-tab="sba-materials">SBA Materials</button>
+                        <button class="drive-tab" data-tab="mark-schemes">Mark Schemes</button>
+                    </div>
+
+                    <div class="tab-content active" id="past-papers-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-file-archive"></i> Past Papers</h4>
+                                <a href="https://drive.google.com/drive/folders/1TmGrwfSZ73VnWHLkdSXkD18UIjYnE5Ns" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1TmGrwfSZ73VnWHLkdSXkD18UIjYnE5Ns#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="sba-materials-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-clipboard-check"></i> SBA Materials</h4>
+                                <a href="https://drive.google.com/drive/folders/1soRbo76NQjzbWV9lLkTmfNeiMK1s1k72" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1soRbo76NQjzbWV9lLkTmfNeiMK1s1k72#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="mark-schemes-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-check-double"></i> Mark Schemes</h4>
+                                <a href="https://drive.google.com/drive/folders/1xAnpoLHZ-iJl3WJErkjtCcFK29P9_eRC" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1xAnpoLHZ-iJl3WJErkjtCcFK29P9_eRC#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Add similar styled Drive integration to other pages as needed -->
-            <!-- Your existing HR, Library, Shop, Blog pages remain unchanged -->
+            <!-- Teacher Collaboration Page -->
+            <div id="collaboration-page" class="page-section">
+                <div class="content-header">
+                    <h2>Teacher Collaboration</h2>
+                    <div class="breadcrumb">
+                        <a href="#" class="nav-link" data-page="home">Home</a> / <span>Teacher Collaboration</span>
+                    </div>
+                </div>
+
+                <div class="tabbed-drive">
+                    <div class="drive-tabs">
+                        <button class="drive-tab active" data-tab="shared-resources">Shared Resources</button>
+                        <button class="drive-tab" data-tab="work-progress">Work in Progress</button>
+                    </div>
+
+                    <div class="tab-content active" id="shared-resources-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-share-alt"></i> Shared Resources</h4>
+                                <a href="https://drive.google.com/drive/folders/1n0Kn3bp8VgvYYiQABBGVMQxKhQP10uR1" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1n0Kn3bp8VgvYYiQABBGVMQxKhQP10uR1#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="work-progress-tab">
+                        <div class="drive-integration">
+                            <div class="drive-header">
+                                <h4><i class="fas fa-hourglass-half"></i> Work in Progress</h4>
+                                <a href="https://drive.google.com/drive/folders/1lGfsLzAJdDF6t0tXZdS4-gGKUcS-ab_a" class="btn btn-primary btn-sm" target="_blank">
+                                    Open in New Tab
+                                </a>
+                            </div>
+                            <div class="drive-container">
+                                <iframe src="https://drive.google.com/embeddedfolderview?id=1lGfsLzAJdDF6t0tXZdS4-gGKUcS-ab_a#list" class="drive-iframe" loading="lazy"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </section>
     </div>
@@ -1215,70 +1296,7 @@
     </footer>
 
     <script>
-        // Your existing JavaScript with added Drive tab functionality
-        function showPage(pageId) {
-            document.querySelectorAll('.page-section').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.getElementById(pageId + '-page').classList.add('active');
-            
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-link[data-page="' + pageId + '"]').forEach(link => {
-                link.classList.add('active');
-            });
-            
-            const breadcrumb = document.querySelector('.breadcrumb');
-            if (pageId === 'home') {
-                breadcrumb.innerHTML = '<a href="#" class="nav-link" data-page="home">Home</a> / <span>Dashboard</span>';
-            } else {
-                const pageTitle = document.getElementById(pageId + '-page').querySelector('h2').textContent;
-                breadcrumb.innerHTML = '<a href="#" class="nav-link" data-page="home">Home</a> / <span>' + pageTitle + '</span>';
-            }
-        }
-
-        document.querySelectorAll('.nav-link, .sidebar-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const page = this.getAttribute('data-page');
-                showPage(page);
-                document.querySelector('nav').classList.remove('active');
-            });
-        });
-
-        // NEW: Drive Tab functionality
-        document.querySelectorAll('.drive-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                const tabId = this.getAttribute('data-tab');
-                
-                // Update active tab
-                document.querySelectorAll('.drive-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Show active content
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                document.getElementById(`${tabId}-tab`).classList.add('active');
-            });
-        });
-
-        // Card buttons to switch tabs
-        document.querySelectorAll('[data-tab]').forEach(button => {
-            if (button.tagName === 'BUTTON') {
-                button.addEventListener('click', function() {
-                    const tabId = this.getAttribute('data-tab');
-                    document.querySelectorAll('.drive-tab').forEach(tab => {
-                        if (tab.getAttribute('data-tab') === tabId) {
-                            tab.click();
-                        }
-                    });
-                });
-            }
-        });
-
-        // Your existing calendar and sidebar functionality
+        // Calendar functionality with today's date highlighting
         let currentDate = new Date();
         let events = JSON.parse(localStorage.getItem('departmentEvents')) || [];
 
@@ -1306,6 +1324,9 @@
             const totalDays = lastDay.getDate();
             const startingDay = firstDay.getDay();
 
+            const today = new Date();
+            const isCurrentMonth = today.getMonth() === currentDate.getMonth() && today.getFullYear() === currentDate.getFullYear();
+
             for (let i = 0; i < startingDay; i++) {
                 const emptyDay = document.createElement('div');
                 emptyDay.className = 'calendar-day empty';
@@ -1314,7 +1335,9 @@
 
             for (let day = 1; day <= totalDays; day++) {
                 const dayElement = document.createElement('div');
-                dayElement.className = 'calendar-day';
+                const isToday = isCurrentMonth && day === today.getDate();
+                
+                dayElement.className = isToday ? 'calendar-day today' : 'calendar-day';
                 
                 const dayNumber = document.createElement('div');
                 dayNumber.className = 'day-number';
@@ -1339,6 +1362,73 @@
             }
         }
 
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId + '-page').classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-link[data-page="' + pageId + '"]').forEach(link => {
+                link.classList.add('active');
+            });
+            
+            const breadcrumb = document.querySelector('.breadcrumb');
+            if (pageId === 'home') {
+                breadcrumb.innerHTML = '<a href="#" class="nav-link" data-page="home">Home</a> / <span>Dashboard</span>';
+            } else {
+                const pageTitle = document.getElementById(pageId + '-page').querySelector('h2').textContent;
+                breadcrumb.innerHTML = '<a href="#" class="nav-link" data-page="home">Home</a> / <span>' + pageTitle + '</span>';
+            }
+        }
+
+        document.querySelectorAll('.nav-link, .sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.getAttribute('data-page');
+                const tab = this.getAttribute('data-tab');
+                
+                if (page) {
+                    showPage(page);
+                    document.querySelector('nav').classList.remove('active');
+                    
+                    // If there's a tab specified, activate it
+                    if (tab) {
+                        setTimeout(() => {
+                            document.querySelectorAll('.drive-tab').forEach(driveTab => {
+                                if (driveTab.getAttribute('data-tab') === tab) {
+                                    driveTab.click();
+                                }
+                            });
+                        }, 100);
+                    }
+                }
+            });
+        });
+
+        // Drive Tab functionality
+        document.querySelectorAll('.drive-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Update active tab
+                const tabsContainer = this.closest('.drive-tabs');
+                tabsContainer.querySelectorAll('.drive-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show active content
+                const tabContentContainer = this.closest('.tabbed-drive');
+                tabContentContainer.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                tabContentContainer.querySelector(`#${tabId}-tab`).classList.add('active');
+            });
+        });
+
+        // Calendar event handling
         document.getElementById('eventForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const title = document.getElementById('eventTitle').value;
@@ -1367,13 +1457,15 @@
             generateCalendar();
         });
 
+        // Mobile navigation
         document.querySelector('.nav-toggle').addEventListener('click', function() {
             document.querySelector('nav').classList.toggle('active');
         });
 
+        // Sidebar functionality
         const sidebarItems = document.querySelectorAll('.sidebar-item');
         sidebarItems.forEach(item => {
-            const link = item.querySelector('a');
+            const link = item.querySelector('.sidebar-link');
             link.addEventListener('click', function(e) {
                 if (item.querySelector('.sidebar-submenu')) {
                     e.preventDefault();
@@ -1387,6 +1479,7 @@
             });
         });
 
+        // File download simulation
         document.querySelectorAll('.file-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1398,10 +1491,10 @@
         // Initialize
         generateCalendar();
         
-        // Initialize first tab as active if on admin page
-        if (document.querySelector('.drive-tab')) {
-            document.querySelector('.drive-tab.active').click();
-        }
+        // Initialize first tab as active on each page
+        document.querySelectorAll('.drive-tab.active').forEach(tab => {
+            tab.click();
+        });
     </script>
 </body>
 </html>
