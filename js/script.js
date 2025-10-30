@@ -529,3 +529,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Enhanced sidebar functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // ... existing code ...
+    
+    // Enhanced sidebar submenu toggle
+    const sidebarItems = document.querySelectorAll('.sidebar-item > a');
+    sidebarItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            const hasSubmenu = this.parentElement.querySelector('.sidebar-submenu');
+            
+            if (hasSubmenu) {
+                e.preventDefault();
+                
+                // Check if we're clicking the currently active item
+                const isCurrentlyActive = this.parentElement.classList.contains('active');
+                
+                // Remove active class from all items
+                sidebarItems.forEach(i => {
+                    i.parentElement.classList.remove('active');
+                });
+                
+                // Toggle active class (close if already open, open if closed)
+                if (!isCurrentlyActive) {
+                    this.parentElement.classList.add('active');
+                }
+            }
+        });
+    });
+    
+    // ... rest of existing code ...
+});
