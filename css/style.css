@@ -1118,3 +1118,132 @@ footer {
     }
 }
 
+/* ===== ADDITIONAL STYLES FOR SCIENCE SUBJECTS ===== */
+
+/* Subject Stats in Cards */
+.subject-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e6ed;
+}
+
+.stat {
+    text-align: center;
+    flex: 1;
+}
+
+.stat strong {
+    display: block;
+    font-size: 1.2rem;
+    color: #1a5f7a;
+    margin-bottom: 0.25rem;
+}
+
+.stat span {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Subject Overview */
+.subject-overview {
+    margin-top: 1rem;
+}
+
+.overview-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border-left: 4px solid #1a5f7a;
+}
+
+.overview-card h4 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1a5f7a;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Resource Info in Cards */
+.resource-info {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e6ed;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.resource-info strong {
+    color: #2c3e50;
+}
+
+/* Enhanced Card Headers with Gradients */
+.card-header {
+    background: var(--primary);
+    color: white;
+    padding: 1rem;
+}
+
+.card-header h3, .card-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+/* Ensure gradient backgrounds work well */
+.card-header[style*="gradient"] h3,
+.card-header[style*="gradient"] h4 {
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments for subject stats */
+@media (max-width: 768px) {
+    .subject-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stat-value {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .subject-stats {
+        flex-direction: column;
+    }
+}
