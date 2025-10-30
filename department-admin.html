@@ -3,253 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Department Admin - ScienceFile Hub | Gams Science Department</title>
+    <title>Department Admin - Gams Science Department</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="logo">Gams Science Department</div>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h1>Gams Science Department</h1>
+            </div>
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
             <nav>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="department-admin.html" class="active">Department Admin</a></li>
-                    <li><a href="subject-resources.html">Subject Resources</a></li>
-                    <li><a href="science-subjects.html">Science Subjects</a></li>
-                    <li><a href="examinations.html">Examinations</a></li>
-                    <li><a href="csec-subjects.html">CSEC Subjects</a></li>
-                    <li><a href="human-resources.html">Human Resources</a></li>
-                    <li><a href="library.html">Library</a></li>
-                    <li><a href="shop.html">Shop</a></li>
-                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="department-admin.html" class="nav-link active">Department Admin</a></li>
+                    <li><a href="subject-resources.html" class="nav-link">Subject Resources</a></li>
+                    <li><a href="examinations.html" class="nav-link">Examinations</a></li>
+                    <li><a href="human-resources.html" class="nav-link">Human Resources</a></li>
+                    <li><a href="library.html" class="nav-link">Library</a></li>
+                    <li><a href="shop.html" class="nav-link">Shop</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <main class="container">
-        <div class="hub-header">
-            <h1 class="hub-title">ScienceFile Hub</h1>
-            <p class="hub-subtitle">Centralized File Management for Gams Science Department</p>
-        </div>
-        
-        <div class="file-stats">
-            <div class="stat-card">
-                <div class="stat-number">147</div>
-                <div class="stat-label">Total Files</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">2.4 GB</div>
-                <div class="stat-label">Storage Used</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">28</div>
-                <div class="stat-label">This Month</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">85%</div>
-                <div class="stat-label">Storage Free</div>
-            </div>
-        </div>
-        
-        <div class="file-management">
-            <div class="file-upload-section">
-                <h3>Upload New File</h3>
-                <div class="upload-area" id="uploadArea">
-                    <i>📁</i>
-                    <p>Drag & drop files here or click to browse</p>
-                    <input type="file" class="file-input" id="fileInput" multiple>
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <div class="sidebar-item">
+                    <a href="index.html"><i class="fas fa-home"></i> Home</a>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Category</label>
-                    <select class="form-select" id="fileCategory">
-                        <option value="meetings">Meeting Documents</option>
-                        <option value="timetables">Timetables</option>
-                        <option value="budget">Budget & Estimates</option>
-                        <option value="marksheets">Marksheets</option>
-                        <option value="appraisals">Teacher Appraisals</option>
-                        <option value="inventory">Inventory</option>
-                        <option value="other">Other</option>
-                    </select>
+                <div class="sidebar-item active">
+                    <a href="department-admin.html"><i class="fas fa-cogs"></i> Department Admin</a>
+                    <div class="sidebar-submenu">
+                        <a href="department-admin.html#meetings">Meetings</a>
+                        <a href="department-admin.html#documents">Documents</a>
+                        <a href="department-admin.html#timetables">Timetables</a>
+                        <a href="department-admin.html#estimates">Estimates</a>
+                        <a href="department-admin.html#budget">Budget</a>
+                        <a href="department-admin.html#marksheets">Marksheets</a>
+                        <a href="department-admin.html#appraisals">Teacher Appraisals</a>
+                        <a href="department-admin.html#inventory">Inventory</a>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Description (Optional)</label>
-                    <input type="text" class="form-input" id="fileDescription" placeholder="Brief description of the file">
+
+                <div class="sidebar-item">
+                    <a href="subject-resources.html"><i class="fas fa-book"></i> Subject Resources</a>
+                    <div class="sidebar-submenu">
+                        <a href="subject-resources.html#curriculum">Curriculum</a>
+                        <a href="subject-resources.html#schemes">Schemes of work</a>
+                        <a href="subject-resources.html#syllabus">Syllabus</a>
+                        <a href="subject-resources.html#lesson-plans">Lesson plans</a>
+                        <a href="subject-resources.html#work-log">Work log</a>
+                        <a href="subject-resources.html#integrated-science">Integrated Science</a>
+                        <a href="subject-resources.html#biology">Biology</a>
+                        <a href="subject-resources.html#chemistry">Chemistry</a>
+                        <a href="subject-resources.html#physics">Physics</a>
+                        <a href="subject-resources.html#agricultural">Agricultural Science</a>
+                        <a href="subject-resources.html#hsb">Human & Social Biology</a>
+                        <a href="subject-resources.html#horticulture">Amenity Horticulture</a>
+                    </div>
                 </div>
-                
-                <button class="upload-btn" id="uploadBtn">Upload to ScienceFile Hub</button>
+
+                <div class="sidebar-item">
+                    <a href="examinations.html"><i class="fas fa-file-alt"></i> Examinations</a>
+                    <div class="sidebar-submenu">
+                        <a href="examinations.html#admin">Exam Admin</a>
+                        <a href="examinations.html#internal">Internal Examinations</a>
+                        <a href="examinations.html#external">External Examinations</a>
+                        <a href="examinations.html#ccslc">CCSLC</a>
+                        <a href="examinations.html#csec">CSEC</a>
+                        <a href="examinations.html#ccslc-sba">CCSLC SBAs</a>
+                        <a href="examinations.html#csec-sba">CSEC SBAs</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="human-resources.html"><i class="fas fa-users"></i> Human Resources</a>
+                    <div class="sidebar-submenu">
+                        <a href="human-resources.html#training">Training Opportunities</a>
+                        <a href="human-resources.html#jobs">Job Opportunities</a>
+                        <a href="human-resources.html#feedback">Suggestions/Complaints</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="library.html"><i class="fas fa-book-open"></i> Library</a>
+                    <div class="sidebar-submenu">
+                        <a href="library.html#orders">Text Books Order</a>
+                        <a href="library.html#resources">Book Resources</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="shop.html"><i class="fas fa-shopping-cart"></i> Shop</a>
+                    <div class="sidebar-submenu">
+                        <a href="shop.html#vegetables">Vegetables</a>
+                        <a href="shop.html#plants">Plants</a>
+                        <a href="shop.html#chickens">Chickens</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-item">
+                    <a href="blog.html"><i class="fas fa-blog"></i> Blog</a>
+                    <div class="sidebar-submenu">
+                        <a href="blog.html#instagram">Instagram</a>
+                        <a href="blog.html#facebook">Facebook</a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="content">
+            <div class="content-header">
+                <h2>ScienceFile Hub</h2>
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a> / <span>Department Admin</span>
+                </div>
+            </div>
+
+            <div class="hub-header">
+                <h1 class="hub-title">ScienceFile Hub</h1>
+                <p class="hub-subtitle">Centralized File Management for Gams Science Department</p>
             </div>
             
-            <div class="file-list-section">
-                <div class="file-actions-header">
-                    <input type="text" class="search-box" placeholder="Search files in ScienceFile Hub...">
-                    <div class="file-categories">
-                        <button class="category-btn active" data-category="all">All Files</button>
-                        <button class="category-btn" data-category="meetings">Meetings</button>
-                        <button class="category-btn" data-category="timetables">Timetables</button>
-                        <button class="category-btn" data-category="budget">Budget</button>
-                        <button class="category-btn" data-category="marksheets">Marksheets</button>
-                        <button class="category-btn" data-category="appraisals">Appraisals</button>
-                        <button class="category-btn" data-category="inventory">Inventory</button>
+            <div class="file-stats">
+                <div class="stat-card">
+                    <div class="stat-number">147</div>
+                    <div class="stat-label">Total Files</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2.4 GB</div>
+                    <div class="stat-label">Storage Used</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">28</div>
+                    <div class="stat-label">This Month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <div class="stat-label">Storage Free</div>
+                </div>
+            </div>
+            
+            <div class="file-management">
+                <div class="file-upload-section">
+                    <h3>Upload New File</h3>
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #1a5f7a;"></i>
+                        <p>Drag & drop files here or click to browse</p>
+                        <input type="file" class="file-input" id="fileInput" multiple>
                     </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" id="fileCategory">
+                            <option value="meetings">Meeting Documents</option>
+                            <option value="timetables">Timetables</option>
+                            <option value="budget">Budget & Estimates</option>
+                            <option value="marksheets">Marksheets</option>
+                            <option value="appraisals">Teacher Appraisals</option>
+                            <option value="inventory">Inventory</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Description (Optional)</label>
+                        <input type="text" class="form-input" id="fileDescription" placeholder="Brief description of the file">
+                    </div>
+                    
+                    <button class="upload-btn" id="uploadBtn">Upload to ScienceFile Hub</button>
                 </div>
                 
-                <div class="file-list" id="fileList">
-                    <div class="file-item">
-                        <div class="file-icon">PDF</div>
-                        <div class="file-info">
-                            <div class="file-name">Department Meeting Minutes - March 2024.pdf</div>
-                            <div class="file-meta">Meeting Documents • 2.4 MB • Uploaded: 2024-03-15</div>
-                        </div>
-                        <div class="file-actions">
-                            <button class="action-btn" title="Download">📥</button>
-                            <button class="action-btn" title="Share">🔗</button>
-                            <button class="action-btn" title="Delete">🗑️</button>
-                        </div>
-                    </div>
-                    
-                    <div class="file-item">
-                        <div class="file-icon">XLS</div>
-                        <div class="file-info">
-                            <div class="file-name">Science Lab Inventory Q1 2024.xlsx</div>
-                            <div class="file-meta">Inventory • 1.8 MB • Uploaded: 2024-03-10</div>
-                        </div>
-                        <div class="file-actions">
-                            <button class="action-btn" title="Download">📥</button>
-                            <button class="action-btn" title="Share">🔗</button>
-                            <button class="action-btn" title="Delete">🗑️</button>
+                <div class="file-list-section">
+                    <div class="file-actions-header">
+                        <input type="text" class="search-box" placeholder="Search files in ScienceFile Hub...">
+                        <div class="file-categories">
+                            <button class="category-btn active" data-category="all">All Files</button>
+                            <button class="category-btn" data-category="meetings">Meetings</button>
+                            <button class="category-btn" data-category="timetables">Timetables</button>
+                            <button class="category-btn" data-category="budget">Budget</button>
+                            <button class="category-btn" data-category="marksheets">Marksheets</button>
+                            <button class="category-btn" data-category="appraisals">Appraisals</button>
+                            <button class="category-btn" data-category="inventory">Inventory</button>
                         </div>
                     </div>
                     
-                    <div class="file-item">
-                        <div class="file-icon">DOC</div>
-                        <div class="file-info">
-                            <div class="file-name">Teacher Appraisal Form Template.docx</div>
-                            <div class="file-meta">Teacher Appraisals • 0.8 MB • Uploaded: 2024-03-05</div>
+                    <div class="file-list" id="fileList">
+                        <div class="file-item">
+                            <div class="file-icon">PDF</div>
+                            <div class="file-info">
+                                <div class="file-name">Department Meeting Minutes - March 2024.pdf</div>
+                                <div class="file-meta">Meeting Documents • 2.4 MB • Uploaded: 2024-03-15</div>
+                            </div>
+                            <div class="file-actions">
+                                <button class="action-btn" title="Download"><i class="fas fa-download"></i></button>
+                                <button class="action-btn" title="Share"><i class="fas fa-share-alt"></i></button>
+                                <button class="action-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
-                        <div class="file-actions">
-                            <button class="action-btn" title="Download">📥</button>
-                            <button class="action-btn" title="Share">🔗</button>
-                            <button class="action-btn" title="Delete">🗑️</button>
+                        
+                        <div class="file-item">
+                            <div class="file-icon">XLS</div>
+                            <div class="file-info">
+                                <div class="file-name">Science Lab Inventory Q1 2024.xlsx</div>
+                                <div class="file-meta">Inventory • 1.8 MB • Uploaded: 2024-03-10</div>
+                            </div>
+                            <div class="file-actions">
+                                <button class="action-btn" title="Download"><i class="fas fa-download"></i></button>
+                                <button class="action-btn" title="Share"><i class="fas fa-share-alt"></i></button>
+                                <button class="action-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
-                    </div>
+                        
+                        <div class="file-item">
+                            <div class="file-icon">DOC</div>
+                            <div class="file-info">
+                                <div class="file-name">Teacher Appraisal Form Template.docx</div>
+                                <div class="file-meta">Teacher Appraisals • 0.8 MB • Uploaded: 2024-03-05</div>
+                            </div>
+                            <div class="file-actions">
+                                <button class="action-btn" title="Download"><i class="fas fa-download"></i></button>
+                                <button class="action-btn" title="Share"><i class="fas fa-share-alt"></i></button>
+                                <button class="action-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
 
-                    <div class="file-item">
-                        <div class="file-icon">PDF</div>
-                        <div class="file-info">
-                            <div class="file-name">Science Department Budget 2024.pdf</div>
-                            <div class="file-meta">Budget & Estimates • 1.2 MB • Uploaded: 2024-02-28</div>
+                        <div class="file-item">
+                            <div class="file-icon">PDF</div>
+                            <div class="file-info">
+                                <div class="file-name">Science Department Budget 2024.pdf</div>
+                                <div class="file-meta">Budget & Estimates • 1.2 MB • Uploaded: 2024-02-28</div>
+                            </div>
+                            <div class="file-actions">
+                                <button class="action-btn" title="Download"><i class="fas fa-download"></i></button>
+                                <button class="action-btn" title="Share"><i class="fas fa-share-alt"></i></button>
+                                <button class="action-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
-                        <div class="file-actions">
-                            <button class="action-btn" title="Download">📥</button>
-                            <button class="action-btn" title="Share">🔗</button>
-                            <button class="action-btn" title="Delete">🗑️</button>
-                        </div>
-                    </div>
 
-                    <div class="file-item">
-                        <div class="file-icon">XLS</div>
-                        <div class="file-info">
-                            <div class="file-name">Class Timetable Semester 2.xlsx</div>
-                            <div class="file-meta">Timetables • 0.9 MB • Uploaded: 2024-02-20</div>
+                        <div class="file-item">
+                            <div class="file-icon">XLS</div>
+                            <div class="file-info">
+                                <div class="file-name">Class Timetable Semester 2.xlsx</div>
+                                <div class="file-meta">Timetables • 0.9 MB • Uploaded: 2024-02-20</div>
+                            </div>
+                            <div class="file-actions">
+                                <button class="action-btn" title="Download"><i class="fas fa-download"></i></button>
+                                <button class="action-btn" title="Share"><i class="fas fa-share-alt"></i></button>
+                                <button class="action-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
-                        <div class="file-actions">
-                            <button class="action-btn" title="Download">📥</button>
-                            <button class="action-btn" title="Share">🔗</button>
-                            <button class="action-btn" title="Delete">🗑️</button>
-                        </div>
-                    </div>
 
-                    <div class="file-item">
-                        <div class="file-icon">PDF</div>
-                        <div class="file-info">
-                            <div class="file-name">Student Marksheets - Term 1.pdf</div>
-                            <div class="file-meta">Marksheets • 3.1 MB • Uploaded: 2024-02-15</div>
-                        </div>
-                        <div class="file-actions">
-                            <button class="action-btn" title="Download">📥</button>
-                            <button class="action-btn" title="Share">🔗</button>
-                            <button class="action-btn" title="Delete">🗑️</button>
+                        <div class="file-item">
+                            <div class="file-icon">PDF</div>
+                            <div class="file-info">
+                                <div class="file-name">Student Marksheets - Term 1.pdf</div>
+                                <div class="file-meta">Marksheets • 3.1 MB • Uploaded: 2024-02-15</div>
+                            </div>
+                            <div class="file-actions">
+                                <button class="action-btn" title="Download"><i class="fas fa-download"></i></button>
+                                <button class="action-btn" title="Share"><i class="fas fa-share-alt"></i></button>
+                                <button class="action-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
-
-    <!-- File Details Modal -->
-    <div class="modal" id="fileDetailsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">ScienceFile Hub - File Details</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">File Name</label>
-                    <input type="text" class="form-input" id="detailFileName" value="Department Meeting Minutes - March 2024.pdf">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Category</label>
-                    <select class="form-select" id="detailFileCategory">
-                        <option value="meetings">Meeting Documents</option>
-                        <option value="timetables">Timetables</option>
-                        <option value="budget">Budget & Estimates</option>
-                        <option value="marksheets">Marksheets</option>
-                        <option value="appraisals">Teacher Appraisals</option>
-                        <option value="inventory">Inventory</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-input" id="detailFileDescription" rows="3">Minutes from the March department meeting covering curriculum updates and budget discussions.</textarea>
-                </div>
-                <div class="form-actions">
-                    <button class="btn btn-secondary" id="cancelDetails">Cancel</button>
-                    <button class="btn btn-primary" id="saveDetails">Save to ScienceFile Hub</button>
-                </div>
-            </div>
-        </div>
+        </section>
     </div>
 
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul class="footer-links">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="department-admin.html">Department Admin</a></li>
-                        <li><a href="science-subjects.html">Science Subjects</a></li>
-                        <li><a href="examinations.html">Examinations</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Resources</h3>
-                    <ul class="footer-links">
-                        <li><a href="subject-resources.html">Subject Resources</a></li>
-                        <li><a href="csec-subjects.html">CSEC Subjects</a></li>
-                        <li><a href="library.html">Library</a></li>
-                        <li><a href="blog.html">Blog</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Contact Us</h3>
-                    <ul class="footer-links">
-                        <li>Email: science@gams.edu</li>
-                        <li>Phone: (123) 456-7890</li>
-                        <li>Address: 123 Science Building, Campus</li>
-                    </ul>
-                </div>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="department-admin.html">Department Admin</a></li>
+                    <li><a href="subject-resources.html">Subject Resources</a></li>
+                    <li><a href="examinations.html">Examinations</a></li>
+                </ul>
             </div>
             
-            <div class="copyright">
-                &copy; 2023 Gams Science Department. ScienceFile Hub v1.0
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="human-resources.html">Human Resources</a></li>
+                    <li><a href="library.html">Library</a></li>
+                    <li><a href="shop.html">Shop</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li>Email: science@gams.edu</li>
+                    <li>Phone: (123) 456-7890</li>
+                    <li>Address: 123 Science Building</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 Gams Science Department. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://instagram.com/gamsscience" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://facebook.com/gamsscience" target="_blank">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
             </div>
         </div>
     </footer>
