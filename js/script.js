@@ -452,3 +452,80 @@ window.removeFromCart = window.removeFromCart || function() {};
 window.clearCart = window.clearCart || function() {};
 window.checkout = window.checkout || function() {};
 window.showShopCategory = window.showShopCategory || function() {};
+
+// Mobile Navigation Toggle
+document.addEventListener('DOMContentLoaded', function() {
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('nav ul');
+    
+    if (navToggle) {
+        navToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('show');
+        });
+    }
+    
+    // Sidebar submenu toggle
+    const sidebarItems = document.querySelectorAll('.sidebar-item > a');
+    sidebarItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            if (this.parentElement.querySelector('.sidebar-submenu')) {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                sidebarItems.forEach(i => {
+                    i.parentElement.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.parentElement.classList.add('active');
+            }
+        });
+    });
+    
+    // Simple Calendar (basic implementation)
+    function generateCalendar() {
+        const calendar = document.getElementById('calendar');
+        if (!calendar) return;
+        
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        
+        // Add day headers
+        days.forEach(day => {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day header';
+            dayElement.textContent = day;
+            calendar.appendChild(dayElement);
+        });
+        
+        // Add days (simplified - you'd want a proper calendar library)
+        for (let i = 1; i <= 31; i++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
+            dayElement.textContent = i;
+            
+            // Mark today (for demo)
+            if (i === new Date().getDate()) {
+                dayElement.classList.add('today');
+            }
+            
+            calendar.appendChild(dayElement);
+        }
+    }
+    
+    generateCalendar();
+    
+    // Event form handling
+    const eventForm = document.getElementById('eventForm');
+    if (eventForm) {
+        eventForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const title = document.getElementById('eventTitle').value;
+            const date = document.getElementById('eventDate').value;
+            
+            if (title && date) {
+                alert(`Event "${title}" added for ${date}`);
+                this.reset();
+            }
+        });
+    }
+});
