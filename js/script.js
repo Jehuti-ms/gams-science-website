@@ -1248,5 +1248,3 @@ document.addEventListener('keydown', function(e) {
 });
 
 console.log('✨ Gams Science Department - Scripts loaded successfully!');
-
-
