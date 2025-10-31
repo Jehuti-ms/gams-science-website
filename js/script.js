@@ -1248,3 +1248,110 @@ document.addEventListener('keydown', function(e) {
 });
 
 console.log('✨ Gams Science Department - Scripts loaded successfully!');
+
+// ===== SECTION NAVIGATION HANDLER =====
+function handleSectionNavigation(sectionId) {
+    console.log('🔍 Navigating to section:', sectionId);
+    
+    // Get or create the section content container
+    let sectionContainer = document.getElementById('section-content-container');
+    if (!sectionContainer) {
+        const contentArea = document.querySelector('.content');
+        sectionContainer = document.createElement('div');
+        sectionContainer.id = 'section-content-container';
+        contentArea.appendChild(sectionContainer);
+    }
+    
+    // Clear existing content
+    sectionContainer.innerHTML = '';
+    
+    // Load the appropriate section
+    console.log('📂 Loading section content for:', sectionId);
+    loadSectionContent(sectionId);
+    
+    // Scroll to the section
+    setTimeout(() => {
+        sectionContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+}
+
+// ===== LOAD SECTION CONTENT =====
+function loadSectionContent(sectionId) {
+    const sectionContainer = document.getElementById('section-content-container');
+    if (!sectionContainer) {
+        console.error('❌ Section container not found!');
+        return;
+    }
+    
+    // Show loading state
+    sectionContainer.innerHTML = '<div style="text-align: center; padding: 2rem;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i><p>Loading...</p></div>';
+    
+    // Small delay for smooth loading effect
+    setTimeout(() => {
+        console.log('🚀 Loading section:', sectionId);
+        
+        // Load content based on section
+        switch(sectionId) {
+            case 'curriculum':
+                loadCurriculumSection(sectionContainer);
+                break;
+            case 'schemes':
+                loadSchemesSection(sectionContainer);
+                break;
+            case 'syllabus':
+                loadSyllabusSection(sectionContainer);
+                break;
+            // ... add other cases for each section
+            default:
+                console.error('❌ Unknown section:', sectionId);
+                sectionContainer.innerHTML = '<div class="drive-section"><p style="text-align: center; color: #999; padding: 2rem;">Section not found.</p></div>';
+        }
+        
+        console.log('✅ Section loaded successfully');
+    }, 300);
+}
+
+// Add these functions for each section:
+function loadCurriculumSection(container) {
+    container.innerHTML = `
+        <div class="section-content">
+            <div class="drive-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3><i class="fas fa-book"></i> Curriculum Resources</h3>
+                    <button onclick="returnToOverview()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Overview
+                    </button>
+                </div>
+                <p>Access curriculum guides and educational frameworks.</p>
+                
+                <div class="file-grid">
+                    <a href="#" class="file-item">
+                        <div class="file-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="file-name">Science Curriculum Guide</div>
+                        <div class="file-meta">PDF • 2.8 MB</div>
+                    </a>
+                    <!-- Add more files as needed -->
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Add similar functions for other sections (schemes, syllabus, etc.)
+
+// Return to overview function
+window.returnToOverview = function() {
+    const sectionContainer = document.getElementById('section-content-container');
+    if (sectionContainer) {
+        sectionContainer.innerHTML = '';
+    }
+    
+    // Clear the hash
+    history.pushState("", document.title, window.location.pathname);
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
