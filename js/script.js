@@ -17,6 +17,10 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeCalendar();
     }
     
+    if (currentPage === 'department-admin.html') {
+        initializeDepartmentAdmin();
+    }
+    
     if (currentPage === 'shop.html') {
         initializeShop();
     }
@@ -28,6 +32,31 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('✅ Initialization complete!');
 });
+
+// ===== DEPARTMENT ADMIN INITIALIZATION =====
+function initializeDepartmentAdmin() {
+    console.log('🔧 Initializing Department Admin page...');
+    
+    // Check if there's a hash in the URL on load
+    if (window.location.hash) {
+        const sectionId = window.location.hash.substring(1);
+        setTimeout(() => handleSectionNavigation(sectionId), 300);
+    }
+    
+    // Add click handlers to all cards in the welcome section
+    const welcomeCards = document.querySelectorAll('#welcome-section .card-footer a');
+    welcomeCards.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                const sectionId = href.substring(1);
+                window.location.hash = href;
+                handleSectionNavigation(sectionId);
+            }
+        });
+    });
+}
 
 // ===== NAVIGATION HIGHLIGHTING =====
 function initializeNavigation() {
@@ -88,10 +117,33 @@ function initializeSidebar() {
             });
         }
         
-        // Highlight active submenu items
+        // Add click handlers for submenu links
         if (submenu) {
             const submenuLinks = submenu.querySelectorAll('a');
             submenuLinks.forEach(subLink => {
+                subLink.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    // Check if it's a hash link for the current page
+                    if (href.startsWith('#')) {
+                        e.preventDefault();
+                        const sectionId = href.substring(1);
+                        handleSectionNavigation(sectionId);
+                        
+                        // Update URL hash
+                        window.location.hash = href;
+                        
+                        // Highlight active submenu item
+                        submenuLinks.forEach(l => {
+                            l.style.color = '';
+                            l.style.background = '';
+                        });
+                        this.style.color = 'white';
+                        this.style.background = 'rgba(255, 255, 255, 0.1)';
+                    }
+                });
+                
+                // Highlight if current hash matches
                 if (window.location.hash && subLink.getAttribute('href') === window.location.hash) {
                     subLink.style.color = 'white';
                     subLink.style.background = 'rgba(255, 255, 255, 0.1)';
@@ -99,9 +151,577 @@ function initializeSidebar() {
             });
         }
     });
+    
+    // Handle hash on page load
+    if (window.location.hash) {
+        const sectionId = window.location.hash.substring(1);
+        setTimeout(() => handleSectionNavigation(sectionId), 100);
+    }
 }
 
-// ===== MOBILE MENU TOGGLE =====
+// ===== SECTION NAVIGATION HANDLER =====
+function handleSectionNavigation(sectionId) {
+    console.log('Navigating to section:', sectionId);
+    
+    // Hide the welcome section
+    const welcomeSection = document.getElementById('welcome-section');
+    if (welcomeSection) {
+        welcomeSection.style.display = 'none';
+    }
+    
+    // Get or create the section content container
+    let sectionContainer = document.getElementById('section-content-container');
+    if (!sectionContainer) {
+        const contentArea = document.querySelector('.content');
+        sectionContainer = document.createElement('div');
+        sectionContainer.id = 'section-content-container';
+        contentArea.appendChild(sectionContainer);
+    }
+    
+    // Clear existing content
+    sectionContainer.innerHTML = '';
+    
+    // Load the appropriate section
+    loadSectionContent(sectionId);
+    
+    // Scroll to the section
+    setTimeout(() => {
+        sectionContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+}
+
+// ===== LOAD SECTION CONTENT =====
+function loadSectionContent(sectionId) {
+    const sectionContainer = document.getElementById('section-content-container');
+    if (!sectionContainer) return;
+    
+    // Check if we're on department-admin page
+    const currentPage = window.location.pathname.split('/').pop();
+    if (currentPage !== 'department-admin.html' && currentPage !== '') {
+        return;
+    }
+    
+    // Show loading state
+    sectionContainer.innerHTML = '<div style="text-align: center; padding: 2rem;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i><p>Loading...</p></div>';
+    
+    // Small delay for smooth loading effect
+    setTimeout(() => {
+        // Load content based on section
+        switch(sectionId) {
+            case 'meetings':
+                loadMeetingsSection(sectionContainer);
+                break;
+            case 'documents':
+                loadDocumentsSection(sectionContainer);
+                break;
+            case 'timetables':
+                loadTimetablesSection(sectionContainer);
+                break;
+            case 'estimates':
+                loadEstimatesSection(sectionContainer);
+                break;
+            case 'budget':
+                loadBudgetSection(sectionContainer);
+                break;
+            case 'marksheets':
+                loadMarksheetsSection(sectionContainer);
+                break;
+            case 'appraisals':
+                loadAppraisalsSection(sectionContainer);
+                break;
+            case 'inventory':
+                loadInventorySection(sectionContainer);
+                break;
+            default:
+                sectionContainer.innerHTML = '<div class="drive-section"><p style="text-align: center; color: #999; padding: 2rem;">Section not found.</p></div>';
+        }
+    }, 300);
+}
+
+// ===== MEETINGS SECTION =====
+function loadMeetingsSection(container) {
+    container.innerHTML = `
+        <div class="section-content" id="section-meetings">
+            <div class="drive-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3><i class="fas fa-users"></i> Department Meetings</h3>
+                    <button onclick="returnToOverview()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Overview
+                    </button>
+                </div>
+                <p>Manage meeting agendas, minutes, and related documents.</p>
+                
+                <div class="meeting-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                    <div class="action-card" onclick="showDraftAgenda()">
+                        <i class="fas fa-file-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h4>Draft New Agenda</h4>
+                        <p>Create a new meeting agenda</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showPastAgendas()">
+                        <i class="fas fa-folder-open" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                        <h4>View Past Agendas</h4>
+                        <p>Access previous meeting agendas</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showPastMinutes()">
+                        <i class="fas fa-history" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                        <h4>Past Meeting Minutes</h4>
+                        <p>View minutes from previous meetings</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showUploadDocument('meeting')">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                        <h4>Upload Document</h4>
+                        <p>Upload a prepared meeting document</p>
+                    </div>
+                </div>
+                
+                <div id="meetings-dynamic-content"></div>
+            </div>
+        </div>
+    `;
+}
+
+// Return to overview
+window.returnToOverview = function() {
+    const welcomeSection = document.getElementById('welcome-section');
+    const sectionContainer = document.getElementById('section-content-container');
+    
+    if (welcomeSection) {
+        welcomeSection.style.display = 'block';
+    }
+    
+    if (sectionContainer) {
+        sectionContainer.innerHTML = '';
+    }
+    
+    // Clear the hash
+    history.pushState("", document.title, window.location.pathname);
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// Draft New Agenda
+window.showDraftAgenda = function() {
+    const dynamicContent = document.getElementById('meetings-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-file-alt"></i> Draft Meeting Agenda</h3>
+                <button onclick="closeDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <form id="agendaForm" onsubmit="saveAgenda(event)">
+                <div class="form-group">
+                    <label class="form-label">Meeting Title *</label>
+                    <input type="text" class="form-input" id="meetingTitle" required 
+                           placeholder="e.g., Department Meeting - November 2025">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Date *</label>
+                        <input type="date" class="form-input" id="meetingDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Time *</label>
+                        <input type="time" class="form-input" id="meetingTime" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Location *</label>
+                    <input type="text" class="form-input" id="meetingLocation" required 
+                           placeholder="e.g., Science Lab 1">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Attendees (one per line)</label>
+                    <textarea class="form-textarea" id="meetingAttendees" rows="4" 
+                              placeholder="John Smith - Head of Department&#10;Jane Doe - Chemistry Teacher&#10;..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Agenda Items</label>
+                    <div id="agendaItems">
+                        <div class="agenda-item-input" style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <input type="text" class="form-input" placeholder="Agenda item 1" style="flex: 1;">
+                            <button type="button" onclick="removeAgendaItem(this)" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" onclick="addAgendaItem()" class="btn btn-secondary btn-sm" style="margin-top: 0.5rem;">
+                        <i class="fas fa-plus"></i> Add Item
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Additional Notes</label>
+                    <textarea class="form-textarea" id="meetingNotes" rows="4" 
+                              placeholder="Any additional information..."></textarea>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" onclick="closeDynamicContent()" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Agenda
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    // Set default date to today
+    document.getElementById('meetingDate').valueAsDate = new Date();
+};
+
+window.addAgendaItem = function() {
+    const container = document.getElementById('agendaItems');
+    const itemCount = container.children.length + 1;
+    const newItem = document.createElement('div');
+    newItem.className = 'agenda-item-input';
+    newItem.style.cssText = 'display: flex; gap: 0.5rem; margin-bottom: 0.5rem;';
+    newItem.innerHTML = `
+        <input type="text" class="form-input" placeholder="Agenda item ${itemCount}" style="flex: 1;">
+        <button type="button" onclick="removeAgendaItem(this)" class="btn btn-danger btn-sm">
+            <i class="fas fa-trash"></i>
+        </button>
+    `;
+    container.appendChild(newItem);
+};
+
+window.removeAgendaItem = function(button) {
+    const container = document.getElementById('agendaItems');
+    if (container.children.length > 1) {
+        button.parentElement.remove();
+    } else {
+        alert('You must have at least one agenda item.');
+    }
+};
+
+window.saveAgenda = function(event) {
+    event.preventDefault();
+    
+    const title = document.getElementById('meetingTitle').value;
+    const date = document.getElementById('meetingDate').value;
+    const time = document.getElementById('meetingTime').value;
+    const location = document.getElementById('meetingLocation').value;
+    const attendees = document.getElementById('meetingAttendees').value;
+    const notes = document.getElementById('meetingNotes').value;
+    
+    const agendaItems = [];
+    document.querySelectorAll('#agendaItems input').forEach(input => {
+        if (input.value.trim()) {
+            agendaItems.push(input.value.trim());
+        }
+    });
+    
+    const agenda = {
+        id: Date.now().toString(),
+        title,
+        date,
+        time,
+        location,
+        attendees: attendees.split('\n').filter(a => a.trim()),
+        agendaItems,
+        notes,
+        createdAt: new Date().toISOString(),
+        type: 'agenda'
+    };
+    
+    // Save to localStorage
+    let agendas = JSON.parse(localStorage.getItem('meetingAgendas')) || [];
+    agendas.push(agenda);
+    localStorage.setItem('meetingAgendas', JSON.stringify(agendas));
+    
+    alert('✅ Agenda saved successfully!');
+    closeDynamicContent();
+    showPastAgendas();
+};
+
+// View Past Agendas
+window.showPastAgendas = function() {
+    const agendas = JSON.parse(localStorage.getItem('meetingAgendas')) || [];
+    const dynamicContent = document.getElementById('meetings-dynamic-content');
+    
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-folder-open"></i> Past Meeting Agendas</h3>
+                <button onclick="closeDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            ${agendas.length === 0 ? 
+                '<p style="text-align: center; color: #999; padding: 2rem;">No agendas found. Create your first agenda!</p>' :
+                `<div class="agenda-list">
+                    ${agendas.map(agenda => `
+                        <div class="agenda-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--primary);">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div style="flex: 1;">
+                                    <h4 style="color: var(--primary); margin-bottom: 0.5rem;">${agenda.title}</h4>
+                                    <p style="color: #666; margin-bottom: 0.5rem;">
+                                        <i class="fas fa-calendar"></i> ${new Date(agenda.date).toLocaleDateString()} 
+                                        <i class="fas fa-clock" style="margin-left: 1rem;"></i> ${agenda.time}
+                                    </p>
+                                    <p style="color: #666; margin-bottom: 0.5rem;">
+                                        <i class="fas fa-map-marker-alt"></i> ${agenda.location}
+                                    </p>
+                                    <p style="color: #999; font-size: 0.85rem;">
+                                        Created: ${new Date(agenda.createdAt).toLocaleString()}
+                                    </p>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button onclick="viewAgenda('${agenda.id}')" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                    <button onclick="deleteAgenda('${agenda.id}')" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>`
+            }
+        </div>
+    `;
+};
+
+window.viewAgenda = function(id) {
+    const agendas = JSON.parse(localStorage.getItem('meetingAgendas')) || [];
+    const agenda = agendas.find(a => a.id === id);
+    
+    if (!agenda) return;
+    
+    const dynamicContent = document.getElementById('meetings-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-file-alt"></i> ${agenda.title}</h3>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button onclick="downloadAgenda('${id}')" class="btn btn-success btn-sm">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button onclick="showPastAgendas()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                </div>
+            </div>
+            
+            <div class="agenda-view" style="line-height: 1.8;">
+                <p><strong>Date:</strong> ${new Date(agenda.date).toLocaleDateString()}</p>
+                <p><strong>Time:</strong> ${agenda.time}</p>
+                <p><strong>Location:</strong> ${agenda.location}</p>
+                
+                ${agenda.attendees.length > 0 ? `
+                    <div style="margin-top: 1.5rem;">
+                        <strong>Attendees:</strong>
+                        <ul style="margin-top: 0.5rem;">
+                            ${agenda.attendees.map(a => `<li>${a}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+                
+                <div style="margin-top: 1.5rem;">
+                    <strong>Agenda Items:</strong>
+                    <ol style="margin-top: 0.5rem;">
+                        ${agenda.agendaItems.map(item => `<li>${item}</li>`).join('')}
+                    </ol>
+                </div>
+                
+                ${agenda.notes ? `
+                    <div style="margin-top: 1.5rem;">
+                        <strong>Additional Notes:</strong>
+                        <p style="margin-top: 0.5rem; white-space: pre-line;">${agenda.notes}</p>
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+    `;
+};
+
+window.downloadAgenda = function(id) {
+    const agendas = JSON.parse(localStorage.getItem('meetingAgendas')) || [];
+    const agenda = agendas.find(a => a.id === id);
+    
+    if (!agenda) return;
+    
+    // Create text content
+    let content = `${agenda.title}\n`;
+    content += `${'='.repeat(agenda.title.length)}\n\n`;
+    content += `Date: ${new Date(agenda.date).toLocaleDateString()}\n`;
+    content += `Time: ${agenda.time}\n`;
+    content += `Location: ${agenda.location}\n\n`;
+    
+    if (agenda.attendees.length > 0) {
+        content += `Attendees:\n`;
+        agenda.attendees.forEach(a => content += `  - ${a}\n`);
+        content += `\n`;
+    }
+    
+    content += `Agenda Items:\n`;
+    agenda.agendaItems.forEach((item, index) => {
+        content += `  ${index + 1}. ${item}\n`;
+    });
+    
+    if (agenda.notes) {
+        content += `\nAdditional Notes:\n${agenda.notes}\n`;
+    }
+    
+    // Create and download file
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${agenda.title.replace(/[^a-z0-9]/gi, '_')}_agenda.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+};
+
+window.deleteAgenda = function(id) {
+    if (!confirm('Are you sure you want to delete this agenda?')) return;
+    
+    let agendas = JSON.parse(localStorage.getItem('meetingAgendas')) || [];
+    agendas = agendas.filter(a => a.id !== id);
+    localStorage.setItem('meetingAgendas', JSON.stringify(agendas));
+    
+    alert('✅ Agenda deleted successfully!');
+    showPastAgendas();
+};
+
+// View Past Minutes
+window.showPastMinutes = function() {
+    const minutes = JSON.parse(localStorage.getItem('meetingMinutes')) || [];
+    const dynamicContent = document.getElementById('meetings-dynamic-content');
+    
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-history"></i> Past Meeting Minutes</h3>
+                <button onclick="closeDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            ${minutes.length === 0 ? 
+                '<p style="text-align: center; color: #999; padding: 2rem;">No meeting minutes found. Upload or create meeting minutes!</p>' :
+                `<div class="minutes-list">
+                    ${minutes.map(minute => `
+                        <div class="minutes-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--success);">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <h4 style="color: var(--success); margin-bottom: 0.5rem;">${minute.title}</h4>
+                                    <p style="color: #666;">${new Date(minute.date).toLocaleDateString()}</p>
+                                </div>
+                                <button onclick="viewMinutes('${minute.id}')" class="btn btn-success btn-sm">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>`
+            }
+        </div>
+    `;
+};
+
+// Upload Document
+window.showUploadDocument = function(type) {
+    const dynamicContent = document.getElementById('meetings-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-cloud-upload-alt"></i> Upload Meeting Document</h3>
+                <button onclick="closeDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <form onsubmit="uploadMeetingDocument(event)">
+                <div class="upload-area" style="border: 2px dashed var(--primary); border-radius: 8px; padding: 3rem; text-align: center; margin-bottom: 1.5rem; background: #f8fdff; cursor: pointer;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <p>Click to browse or drag and drop your file here</p>
+                    <input type="file" id="meetingDocUpload" accept=".pdf,.doc,.docx,.txt" style="display: none;">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Document Type *</label>
+                    <select class="form-select" id="docType" required>
+                        <option value="agenda">Meeting Agenda</option>
+                        <option value="minutes">Meeting Minutes</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Document Title *</label>
+                    <input type="text" class="form-input" id="docTitle" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="docDescription" rows="3"></textarea>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" onclick="closeDynamicContent()" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Upload
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    // Add file input handler
+    const uploadArea = document.querySelector('.upload-area');
+    const fileInput = document.getElementById('meetingDocUpload');
+    
+    uploadArea.addEventListener('click', () => fileInput.click());
+    
+    fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            uploadArea.querySelector('p').textContent = `Selected: ${this.files[0].name}`;
+        }
+    });
+};
+
+window.uploadMeetingDocument = function(event) {
+    event.preventDefault();
+    
+    const fileInput = document.getElementById('meetingDocUpload');
+    const docType = document.getElementById('docType').value;
+    const title = document.getElementById('docTitle').value;
+    const description = document.getElementById('docDescription').value;
+    
+    if (!fileInput.files.length) {
+        alert('Please select a file to upload');
+        return;
+    }
+    
+    // In production, this would upload to your server/drive
+    alert(`✅ Document "${title}" uploaded successfully!\n\nType: ${docType}\nFile: ${fileInput.files[0].name}`);
+    closeDynamicContent();
+};
+
+window.closeDynamicContent = function() {
+    const dynamicContent = document.getElementById('meetings-dynamic-content');
+    if (dynamicContent) {
+        dynamicContent.innerHTML = '';
+    }
+};
 function initializeMobileMenu() {
     const navToggle = document.querySelector('.nav-toggle');
     const nav = document.querySelector('nav ul');
@@ -169,17 +789,8 @@ function initializeCalendar() {
             year: 'numeric' 
         });
 
-        // Clear calendar
+        // Clear calendar completely
         calendar.innerHTML = '';
-
-        // Add day headers
-        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        days.forEach(day => {
-            const dayHeader = document.createElement('div');
-            dayHeader.className = 'calendar-day-header';
-            dayHeader.textContent = day;
-            calendar.appendChild(dayHeader);
-        });
 
         // Calculate calendar days
         const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -199,11 +810,7 @@ function initializeCalendar() {
         for (let day = 1; day <= totalDays; day++) {
             const dayElement = document.createElement('div');
             dayElement.className = 'calendar-day';
-            
-            const dayNumber = document.createElement('div');
-            dayNumber.className = 'day-number';
-            dayNumber.textContent = day;
-            dayElement.appendChild(dayNumber);
+            dayElement.textContent = day;
 
             // Check if it's today
             if (day === today.getDate() && 
@@ -222,10 +829,6 @@ function initializeCalendar() {
 
             if (dayEvents.length > 0) {
                 dayElement.classList.add('event');
-                const eventDot = document.createElement('div');
-                eventDot.className = 'event-dot';
-                eventDot.title = dayEvents.map(e => e.title).join(', ');
-                dayElement.appendChild(eventDot);
                 
                 // Add click handler to show event details
                 dayElement.addEventListener('click', function() {
