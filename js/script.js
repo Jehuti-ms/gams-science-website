@@ -161,12 +161,13 @@ function initializeSidebar() {
 
 // ===== SECTION NAVIGATION HANDLER =====
 function handleSectionNavigation(sectionId) {
-    console.log('Navigating to section:', sectionId);
+    console.log('🔍 Navigating to section:', sectionId);
     
     // Hide the welcome section
     const welcomeSection = document.getElementById('welcome-section');
     if (welcomeSection) {
         welcomeSection.style.display = 'none';
+        console.log('✅ Welcome section hidden');
     }
     
     // Get or create the section content container
@@ -176,12 +177,14 @@ function handleSectionNavigation(sectionId) {
         sectionContainer = document.createElement('div');
         sectionContainer.id = 'section-content-container';
         contentArea.appendChild(sectionContainer);
+        console.log('✅ Section container created');
     }
     
     // Clear existing content
     sectionContainer.innerHTML = '';
     
     // Load the appropriate section
+    console.log('📂 Loading section content for:', sectionId);
     loadSectionContent(sectionId);
     
     // Scroll to the section
@@ -193,11 +196,17 @@ function handleSectionNavigation(sectionId) {
 // ===== LOAD SECTION CONTENT =====
 function loadSectionContent(sectionId) {
     const sectionContainer = document.getElementById('section-content-container');
-    if (!sectionContainer) return;
+    if (!sectionContainer) {
+        console.error('❌ Section container not found!');
+        return;
+    }
     
     // Check if we're on department-admin page
     const currentPage = window.location.pathname.split('/').pop();
+    console.log('📄 Current page:', currentPage);
+    
     if (currentPage !== 'department-admin.html' && currentPage !== '') {
+        console.log('⚠️ Not on department-admin page, skipping load');
         return;
     }
     
@@ -206,35 +215,48 @@ function loadSectionContent(sectionId) {
     
     // Small delay for smooth loading effect
     setTimeout(() => {
+        console.log('🚀 Loading section:', sectionId);
+        
         // Load content based on section
         switch(sectionId) {
             case 'meetings':
+                console.log('📅 Loading Meetings section');
                 loadMeetingsSection(sectionContainer);
                 break;
             case 'documents':
+                console.log('📄 Loading Documents section');
                 loadDocumentsSection(sectionContainer);
                 break;
             case 'timetables':
+                console.log('🗓️ Loading Timetables section');
                 loadTimetablesSection(sectionContainer);
                 break;
             case 'estimates':
+                console.log('💰 Loading Estimates section');
                 loadEstimatesSection(sectionContainer);
                 break;
             case 'budget':
+                console.log('💵 Loading Budget section');
                 loadBudgetSection(sectionContainer);
                 break;
             case 'marksheets':
+                console.log('📋 Loading Marksheets section');
                 loadMarksheetsSection(sectionContainer);
                 break;
             case 'appraisals':
+                console.log('✅ Loading Appraisals section');
                 loadAppraisalsSection(sectionContainer);
                 break;
             case 'inventory':
+                console.log('📦 Loading Inventory section');
                 loadInventorySection(sectionContainer);
                 break;
             default:
+                console.error('❌ Unknown section:', sectionId);
                 sectionContainer.innerHTML = '<div class="drive-section"><p style="text-align: center; color: #999; padding: 2rem;">Section not found.</p></div>';
         }
+        
+        console.log('✅ Section loaded successfully');
     }, 300);
 }
 
