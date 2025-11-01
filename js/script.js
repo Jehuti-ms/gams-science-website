@@ -1,3 +1,4 @@
+
 // ===== GAMS SCIENCE DEPARTMENT - ENHANCED JAVASCRIPT =====
 
 // Initialize everything when DOM is ready
@@ -116,6 +117,122 @@ function initializeSidebar() {
                 }
             });
         }
+
+        // Function to update sidebar active state based on current section
+function updateSidebarActiveState(sectionId) {
+    const sidebarItems = document.querySelectorAll('.sidebar-item');
+    
+    sidebarItems.forEach(item => {
+        const submenu = item.querySelector('.sidebar-submenu');
+        if (submenu) {
+            const submenuLinks = submenu.querySelectorAll('a');
+            let foundActive = false;
+            
+            submenuLinks.forEach(subLink => {
+                const href = subLink.getAttribute('href');
+                if (href === '#' + sectionId) {
+                    subLink.style.color = 'white';
+                    subLink.style.background = 'rgba(255, 255, 255, 0.1)';
+                    foundActive = true;
+                    
+                    // Ensure the parent item is expanded
+                    item.classList.add('active');
+                } else {
+                    subLink.style.color = '';
+                    subLink.style.background = '';
+                }
+            });
+            
+            // If no active sublink found, collapse the parent
+            if (!foundActive && !item.classList.contains('persistent-active')) {
+                item.classList.remove('active');
+            }
+        }
+    });
+}
+
+// Update the handleSectionNavigation to call this
+function handleSectionNavigation(sectionId) {
+    console.log('Navigating to section:', sectionId);
+    
+    // Hide the welcome section
+    const welcomeSection = document.getElementById('welcome-section');
+    if (welcomeSection) {
+        welcomeSection.style.display = 'none';
+    }
+    
+    // Get or create the section content container
+    let sectionContainer = document.getElementById('section-content-container');
+    if (!sectionContainer) {
+        const contentArea = document.querySelector('.content');
+        sectionContainer = document.createElement('div');
+        sectionContainer.id = 'section-content-container';
+        contentArea.appendChild(sectionContainer);
+    }
+    
+    // Clear existing content
+    sectionContainer.innerHTML = '';
+    
+    // Update sidebar active state
+    updateSidebarActiveState(sectionId);
+    
+    // Load the appropriate section
+    loadSectionContent(sectionId);
+    
+    // Scroll to the section
+    setTimeout(() => {
+        sectionContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+}
+        
+        // Add click handlers for submenu links
+        if (submenu) {
+            const submenuLinks = submenu.querySelectorAll('a');
+            submenuLinks.forEach(subLink => {
+                subLink.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    // Check if it's a hash link for department admin sections
+                    if (href && href.startsWith('#')) {
+                        e.preventDefault();
+                        const sectionId = href.substring(1);
+                        
+                        // Check if we're on the department admin page
+                        if (currentPage === 'department-admin.html' || currentPage === '') {
+                            handleSectionNavigation(sectionId);
+                            
+                            // Update URL hash
+                            window.location.hash = href;
+                            
+                            // Highlight active submenu item
+                            submenuLinks.forEach(l => {
+                                l.style.color = '';
+                                l.style.background = '';
+                            });
+                            this.style.color = 'white';
+                            this.style.background = 'rgba(255, 255, 255, 0.1)';
+                        } else {
+                            // Navigate to department admin page with hash
+                            window.location.href = 'department-admin.html' + href;
+                        }
+                    }
+                });
+                
+                // Highlight if current hash matches
+                if (window.location.hash && subLink.getAttribute('href') === window.location.hash) {
+                    subLink.style.color = 'white';
+                    subLink.style.background = 'rgba(255, 255, 255, 0.1)';
+                }
+            });
+        }
+    });
+    
+    // Handle hash on page load for department admin
+    if ((currentPage === 'department-admin.html' || currentPage === '') && window.location.hash) {
+        const sectionId = window.location.hash.substring(1);
+        setTimeout(() => handleSectionNavigation(sectionId), 100);
+    }
+}
         
         // Add click handlers for submenu links
         if (submenu) {
@@ -265,6 +382,13 @@ function loadSectionContent(sectionId) {
                         throw new Error('loadInventorySection function not found');
                     }
                     break;
+                case 'subject-resources':
+                    if (typeof loadSubjectResourcesSection === 'function') {
+                        loadSubjectResourcesSection(sectionContainer);
+                    } else {
+                        throw new Error('loadSubjectResourcesSection function not found');
+                    }
+                    break;
                 default:
                     sectionContainer.innerHTML = '<div class="drive-section"><p style="text-align: center; color: #999; padding: 2rem;">Section not found.</p></div>';
             }
@@ -274,6 +398,9 @@ function loadSectionContent(sectionId) {
                 <div class="error-message" style="text-align: center; padding: 2rem; color: #d32f2f;">
                     <i class="fas fa-exclamation-triangle" style="font-size: 2rem;"></i>
                     <p>Error loading content: ${error.message}</p>
+                    <button onclick="returnToOverview()" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-arrow-left"></i> Back to Overview
+                    </button>
                 </div>
             `;
         }
@@ -1719,3 +1846,36 @@ window.addEventListener('unhandledrejection', function(e) {
 });
 
 console.log('✅ GAMS Science Department JavaScript loaded successfully');
+
+// ===== NAVIGATION HELPER FUNCTIONS =====
+
+// Function to navigate to department admin with specific section
+window.navigateToSection = function(sectionId) {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    if (currentPage === 'department-admin.html' || currentPage === '') {
+        // We're already on the department admin page
+        handleSectionNavigation(sectionId);
+        window.location.hash = '#' + sectionId;
+    } else {
+        // Navigate to department admin page with hash
+        window.location.href = 'department-admin.html#' + sectionId;
+    }
+};
+
+// Function to handle page load with hash
+function handlePageLoadWithHash() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    if ((currentPage === 'department-admin.html' || currentPage === '') && window.location.hash) {
+        const sectionId = window.location.hash.substring(1);
+        setTimeout(() => handleSectionNavigation(sectionId), 300);
+    }
+}
+
+// Call this on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    handlePageLoadWithHash();
+});
+
+
