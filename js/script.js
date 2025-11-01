@@ -5626,6 +5626,176 @@ window.getRecommendationColor = function(recommendation) {
     }
 };
 
+// ===== HELPER FUNCTIONS =====
+
+// Close dynamic content
+window.closeTeacherAppraisalsDynamicContent = function() {
+    const dynamicContent = document.getElementById('teacher-appraisals-dynamic-content');
+    if (dynamicContent) {
+        dynamicContent.innerHTML = '<div style="text-align: center; padding: 3rem; color: #999;"><i class="fas fa-user-check" style="font-size: 4rem; margin-bottom: 1rem;"></i><p>Select an option above to manage teacher appraisals</p></div>';
+    }
+};
+
+// Evaluator management
+window.addEvaluator = function() {
+    const container = document.getElementById('evaluatorItems');
+    const newItem = document.createElement('div');
+    newItem.className = 'evaluator-item';
+    newItem.style.cssText = 'display: grid; grid-template-columns: 2fr 1fr 100px; gap: 1rem; padding: 1rem; border-bottom: 1px solid #eee; align-items: center;';
+    newItem.innerHTML = `
+        <select class="form-select">
+            <option value="head_department">Head of Department</option>
+            <option value="principal">Principal</option>
+            <option value="senior_teacher">Senior Teacher</option>
+            <option value="external">External Evaluator</option>
+        </select>
+        <select class="form-select">
+            <option value="primary">Primary Evaluator</option>
+            <option value="secondary">Secondary Evaluator</option>
+            <option value="observer">Observer</option>
+        </select>
+        <button type="button" onclick="removeEvaluator(this)" class="btn btn-danger btn-sm">
+            <i class="fas fa-trash"></i>
+        </button>
+    `;
+    container.appendChild(newItem);
+};
+
+window.removeEvaluator = function(button) {
+    const container = document.getElementById('evaluatorItems');
+    if (container.children.length > 1) {
+        button.closest('.evaluator-item').remove();
+    } else {
+        alert('You must have at least one evaluator.');
+    }
+};
+
+// Form submission handlers
+window.startAppraisalProcess = function(event) {
+    event.preventDefault();
+    
+    const teacherSelect = document.getElementById('appraisalTeacher');
+    const type = document.getElementById('appraisalType').value;
+    const year = document.getElementById('appraisalYear').value;
+    const dueDate = document.getElementById('appraisalDueDate').value;
+    const template = document.getElementById('appraisalTemplate').value;
+    const objectives = document.getElementById('appraisalObjectives').value;
+    
+    // Get evaluators
+    const evaluators = [];
+    document.querySelectorAll('#evaluatorItems .evaluator-item').forEach(item => {
+        const role = item.querySelector('select:first-child').value;
+        evaluators.push(role);
+    });
+    
+    const newAppraisal = {
+        id: 'appr_' + Date.now(),
+        teacherName: teacherSelect.options[teacherSelect.selectedIndex].text,
+        type: type,
+        startDate: new Date().toISOString(),
+        dueDate: dueDate,
+        progress: 0,
+        objectives: objectives,
+        currentStage: 'Initial Setup',
+        evaluators: evaluators,
+        template: template,
+        academicYear: year,
+        department: teacherSelect.options[teacherSelect.selectedIndex].text.includes('Physics') ? 'Physics' : 
+                   teacherSelect.options[teacherSelect.selectedIndex].text.includes('Chemistry') ? 'Chemistry' :
+                   teacherSelect.options[teacherSelect.selectedIndex].text.includes('Biology') ? 'Biology' : 'Mathematics'
+    };
+    
+    // Save to ongoing appraisals
+    let ongoingAppraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
+    ongoingAppraisals.push(newAppraisal);
+    localStorage.setItem('ongoingAppraisals', JSON.stringify(ongoingAppraisals));
+    
+    alert('✅ Appraisal process started successfully!');
+    closeTeacherAppraisalsDynamicContent();
+    showOngoingAppraisals();
+};
+
+// Appraisal actions
+window.continueAppraisal = function(appraisalId) {
+    alert(`Continuing appraisal: ${appraisalId}\n\nThis would open the appraisal form for completion.`);
+};
+
+window.viewAppraisal = function(appraisalId) {
+    const ongoingAppraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
+    const appraisal = ongoingAppraisals.find(a => a.id === appraisalId);
+    
+    if (appraisal) {
+        alert(`Viewing Appraisal: ${appraisal.teacherName}\nType: ${appraisal.type}\nProgress: ${appraisal.progress}%\nCurrent Stage: ${appraisal.currentStage}`);
+    }
+};
+
+window.viewCompletedAppraisal = function(appraisalId) {
+    const completedAppraisals = JSON.parse(localStorage.getItem('completedAppraisals')) || [];
+    const appraisal = completedAppraisals.find(a => a.id === appraisalId);
+    
+    if (appraisal) {
+        alert(`Viewing Completed Appraisal: ${appraisal.teacherName}\nRating: ${appraisal.overallRating}/5\nRecommendation: ${appraisal.recommendation}`);
+    }
+};
+
+window.cancelAppraisal = function(appraisalId) {
+    if (confirm('Are you sure you want to cancel this appraisal? This action cannot be undone.')) {
+        let ongoingAppraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
+        ongoingAppraisals = ongoingAppraisals.filter(a => a.id !== appraisalId);
+        localStorage.setItem('ongoingAppraisals', JSON.stringify(ongoingAppraisals));
+        
+        alert('✅ Appraisal cancelled successfully!');
+        showOngoingAppraisals();
+    }
+};
+
+window.downloadAppraisal = function(appraisalId) {
+    alert(`Downloading appraisal report for ID: ${appraisalId}`);
+};
+
+// Export functions
+window.exportOngoingAppraisals = function() {
+    alert('Exporting ongoing appraisals data...');
+};
+
+window.exportCompletedAppraisals = function() {
+    alert('Exporting completed appraisals data...');
+};
+
+// Calculation helper functions
+window.calculateAverageRating = function(appraisals) {
+    if (!appraisals || appraisals.length === 0) return 0;
+    
+    const total = appraisals.reduce((sum, appraisal) => sum + appraisal.overallRating, 0);
+    return total / appraisals.length;
+};
+
+window.calculateImprovementRate = function(appraisals) {
+    return appraisals.length > 0 ? 12 : 0;
+};
+
+window.getRatingColor = function(rating) {
+    if (rating >= 4.5) return 'var(--success)';
+    if (rating >= 4.0) return 'var(--info)';
+    if (rating >= 3.5) return 'var(--warning)';
+    return 'var(--danger)';
+};
+
+window.getRecommendationColor = function(recommendation) {
+    switch(recommendation) {
+        case 'Promotion Recommended':
+            return 'var(--success)';
+        case 'Continue Current Role':
+            return 'var(--info)';
+        case 'Development Needed':
+            return 'var(--warning)';
+        case 'Performance Improvement Plan':
+            return 'var(--danger)';
+        default:
+            return '#666';
+    }
+};
+
 // ===== INVENTORY SECTION =====
 function loadInventorySection(container) {
     container.innerHTML = `
