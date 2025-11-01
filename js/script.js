@@ -5230,6 +5230,35 @@ window.showStartAppraisal = function() {
 
 // Ongoing Appraisals Section
 window.showOngoingAppraisals = function() {
+    // Initialize sample data if not exists
+    if (!localStorage.getItem('ongoingAppraisals')) {
+        const sampleAppraisals = [
+            {
+                id: 'appr_001',
+                teacherName: 'Dr. Sarah Johnson',
+                type: 'Annual Appraisal',
+                startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                dueDate: new Date(Date.now() + 23 * 24 * 60 * 60 * 1000).toISOString(),
+                progress: 45,
+                objectives: 'Comprehensive annual performance review focusing on teaching methodology and student outcomes',
+                currentStage: 'Classroom Observation',
+                evaluators: ['Head of Department', 'Senior Teacher']
+            },
+            {
+                id: 'appr_002',
+                teacherName: 'Prof. Michael Chen',
+                type: 'Promotion Assessment',
+                startDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+                dueDate: new Date(Date.now() + 27 * 24 * 60 * 60 * 1000).toISOString(),
+                progress: 20,
+                objectives: 'Assessment for senior lecturer promotion focusing on research and leadership',
+                currentStage: 'Document Review',
+                evaluators: ['Principal', 'External Evaluator']
+            }
+        ];
+        localStorage.setItem('ongoingAppraisals', JSON.stringify(sampleAppraisals));
+    }
+
     const appraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
     const dynamicContent = document.getElementById('teacher-appraisals-dynamic-content');
     
@@ -5295,6 +5324,33 @@ window.showOngoingAppraisals = function() {
 
 // Completed Appraisals Section
 window.showCompletedAppraisals = function() {
+    // Initialize sample data if not exists
+    if (!localStorage.getItem('completedAppraisals')) {
+        const sampleCompleted = [
+            {
+                id: 'comp_001',
+                teacherName: 'Dr. Emily Davis',
+                type: 'Annual Appraisal',
+                completionDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+                overallRating: 4.7,
+                summary: 'Excellent performance across all evaluation criteria with notable achievements in student engagement',
+                recommendation: 'Promotion Recommended',
+                evaluatedBy: 'Head of Department'
+            },
+            {
+                id: 'comp_002',
+                teacherName: 'Mr. Robert Brown',
+                type: 'Probation Review',
+                completionDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+                overallRating: 3.8,
+                summary: 'Satisfactory performance with areas identified for professional development',
+                recommendation: 'Continue Current Role',
+                evaluatedBy: 'Principal'
+            }
+        ];
+        localStorage.setItem('completedAppraisals', JSON.stringify(sampleCompleted));
+    }
+
     const appraisals = JSON.parse(localStorage.getItem('completedAppraisals')) || [];
     const dynamicContent = document.getElementById('teacher-appraisals-dynamic-content');
     
@@ -5318,11 +5374,11 @@ window.showCompletedAppraisals = function() {
                     <div style="color: #666;">Total Completed</div>
                 </div>
                 <div class="stat-card" style="background: #f0f9f0; padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid var(--success);">
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--success);">${calculateAverageRating().toFixed(1)}/5</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--success);">${calculateAverageRating(appraisals).toFixed(1)}/5</div>
                     <div style="color: #666;">Average Rating</div>
                 </div>
                 <div class="stat-card" style="background: #fffbf0; padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid var(--warning);">
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--warning);">${calculateImprovementRate()}%</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--warning);">${calculateImprovementRate(appraisals)}%</div>
                     <div style="color: #666;">Improvement Rate</div>
                 </div>
             </div>
@@ -5360,7 +5416,7 @@ window.showCompletedAppraisals = function() {
                                     </div>
                                 </div>
                                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                    <button onclick="viewAppraisal('${appraisal.id}')" class="btn btn-primary btn-sm">
+                                    <button onclick="viewCompletedAppraisal('${appraisal.id}')" class="btn btn-primary btn-sm">
                                         <i class="fas fa-eye"></i> View
                                     </button>
                                     <button onclick="downloadAppraisal('${appraisal.id}')" class="btn btn-success btn-sm">
@@ -5459,7 +5515,7 @@ window.showPerformanceTrends = function() {
                 <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end;">
                     <div class="form-group">
                         <label class="form-label">Department</label>
-                        <select class="form-select" onchange="updateTrendsAnalysis()">
+                        <select class="form-select" id="trendsDepartment" onchange="updateTrendsAnalysis()">
                             <option value="all">All Departments</option>
                             <option value="physics">Physics</option>
                             <option value="chemistry">Chemistry</option>
@@ -5469,7 +5525,7 @@ window.showPerformanceTrends = function() {
                     </div>
                     <div class="form-group">
                         <label class="form-label">Time Period</label>
-                        <select class="form-select" onchange="updateTrendsAnalysis()">
+                        <select class="form-select" id="trendsPeriod" onchange="updateTrendsAnalysis()">
                             <option value="last_year">Last Year</option>
                             <option value="last_2_years">Last 2 Years</option>
                             <option value="last_5_years">Last 5 Years</option>
@@ -5722,7 +5778,9 @@ window.showAppraisalSettings = function() {
     `;
 };
 
-// Helper functions for Teacher Appraisals section
+// ===== HELPER FUNCTIONS =====
+
+// Close dynamic content
 window.closeTeacherAppraisalsDynamicContent = function() {
     const dynamicContent = document.getElementById('teacher-appraisals-dynamic-content');
     if (dynamicContent) {
@@ -5730,6 +5788,7 @@ window.closeTeacherAppraisalsDynamicContent = function() {
     }
 };
 
+// Evaluator management
 window.addEvaluator = function() {
     const container = document.getElementById('evaluatorItems');
     const newItem = document.createElement('div');
@@ -5763,49 +5822,111 @@ window.removeEvaluator = function(button) {
     }
 };
 
+// Form submission handlers
 window.startAppraisalProcess = function(event) {
     event.preventDefault();
+    
+    const teacher = document.getElementById('appraisalTeacher').value;
+    const type = document.getElementById('appraisalType').value;
+    const year = document.getElementById('appraisalYear').value;
+    const dueDate = document.getElementById('appraisalDueDate').value;
+    const template = document.getElementById('appraisalTemplate').value;
+    const objectives = document.getElementById('appraisalObjectives').value;
+    
+    // Get evaluators
+    const evaluators = [];
+    document.querySelectorAll('#evaluatorItems .evaluator-item').forEach(item => {
+        const role = item.querySelector('select:first-child').value;
+        const type = item.querySelector('select:last-child').value;
+        evaluators.push({ role, type });
+    });
+    
+    const newAppraisal = {
+        id: 'appr_' + Date.now(),
+        teacherName: document.getElementById('appraisalTeacher').options[document.getElementById('appraisalTeacher').selectedIndex].text,
+        type: type,
+        startDate: new Date().toISOString(),
+        dueDate: dueDate,
+        progress: 0,
+        objectives: objectives,
+        currentStage: 'Initial Setup',
+        evaluators: evaluators.map(e => e.role),
+        template: template,
+        academicYear: year
+    };
+    
+    // Save to ongoing appraisals
+    let ongoingAppraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
+    ongoingAppraisals.push(newAppraisal);
+    localStorage.setItem('ongoingAppraisals', JSON.stringify(ongoingAppraisals));
+    
     alert('✅ Appraisal process started successfully!');
     closeTeacherAppraisalsDynamicContent();
+    showOngoingAppraisals();
 };
 
+// Appraisal actions
 window.continueAppraisal = function(appraisalId) {
-    alert(`Continuing appraisal: ${appraisalId}`);
+    alert(`Continuing appraisal: ${appraisalId}\n\nThis would open the appraisal form for completion.`);
 };
 
 window.viewAppraisal = function(appraisalId) {
-    alert(`Viewing appraisal: ${appraisalId}`);
+    const ongoingAppraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
+    const appraisal = ongoingAppraisals.find(a => a.id === appraisalId);
+    
+    if (appraisal) {
+        alert(`Viewing Appraisal: ${appraisal.teacherName}\nType: ${appraisal.type}\nProgress: ${appraisal.progress}%\nCurrent Stage: ${appraisal.currentStage}`);
+    }
+};
+
+window.viewCompletedAppraisal = function(appraisalId) {
+    const completedAppraisals = JSON.parse(localStorage.getItem('completedAppraisals')) || [];
+    const appraisal = completedAppraisals.find(a => a.id === appraisalId);
+    
+    if (appraisal) {
+        alert(`Viewing Completed Appraisal: ${appraisal.teacherName}\nRating: ${appraisal.overallRating}/5\nRecommendation: ${appraisal.recommendation}`);
+    }
 };
 
 window.cancelAppraisal = function(appraisalId) {
-    if (confirm('Are you sure you want to cancel this appraisal?')) {
-        alert(`Appraisal ${appraisalId} cancelled.`);
+    if (confirm('Are you sure you want to cancel this appraisal? This action cannot be undone.')) {
+        let ongoingAppraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
+        ongoingAppraisals = ongoingAppraisals.filter(a => a.id !== appraisalId);
+        localStorage.setItem('ongoingAppraisals', JSON.stringify(ongoingAppraisals));
+        
+        alert('✅ Appraisal cancelled successfully!');
+        showOngoingAppraisals();
     }
 };
 
 window.downloadAppraisal = function(appraisalId) {
-    alert(`Downloading appraisal: ${appraisalId}`);
+    alert(`Downloading appraisal report for ID: ${appraisalId}`);
 };
 
+// Export functions
 window.exportOngoingAppraisals = function() {
-    alert('Exporting ongoing appraisals...');
+    alert('Exporting ongoing appraisals data...');
 };
 
 window.exportCompletedAppraisals = function() {
-    alert('Exporting completed appraisals...');
+    alert('Exporting completed appraisals data...');
 };
 
+// Template functions
 window.useTemplate = function(templateId) {
-    alert(`Using template: ${templateId}`);
+    alert(`Using template: ${templateId}\n\nThis would pre-fill the appraisal form with the selected template.`);
     showStartAppraisal();
 };
 
 window.createNewTemplate = function() {
-    alert('Creating new appraisal template...');
+    alert('Opening template creation form...');
 };
 
+// Trends analysis
 window.updateTrendsAnalysis = function() {
-    console.log('Updating trends analysis...');
+    const department = document.getElementById('trendsDepartment').value;
+    const period = document.getElementById('trendsPeriod').value;
+    console.log(`Updating trends for department: ${department}, period: ${period}`);
 };
 
 window.refreshTrends = function() {
@@ -5816,6 +5937,7 @@ window.exportTrendsReport = function() {
     alert('Exporting trends report...');
 };
 
+// Settings
 window.saveAppraisalSettings = function(event) {
     event.preventDefault();
     alert('✅ Appraisal settings saved successfully!');
@@ -5823,17 +5945,16 @@ window.saveAppraisalSettings = function(event) {
 };
 
 // Calculation helper functions
-window.calculateAverageRating = function() {
-    const appraisals = JSON.parse(localStorage.getItem('completedAppraisals')) || [];
-    if (appraisals.length === 0) return 0;
+window.calculateAverageRating = function(appraisals) {
+    if (!appraisals || appraisals.length === 0) return 0;
     
     const total = appraisals.reduce((sum, appraisal) => sum + appraisal.overallRating, 0);
     return total / appraisals.length;
 };
 
-window.calculateImprovementRate = function() {
+window.calculateImprovementRate = function(appraisals) {
     // Mock improvement rate calculation
-    return 12;
+    return appraisals.length > 0 ? 12 : 0;
 };
 
 window.getRatingColor = function(rating) {
