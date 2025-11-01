@@ -7213,3 +7213,4 @@ window.showUploadResources = function() {
 window.showResourceSearch = function() {
     const dynamicContent = document.getElementById('subject-resources-dynamic-content');
     dynamic
+}
