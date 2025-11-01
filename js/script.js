@@ -5058,14 +5058,14 @@ window.uploadMarksFile = function(event) {
 };
 
 // ===== TEACHER APPRAISALS SECTION =====
-function loadTeacherAppraisalsSection(container) {
+function loadAppraisalsSection(container) {
     console.log('Loading Teacher Appraisals section...');
     
     // Initialize sample data if not exists
     initializeAppraisalData();
     
     container.innerHTML = `
-        <div class="section-content" id="section-teacher-appraisals">
+        <div class="section-content" id="section-appraisals">
             <div class="drive-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                     <h3><i class="fas fa-user-check"></i> Teacher Appraisals</h3>
@@ -5113,7 +5113,7 @@ function loadTeacherAppraisalsSection(container) {
                     </div>
                 </div>
                 
-                <div id="teacher-appraisals-dynamic-content">
+                <div id="appraisals-dynamic-content">
                     <!-- Dynamic content will be loaded here -->
                     <div style="text-align: center; padding: 3rem; color: #999;">
                         <i class="fas fa-user-check" style="font-size: 4rem; margin-bottom: 1rem;"></i>
@@ -5190,12 +5190,12 @@ function initializeAppraisalData() {
 
 // Start Appraisal Section
 window.showStartAppraisal = function() {
-    const dynamicContent = document.getElementById('teacher-appraisals-dynamic-content');
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
     dynamicContent.innerHTML = `
         <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h3><i class="fas fa-play-circle"></i> Start New Teacher Appraisal</h3>
-                <button onclick="closeTeacherAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
                     <i class="fas fa-times"></i> Close
                 </button>
             </div>
@@ -5290,7 +5290,7 @@ window.showStartAppraisal = function() {
                 </div>
                 
                 <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
-                    <button type="button" onclick="closeTeacherAppraisalsDynamicContent()" class="btn btn-secondary">
+                    <button type="button" onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Cancel
                     </button>
                     <button type="submit" class="btn btn-primary">
@@ -5305,7 +5305,7 @@ window.showStartAppraisal = function() {
 // Ongoing Appraisals Section
 window.showOngoingAppraisals = function() {
     const appraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
-    const dynamicContent = document.getElementById('teacher-appraisals-dynamic-content');
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
     
     dynamicContent.innerHTML = `
         <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
@@ -5315,7 +5315,7 @@ window.showOngoingAppraisals = function() {
                     <button onclick="exportOngoingAppraisals()" class="btn btn-success btn-sm">
                         <i class="fas fa-download"></i> Export
                     </button>
-                    <button onclick="closeTeacherAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
                         <i class="fas fa-times"></i> Close
                     </button>
                 </div>
@@ -5373,7 +5373,7 @@ window.showOngoingAppraisals = function() {
 // Completed Appraisals Section
 window.showCompletedAppraisals = function() {
     const appraisals = JSON.parse(localStorage.getItem('completedAppraisals')) || [];
-    const dynamicContent = document.getElementById('teacher-appraisals-dynamic-content');
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
     
     dynamicContent.innerHTML = `
         <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
@@ -5383,7 +5383,7 @@ window.showCompletedAppraisals = function() {
                     <button onclick="exportCompletedAppraisals()" class="btn btn-success btn-sm">
                         <i class="fas fa-download"></i> Export All
                     </button>
-                    <button onclick="closeTeacherAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
                         <i class="fas fa-times"></i> Close
                     </button>
                 </div>
@@ -5454,13 +5454,260 @@ window.showCompletedAppraisals = function() {
     `;
 };
 
-// The rest of the sections (Templates, Performance Trends, Settings) remain the same as previous...
+// Appraisal Templates Section
+window.showAppraisalTemplates = function() {
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-copy"></i> Appraisal Templates</h3>
+                <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="templates-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="template-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; border: 2px dashed #dee2e6; cursor: pointer;" onclick="useAppraisalTemplate('comprehensive')">
+                    <i class="fas fa-clipboard-check" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Comprehensive Evaluation</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Full teacher evaluation covering all performance areas</p>
+                    <div class="template-stats" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-list"></i> 8 sections</span>
+                        <span style="color: #999;"><i class="fas fa-clock"></i> 45 min</span>
+                    </div>
+                </div>
+                
+                <div class="template-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; border: 2px dashed #dee2e6; cursor: pointer;" onclick="useAppraisalTemplate('classroom')">
+                    <i class="fas fa-chalkboard-teacher" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--info); margin-bottom: 0.5rem;">Classroom Observation</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Focus on teaching methodology and classroom management</p>
+                    <div class="template-stats" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-list"></i> 5 sections</span>
+                        <span style="color: #999;"><i class="fas fa-clock"></i> 30 min</span>
+                    </div>
+                </div>
+                
+                <div class="template-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; border: 2px dashed #dee2e6; cursor: pointer;" onclick="useAppraisalTemplate('student_feedback')">
+                    <i class="fas fa-user-graduate" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--success); margin-bottom: 0.5rem;">Student Feedback Focus</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Evaluation based on student feedback and outcomes</p>
+                    <div class="template-stats" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-list"></i> 6 sections</span>
+                        <span style="color: #999;"><i class="fas fa-clock"></i> 35 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Performance Trends Section
+window.showPerformanceTrends = function() {
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-chart-line"></i> Performance Trends</h3>
+                <div>
+                    <button onclick="exportTrendsReport()" class="btn btn-success btn-sm">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="trends-filters" style="margin-bottom: 2rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end;">
+                    <div class="form-group">
+                        <label class="form-label">Department</label>
+                        <select class="form-select" onchange="updateTrends()">
+                            <option value="all">All Departments</option>
+                            <option value="physics">Physics</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="biology">Biology</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time Period</label>
+                        <select class="form-select" onchange="updateTrends()">
+                            <option value="current_year">Current Year</option>
+                            <option value="last_year">Last Year</option>
+                            <option value="last_2_years">Last 2 Years</option>
+                        </select>
+                    </div>
+                    <button onclick="refreshTrends()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="trends-stats" style="margin-bottom: 2rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="stat-card" style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">4.2/5</div>
+                        <div style="color: #666;">Average Rating</div>
+                    </div>
+                    <div class="stat-card" style="background: #f0f9f0; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">12%</div>
+                        <div style="color: #666;">Improvement Rate</div>
+                    </div>
+                    <div class="stat-card" style="background: #fffbf0; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--warning);">85%</div>
+                        <div style="color: #666;">Satisfactory+</div>
+                    </div>
+                    <div class="stat-card" style="background: #fff5f5; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--danger);">8%</div>
+                        <div style="color: #666;">Need Improvement</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="department-comparison">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">Department Comparison</h4>
+                <div class="comparison-list">
+                    <div class="department-item">
+                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: bold;">Physics Department</span>
+                            <span style="color: var(--success);">4.5/5</span>
+                        </div>
+                        <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; background: var(--success); width: 90%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="department-item" style="margin-top: 1rem;">
+                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: bold;">Chemistry Department</span>
+                            <span style="color: var(--info);">4.3/5</span>
+                        </div>
+                        <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; background: var(--info); width: 86%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="department-item" style="margin-top: 1rem;">
+                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: bold;">Biology Department</span>
+                            <span style="color: var(--warning);">4.1/5</span>
+                        </div>
+                        <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; background: var(--warning); width: 82%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Appraisal Settings Section
+window.showAppraisalSettings = function() {
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-cog"></i> Appraisal Settings</h3>
+                <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <form id="appraisalSettingsForm" onsubmit="saveAppraisalSettings(event)">
+                <div class="settings-section" style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-sliders-h"></i> Rating Scale
+                    </h4>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Rating System</label>
+                            <select class="form-select" id="ratingSystem">
+                                <option value="5_point">5-Point Scale (1-5)</option>
+                                <option value="10_point">10-Point Scale (1-10)</option>
+                                <option value="percentage">Percentage (0-100%)</option>
+                                <option value="descriptive">Descriptive (Poor to Excellent)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Minimum Satisfactory Rating</label>
+                            <input type="number" class="form-input" id="minSatisfactory" value="3" min="1" max="5" step="0.1">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section" style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-bell"></i> Notification Settings
+                    </h4>
+                    
+                    <div class="notification-settings">
+                        <div class="form-group">
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="notifyDueAppraisals" checked>
+                                Notify about due appraisals
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="notifyCompletion" checked>
+                                Notify when appraisals are completed
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="notifyLowRatings">
+                                Notify about low ratings
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section" style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-user-clock"></i> Appraisal Schedule
+                    </h4>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Annual Appraisal Period</label>
+                            <select class="form-select" id="appraisalPeriod">
+                                <option value="jan_mar">January - March</option>
+                                <option value="apr_jun" selected>April - June</option>
+                                <option value="jul_sep">July - September</option>
+                                <option value="oct_dec">October - December</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Default Appraisal Duration (days)</label>
+                            <input type="number" class="form-input" id="appraisalDuration" value="30" min="7" max="90">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+};
 
 // ===== HELPER FUNCTIONS =====
 
 // Close dynamic content
-window.closeTeacherAppraisalsDynamicContent = function() {
-    const dynamicContent = document.getElementById('teacher-appraisals-dynamic-content');
+window.closeAppraisalsDynamicContent = function() {
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
     if (dynamicContent) {
         dynamicContent.innerHTML = '<div style="text-align: center; padding: 3rem; color: #999;"><i class="fas fa-user-check" style="font-size: 4rem; margin-bottom: 1rem;"></i><p>Select an option above to manage teacher appraisals</p></div>';
     }
@@ -5541,7 +5788,7 @@ window.startAppraisalProcess = function(event) {
     localStorage.setItem('ongoingAppraisals', JSON.stringify(ongoingAppraisals));
     
     alert('✅ Appraisal process started successfully!');
-    closeTeacherAppraisalsDynamicContent();
+    closeAppraisalsDynamicContent();
     showOngoingAppraisals();
 };
 
@@ -5583,174 +5830,17 @@ window.downloadAppraisal = function(appraisalId) {
     alert(`Downloading appraisal report for ID: ${appraisalId}`);
 };
 
-// Export functions
-window.exportOngoingAppraisals = function() {
-    alert('Exporting ongoing appraisals data...');
+// Template functions
+window.useAppraisalTemplate = function(templateId) {
+    alert(`Using appraisal template: ${templateId}\n\nThis would pre-fill the appraisal form with template criteria.`);
+    showStartAppraisal();
 };
 
-window.exportCompletedAppraisals = function() {
-    alert('Exporting completed appraisals data...');
-};
-
-// Calculation helper functions
-window.calculateAverageRating = function(appraisals) {
-    if (!appraisals || appraisals.length === 0) return 0;
-    
-    const total = appraisals.reduce((sum, appraisal) => sum + appraisal.overallRating, 0);
-    return total / appraisals.length;
-};
-
-window.calculateImprovementRate = function(appraisals) {
-    return appraisals.length > 0 ? 12 : 0;
-};
-
-window.getRatingColor = function(rating) {
-    if (rating >= 4.5) return 'var(--success)';
-    if (rating >= 4.0) return 'var(--info)';
-    if (rating >= 3.5) return 'var(--warning)';
-    return 'var(--danger)';
-};
-
-window.getRecommendationColor = function(recommendation) {
-    switch(recommendation) {
-        case 'Promotion Recommended':
-            return 'var(--success)';
-        case 'Continue Current Role':
-            return 'var(--info)';
-        case 'Development Needed':
-            return 'var(--warning)';
-        case 'Performance Improvement Plan':
-            return 'var(--danger)';
-        default:
-            return '#666';
-    }
-};
-
-// ===== HELPER FUNCTIONS =====
-
-// Close dynamic content
-window.closeTeacherAppraisalsDynamicContent = function() {
-    const dynamicContent = document.getElementById('teacher-appraisals-dynamic-content');
-    if (dynamicContent) {
-        dynamicContent.innerHTML = '<div style="text-align: center; padding: 3rem; color: #999;"><i class="fas fa-user-check" style="font-size: 4rem; margin-bottom: 1rem;"></i><p>Select an option above to manage teacher appraisals</p></div>';
-    }
-};
-
-// Evaluator management
-window.addEvaluator = function() {
-    const container = document.getElementById('evaluatorItems');
-    const newItem = document.createElement('div');
-    newItem.className = 'evaluator-item';
-    newItem.style.cssText = 'display: grid; grid-template-columns: 2fr 1fr 100px; gap: 1rem; padding: 1rem; border-bottom: 1px solid #eee; align-items: center;';
-    newItem.innerHTML = `
-        <select class="form-select">
-            <option value="head_department">Head of Department</option>
-            <option value="principal">Principal</option>
-            <option value="senior_teacher">Senior Teacher</option>
-            <option value="external">External Evaluator</option>
-        </select>
-        <select class="form-select">
-            <option value="primary">Primary Evaluator</option>
-            <option value="secondary">Secondary Evaluator</option>
-            <option value="observer">Observer</option>
-        </select>
-        <button type="button" onclick="removeEvaluator(this)" class="btn btn-danger btn-sm">
-            <i class="fas fa-trash"></i>
-        </button>
-    `;
-    container.appendChild(newItem);
-};
-
-window.removeEvaluator = function(button) {
-    const container = document.getElementById('evaluatorItems');
-    if (container.children.length > 1) {
-        button.closest('.evaluator-item').remove();
-    } else {
-        alert('You must have at least one evaluator.');
-    }
-};
-
-// Form submission handlers
-window.startAppraisalProcess = function(event) {
+// Settings functions
+window.saveAppraisalSettings = function(event) {
     event.preventDefault();
-    
-    const teacherSelect = document.getElementById('appraisalTeacher');
-    const type = document.getElementById('appraisalType').value;
-    const year = document.getElementById('appraisalYear').value;
-    const dueDate = document.getElementById('appraisalDueDate').value;
-    const template = document.getElementById('appraisalTemplate').value;
-    const objectives = document.getElementById('appraisalObjectives').value;
-    
-    // Get evaluators
-    const evaluators = [];
-    document.querySelectorAll('#evaluatorItems .evaluator-item').forEach(item => {
-        const role = item.querySelector('select:first-child').value;
-        evaluators.push(role);
-    });
-    
-    const newAppraisal = {
-        id: 'appr_' + Date.now(),
-        teacherName: teacherSelect.options[teacherSelect.selectedIndex].text,
-        type: type,
-        startDate: new Date().toISOString(),
-        dueDate: dueDate,
-        progress: 0,
-        objectives: objectives,
-        currentStage: 'Initial Setup',
-        evaluators: evaluators,
-        template: template,
-        academicYear: year,
-        department: teacherSelect.options[teacherSelect.selectedIndex].text.includes('Physics') ? 'Physics' : 
-                   teacherSelect.options[teacherSelect.selectedIndex].text.includes('Chemistry') ? 'Chemistry' :
-                   teacherSelect.options[teacherSelect.selectedIndex].text.includes('Biology') ? 'Biology' : 'Mathematics'
-    };
-    
-    // Save to ongoing appraisals
-    let ongoingAppraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
-    ongoingAppraisals.push(newAppraisal);
-    localStorage.setItem('ongoingAppraisals', JSON.stringify(ongoingAppraisals));
-    
-    alert('✅ Appraisal process started successfully!');
-    closeTeacherAppraisalsDynamicContent();
-    showOngoingAppraisals();
-};
-
-// Appraisal actions
-window.continueAppraisal = function(appraisalId) {
-    alert(`Continuing appraisal: ${appraisalId}\n\nThis would open the appraisal form for completion.`);
-};
-
-window.viewAppraisal = function(appraisalId) {
-    const ongoingAppraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
-    const appraisal = ongoingAppraisals.find(a => a.id === appraisalId);
-    
-    if (appraisal) {
-        alert(`Viewing Appraisal: ${appraisal.teacherName}\nType: ${appraisal.type}\nProgress: ${appraisal.progress}%\nCurrent Stage: ${appraisal.currentStage}`);
-    }
-};
-
-window.viewCompletedAppraisal = function(appraisalId) {
-    const completedAppraisals = JSON.parse(localStorage.getItem('completedAppraisals')) || [];
-    const appraisal = completedAppraisals.find(a => a.id === appraisalId);
-    
-    if (appraisal) {
-        alert(`Viewing Completed Appraisal: ${appraisal.teacherName}\nRating: ${appraisal.overallRating}/5\nRecommendation: ${appraisal.recommendation}`);
-    }
-};
-
-window.cancelAppraisal = function(appraisalId) {
-    if (confirm('Are you sure you want to cancel this appraisal? This action cannot be undone.')) {
-        let ongoingAppraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
-        ongoingAppraisals = ongoingAppraisals.filter(a => a.id !== appraisalId);
-        localStorage.setItem('ongoingAppraisals', JSON.stringify(ongoingAppraisals));
-        
-        alert('✅ Appraisal cancelled successfully!');
-        showOngoingAppraisals();
-    }
-};
-
-window.downloadAppraisal = function(appraisalId) {
-    alert(`Downloading appraisal report for ID: ${appraisalId}`);
+    alert('✅ Appraisal settings saved successfully!');
+    closeAppraisalsDynamicContent();
 };
 
 // Export functions
@@ -5760,6 +5850,19 @@ window.exportOngoingAppraisals = function() {
 
 window.exportCompletedAppraisals = function() {
     alert('Exporting completed appraisals data...');
+};
+
+window.exportTrendsReport = function() {
+    alert('Exporting performance trends report...');
+};
+
+// Trends functions
+window.updateTrends = function() {
+    console.log('Updating performance trends...');
+};
+
+window.refreshTrends = function() {
+    alert('Refreshing trends data...');
 };
 
 // Calculation helper functions
