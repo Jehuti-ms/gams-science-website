@@ -1210,6 +1210,611 @@ function formatDate(date) {
     });
 }
 
+// ===== DOCUMENTS SECTION =====
+function loadDocumentsSection(container) {
+    container.innerHTML = `
+        <div class="section-content" id="section-documents">
+            <div class="drive-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3><i class="fas fa-folder"></i> Department Documents</h3>
+                    <button onclick="returnToOverview()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Overview
+                    </button>
+                </div>
+                <p>Access and manage department documents, forms, and legal resources.</p>
+                
+                <div class="document-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                    <div class="action-card" onclick="showNationalLaw()">
+                        <i class="fas fa-gavel" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h4>National Law</h4>
+                        <p>Access national education laws and regulations</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showEventsTours()">
+                        <i class="fas fa-calendar-alt" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                        <h4>Events & Tours</h4>
+                        <p>Event planning and tour documentation</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showFormList()">
+                        <i class="fas fa-list-alt" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                        <h4>Form List</h4>
+                        <p>Access all department forms and templates</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showCalendarEvents()">
+                        <i class="fas fa-calendar-check" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                        <h4>Calendar of Events</h4>
+                        <p>View and manage event calendar</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showCorrespondence()">
+                        <i class="fas fa-envelope" style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                        <h4>Correspondence</h4>
+                        <p>Official letters and communications</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showUploadDocument('general')">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;"></i>
+                        <h4>Upload Document</h4>
+                        <p>Upload new documents to the repository</p>
+                    </div>
+                </div>
+                
+                <div id="documents-dynamic-content"></div>
+            </div>
+        </div>
+    `;
+}
+
+// National Law Section
+window.showNationalLaw = function() {
+    const dynamicContent = document.getElementById('documents-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-gavel"></i> National Education Laws & Regulations</h3>
+                <button onclick="closeDocumentsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="search-section" style="margin-bottom: 2rem;">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Search laws and regulations..." 
+                           onkeyup="searchNationalLaws(this.value)" style="width: 100%;">
+                </div>
+            </div>
+            
+            <div class="laws-grid" style="display: grid; gap: 1.5rem;">
+                <div class="law-category">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-balance-scale"></i> Education Act & Framework
+                    </h4>
+                    <div class="law-list">
+                        <div class="law-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div>
+                                <h5 style="margin: 0; color: #333;">Education Act 2020</h5>
+                                <p style="margin: 0.25rem 0 0 0; color: #666; font-size: 0.9rem;">Comprehensive education legislation</p>
+                            </div>
+                            <button onclick="viewLawDocument('education_act_2020')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </div>
+                        
+                        <div class="law-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div>
+                                <h5 style="margin: 0; color: #333;">National Curriculum Framework</h5>
+                                <p style="margin: 0.25rem 0 0 0; color: #666; font-size: 0.9rem;">Curriculum standards and guidelines</p>
+                            </div>
+                            <button onclick="viewLawDocument('curriculum_framework')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="law-category">
+                    <h4 style="color: var(--success); margin-bottom: 1rem; border-bottom: 2px solid var(--success-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-user-graduate"></i> Teacher Regulations
+                    </h4>
+                    <div class="law-list">
+                        <div class="law-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div>
+                                <h5 style="margin: 0; color: #333;">Teacher Certification Standards</h5>
+                                <p style="margin: 0.25rem 0 0 0; color: #666; font-size: 0.9rem;">Professional standards and requirements</p>
+                            </div>
+                            <button onclick="viewLawDocument('teacher_certification')" class="btn btn-success btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </div>
+                        
+                        <div class="law-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div>
+                                <h5 style="margin: 0; color: #333;">Code of Professional Conduct</h5>
+                                <p style="margin: 0.25rem 0 0 0; color: #666; font-size: 0.9rem;">Ethical guidelines for educators</p>
+                            </div>
+                            <button onclick="viewLawDocument('professional_conduct')" class="btn btn-success btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="law-category">
+                    <h4 style="color: var(--warning); margin-bottom: 1rem; border-bottom: 2px solid var(--warning-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-shield-alt"></i> Safety & Compliance
+                    </h4>
+                    <div class="law-list">
+                        <div class="law-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div>
+                                <h5 style="margin: 0; color: #333;">School Safety Regulations</h5>
+                                <p style="margin: 0.25rem 0 0 0; color: #666; font-size: 0.9rem;">Health and safety requirements</p>
+                            </div>
+                            <button onclick="viewLawDocument('safety_regulations')" class="btn btn-warning btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </div>
+                        
+                        <div class="law-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div>
+                                <h5 style="margin: 0; color: #333;">Student Protection Policy</h5>
+                                <p style="margin: 0.25rem 0 0 0; color: #666; font-size: 0.9rem;">Child protection guidelines</p>
+                            </div>
+                            <button onclick="viewLawDocument('student_protection')" class="btn btn-warning btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Events & Tours Section
+window.showEventsTours = function() {
+    const dynamicContent = document.getElementById('documents-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-calendar-alt"></i> Events & Tours Management</h3>
+                <div>
+                    <button onclick="createNewEvent()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> New Event
+                    </button>
+                    <button onclick="closeDocumentsDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="events-tabs" style="margin-bottom: 2rem;">
+                <div class="tabs" style="display: flex; border-bottom: 2px solid #eee;">
+                    <button class="tab-btn active" onclick="switchEventsTab('upcoming')" style="padding: 0.75rem 1.5rem; border: none; background: none; border-bottom: 3px solid var(--primary);">
+                        Upcoming Events
+                    </button>
+                    <button class="tab-btn" onclick="switchEventsTab('past')" style="padding: 0.75rem 1.5rem; border: none; background: none;">
+                        Past Events
+                    </button>
+                    <button class="tab-btn" onclick="switchEventsTab('tours')" style="padding: 0.75rem 1.5rem; border: none; background: none;">
+                        Educational Tours
+                    </button>
+                </div>
+            </div>
+            
+            <div id="events-tab-content">
+                <div class="events-list">
+                    <div class="event-card" style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--info);">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--info); margin-bottom: 0.5rem;">Science Fair 2025</h4>
+                                <p style="color: #666; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-calendar"></i> March 15, 2025 | 
+                                    <i class="fas fa-clock" style="margin-left: 0.5rem;"></i> 9:00 AM - 3:00 PM
+                                </p>
+                                <p style="color: #666; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-map-marker-alt"></i> Main Auditorium
+                                </p>
+                                <p style="color: #999;">Annual science exhibition showcasing student projects</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button onclick="viewEventDetails('science_fair')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Details
+                                </button>
+                                <button onclick="downloadEventPlan('science_fair')" class="btn btn-success btn-sm">
+                                    <i class="fas fa-download"></i> Plan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="event-card" style="background: #fff0f0; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--danger);">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--danger); margin-bottom: 0.5rem;">Parent-Teacher Conference</h4>
+                                <p style="color: #666; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-calendar"></i> April 5, 2025 | 
+                                    <i class="fas fa-clock" style="margin-left: 0.5rem;"></i> 1:00 PM - 6:00 PM
+                                </p>
+                                <p style="color: #666; margin-bottom: 0.5rem;">
+                                    <i class="fas fa-map-marker-alt"></i> Classrooms
+                                </p>
+                                <p style="color: #999;">Spring semester parent-teacher meetings</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button onclick="viewEventDetails('parent_conference')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Details
+                                </button>
+                                <button onclick="downloadEventPlan('parent_conference')" class="btn btn-success btn-sm">
+                                    <i class="fas fa-download"></i> Plan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Form List Section
+window.showFormList = function() {
+    const dynamicContent = document.getElementById('documents-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-list-alt"></i> Department Forms & Templates</h3>
+                <button onclick="closeDocumentsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="search-section" style="margin-bottom: 2rem;">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Search forms..." 
+                           onkeyup="searchForms(this.value)" style="width: 100%;">
+                </div>
+            </div>
+            
+            <div class="forms-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="form-category">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem;">
+                        <i class="fas fa-user-tie"></i> Staff Forms
+                    </h4>
+                    <div class="form-list">
+                        <div class="form-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>Leave Application Form</span>
+                            <button onclick="downloadForm('leave_application')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                        <div class="form-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>Professional Development Request</span>
+                            <button onclick="downloadForm('pd_request')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                        <div class="form-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>Expense Reimbursement Form</span>
+                            <button onclick="downloadForm('expense_form')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-category">
+                    <h4 style="color: var(--success); margin-bottom: 1rem;">
+                        <i class="fas fa-user-graduate"></i> Student Forms
+                    </h4>
+                    <div class="form-list">
+                        <div class="form-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>Field Trip Permission Slip</span>
+                            <button onclick="downloadForm('field_trip_form')" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                        <div class="form-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>Academic Appeal Form</span>
+                            <button onclick="downloadForm('academic_appeal')" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                        <div class="form-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>Student Information Update</span>
+                            <button onclick="downloadForm('student_info_update')" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-category">
+                    <h4 style="color: var(--warning); margin-bottom: 1rem;">
+                        <i class="fas fa-clipboard-list"></i> Administrative Forms
+                    </h4>
+                    <div class="form-list">
+                        <div class="form-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>Purchase Requisition Form</span>
+                            <button onclick="downloadForm('purchase_requisition')" class="btn btn-warning btn-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                        <div class="form-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>Room Reservation Request</span>
+                            <button onclick="downloadForm('room_reservation')" class="btn btn-warning btn-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                        <div class="form-item" style="display: flex; justify-content: between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <span>Incident Report Form</span>
+                            <button onclick="downloadForm('incident_report')" class="btn btn-warning btn-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Calendar of Events Section
+window.showCalendarEvents = function() {
+    const dynamicContent = document.getElementById('documents-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-calendar-check"></i> Calendar of Events</h3>
+                <div>
+                    <button onclick="exportCalendar()" class="btn btn-success btn-sm">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button onclick="closeDocumentsDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="calendar-controls" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <button onclick="previousMonth()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span style="margin: 0 1rem; font-weight: bold; font-size: 1.1rem;">March 2025</span>
+                    <button onclick="nextMonth()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <button onclick="addCalendarEvent()" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> Add Event
+                </button>
+            </div>
+            
+            <div class="calendar-view" style="background: #f8f9fa; border-radius: 8px; padding: 1rem;">
+                <div class="calendar-header" style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; margin-bottom: 1rem;">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                
+                <div class="calendar-days" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem;">
+                    ${generateCalendarDays()}
+                </div>
+            </div>
+            
+            <div class="upcoming-events" style="margin-top: 2rem;">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">Upcoming Events</h4>
+                <div class="events-list">
+                    <div class="event-item" style="display: flex; align-items: center; padding: 1rem; background: #f0f9ff; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div style="background: var(--info); color: white; padding: 0.5rem; border-radius: 6px; text-align: center; min-width: 60px; margin-right: 1rem;">
+                            <div style="font-size: 0.8rem;">MAR</div>
+                            <div style="font-size: 1.2rem; font-weight: bold;">15</div>
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Science Fair 2025</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">Main Auditorium • 9:00 AM - 3:00 PM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="event-item" style="display: flex; align-items: center; padding: 1rem; background: #fff0f0; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div style="background: var(--danger); color: white; padding: 0.5rem; border-radius: 6px; text-align: center; min-width: 60px; margin-right: 1rem;">
+                            <div style="font-size: 0.8rem;">APR</div>
+                            <div style="font-size: 1.2rem; font-weight: bold;">5</div>
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Parent-Teacher Conference</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">Classrooms • 1:00 PM - 6:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Correspondence Section
+window.showCorrespondence = function() {
+    const dynamicContent = document.getElementById('documents-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-envelope"></i> Official Correspondence</h3>
+                <div>
+                    <button onclick="composeNewLetter()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> New Letter
+                    </button>
+                    <button onclick="closeDocumentsDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="correspondence-tabs" style="margin-bottom: 2rem;">
+                <div class="tabs" style="display: flex; border-bottom: 2px solid #eee;">
+                    <button class="tab-btn active" onclick="switchCorrespondenceTab('incoming')" style="padding: 0.75rem 1.5rem; border: none; background: none; border-bottom: 3px solid var(--primary);">
+                        Incoming
+                    </button>
+                    <button class="tab-btn" onclick="switchCorrespondenceTab('outgoing')" style="padding: 0.75rem 1.5rem; border: none; background: none;">
+                        Outgoing
+                    </button>
+                    <button class="tab-btn" onclick="switchCorrespondenceTab('templates')" style="padding: 0.75rem 1.5rem; border: none; background: none;">
+                        Templates
+                    </button>
+                </div>
+            </div>
+            
+            <div id="correspondence-tab-content">
+                <div class="letters-list">
+                    <div class="letter-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 1rem;">
+                        <div style="flex: 1;">
+                            <h4 style="margin: 0 0 0.5rem 0; color: #333;">Ministry of Education - Curriculum Update</h4>
+                            <p style="margin: 0.25rem 0; color: #666;">
+                                <strong>From:</strong> Ministry of Education • 
+                                <strong>Date:</strong> March 1, 2025 • 
+                                <strong>Ref:</strong> MOE/2025/CUR/012
+                            </p>
+                            <p style="margin: 0.25rem 0 0 0; color: #999;">
+                                Updates to national science curriculum standards for 2025-2026 academic year
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="viewLetter('moe_curriculum_update')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button onclick="downloadLetter('moe_curriculum_update')" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="letter-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 1rem;">
+                        <div style="flex: 1;">
+                            <h4 style="margin: 0 0 0.5rem 0; color: #333;">University Partnership Inquiry</h4>
+                            <p style="margin: 0.25rem 0; color: #666;">
+                                <strong>From:</strong> State University • 
+                                <strong>Date:</strong> February 28, 2025 • 
+                                <strong>Ref:</strong> SU/ADM/2025/045
+                            </p>
+                            <p style="margin: 0.25rem 0 0 0; color: #999;">
+                                Proposal for collaborative research program and student mentorship
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="viewLetter('university_partnership')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button onclick="downloadLetter('university_partnership')" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Helper functions for Documents section
+window.closeDocumentsDynamicContent = function() {
+    const dynamicContent = document.getElementById('documents-dynamic-content');
+    if (dynamicContent) {
+        dynamicContent.innerHTML = '';
+    }
+};
+
+window.searchNationalLaws = function(query) {
+    // Implementation for searching laws
+    console.log('Searching laws:', query);
+};
+
+window.viewLawDocument = function(lawId) {
+    alert(`Viewing law document: ${lawId}\n\nIn a real implementation, this would open the document viewer.`);
+};
+
+window.switchEventsTab = function(tab) {
+    // Implementation for switching event tabs
+    console.log('Switching to tab:', tab);
+};
+
+window.viewEventDetails = function(eventId) {
+    alert(`Viewing event details: ${eventId}`);
+};
+
+window.downloadEventPlan = function(eventId) {
+    alert(`Downloading event plan: ${eventId}`);
+};
+
+window.searchForms = function(query) {
+    // Implementation for searching forms
+    console.log('Searching forms:', query);
+};
+
+window.downloadForm = function(formId) {
+    alert(`Downloading form: ${formId}\n\nIn a real implementation, this would download the form template.`);
+};
+
+window.generateCalendarDays = function() {
+    // Simplified calendar generation - in real implementation, this would generate actual calendar
+    let days = '';
+    for (let i = 1; i <= 31; i++) {
+        const hasEvent = i === 15 || i === 5; // Example events on 5th and 15th
+        days += `
+            <div class="calendar-day ${hasEvent ? 'has-event' : ''}" 
+                 style="background: white; padding: 0.75rem; border-radius: 6px; text-align: center; min-height: 80px; position: relative;">
+                <div style="font-weight: bold; margin-bottom: 0.25rem;">${i}</div>
+                ${hasEvent ? `
+                    <div style="background: var(--info); color: white; padding: 0.1rem 0.3rem; border-radius: 4px; font-size: 0.7rem; margin-top: 0.25rem;">
+                        Event
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+    return days;
+};
+
+window.switchCorrespondenceTab = function(tab) {
+    // Implementation for switching correspondence tabs
+    console.log('Switching to correspondence tab:', tab);
+};
+
+window.viewLetter = function(letterId) {
+    alert(`Viewing letter: ${letterId}`);
+};
+
+window.downloadLetter = function(letterId) {
+    alert(`Downloading letter: ${letterId}`);
+};
+
+window.createNewEvent = function() {
+    alert('Opening new event creation form...');
+};
+
+window.composeNewLetter = function() {
+    alert('Opening letter composition form...');
+};
+
+window.exportCalendar = function() {
+    alert('Exporting calendar data...');
+};
+
+window.previousMonth = function() {
+    alert('Navigating to previous month...');
+};
+
+window.nextMonth = function() {
+    alert('Navigating to next month...');
+};
+
+window.addCalendarEvent = function() {
+    alert('Adding new calendar event...');
+};
 // Show notification (could be enhanced with a toast library)
 function showNotification(message, type = 'info') {
     alert(message); // Simple version - could be replaced with toast notifications
