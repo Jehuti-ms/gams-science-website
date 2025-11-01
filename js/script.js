@@ -4155,3 +4155,905 @@ window.generateVarianceRows = function() {
     `).join('');
 };
 
+// ===== MARKSHEETS SECTION =====
+function loadMarksheetsSection(container) {
+    container.innerHTML = `
+        <div class="section-content" id="section-marksheets">
+            <div class="drive-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3><i class="fas fa-file-alt"></i> Student Marksheets</h3>
+                    <button onclick="returnToOverview()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Overview
+                    </button>
+                </div>
+                <p>Manage student marks, generate reports, and track academic performance.</p>
+                
+                <div class="marksheets-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                    <div class="action-card" onclick="showEnterMarks()">
+                        <i class="fas fa-edit" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h4>Enter Marks</h4>
+                        <p>Input student marks and grades</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showViewMarksheets()">
+                        <i class="fas fa-search" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                        <h4>View Marksheets</h4>
+                        <p>Access student marksheets</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showGenerateReports()">
+                        <i class="fas fa-chart-bar" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                        <h4>Generate Reports</h4>
+                        <p>Create academic reports</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showGradeSetup()">
+                        <i class="fas fa-cog" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                        <h4>Grade Setup</h4>
+                        <p>Configure grading system</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showPerformanceAnalysis()">
+                        <i class="fas fa-chart-line" style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                        <h4>Performance Analysis</h4>
+                        <p>Analyze student performance</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showUploadMarks()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;"></i>
+                        <h4>Upload Marks</h4>
+                        <p>Bulk upload marks data</p>
+                    </div>
+                </div>
+                
+                <div id="marksheets-dynamic-content"></div>
+            </div>
+        </div>
+    `;
+}
+
+// Enter Marks Section
+window.showEnterMarks = function() {
+    const dynamicContent = document.getElementById('marksheets-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-edit"></i> Enter Student Marks</h3>
+                <button onclick="closeMarksheetsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <form id="enterMarksForm" onsubmit="saveMarks(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label">Class *</label>
+                        <select class="form-select" id="marksClass" required onchange="loadStudentsForClass()">
+                            <option value="">-- Select Class --</option>
+                            <option value="grade10">Grade 10</option>
+                            <option value="grade11">Grade 11</option>
+                            <option value="grade12">Grade 12</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Subject *</label>
+                        <select class="form-select" id="marksSubject" required>
+                            <option value="">-- Select Subject --</option>
+                            <option value="physics">Physics</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="biology">Biology</option>
+                            <option value="mathematics">Mathematics</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Exam Type *</label>
+                        <select class="form-select" id="examType" required>
+                            <option value="">-- Select Exam --</option>
+                            <option value="midterm">Midterm Exam</option>
+                            <option value="final">Final Exam</option>
+                            <option value="quiz1">Quiz 1</option>
+                            <option value="quiz2">Quiz 2</option>
+                            <option value="assignment">Assignment</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label">Maximum Marks *</label>
+                        <input type="number" class="form-input" id="maxMarks" value="100" min="1" max="200" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Exam Date *</label>
+                        <input type="date" class="form-input" id="examDate" value="${new Date().toISOString().split('T')[0]}" required>
+                    </div>
+                </div>
+                
+                <div class="marks-entry-section">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-list"></i> Student Marks Entry
+                    </h4>
+                    
+                    <div class="marks-table" style="margin-bottom: 1.5rem;">
+                        <div class="table-header" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px 8px 0 0; font-weight: bold;">
+                            <div>Student Name</div>
+                            <div>Student ID</div>
+                            <div>Marks Obtained</div>
+                            <div>Percentage</div>
+                            <div>Grade</div>
+                        </div>
+                        
+                        <div id="marksEntryItems">
+                            <div class="table-row" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 1rem; padding: 1rem; border-bottom: 1px solid #eee; align-items: center;">
+                                <div>John Smith</div>
+                                <div>S1001</div>
+                                <input type="number" class="form-input" value="85" min="0" max="100" onchange="calculateGrade(this)">
+                                <div class="percentage" style="font-weight: bold; color: var(--info);">85%</div>
+                                <div class="grade" style="font-weight: bold; color: var(--success);">A</div>
+                            </div>
+                            
+                            <div class="table-row" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 1rem; padding: 1rem; border-bottom: 1px solid #eee; align-items: center;">
+                                <div>Sarah Johnson</div>
+                                <div>S1002</div>
+                                <input type="number" class="form-input" value="72" min="0" max="100" onchange="calculateGrade(this)">
+                                <div class="percentage" style="font-weight: bold; color: var(--info);">72%</div>
+                                <div class="grade" style="font-weight: bold; color: var(--warning);">B</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Remarks</label>
+                    <textarea class="form-textarea" id="marksRemarks" rows="3" 
+                              placeholder="Any additional remarks about this exam..."></textarea>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" onclick="closeMarksheetsDynamicContent()" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Marks
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+};
+
+// View Marksheets Section
+window.showViewMarksheets = function() {
+    const dynamicContent = document.getElementById('marksheets-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-search"></i> View Student Marksheets</h3>
+                <div>
+                    <button onclick="printAllMarksheets()" class="btn btn-success btn-sm">
+                        <i class="fas fa-print"></i> Print All
+                    </button>
+                    <button onclick="closeMarksheetsDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="search-filters" style="margin-bottom: 2rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: end;">
+                    <div class="form-group">
+                        <label class="form-label">Class</label>
+                        <select class="form-select" onchange="filterMarksheets()">
+                            <option value="">All Classes</option>
+                            <option value="grade10">Grade 10</option>
+                            <option value="grade11">Grade 11</option>
+                            <option value="grade12">Grade 12</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <select class="form-select" onchange="filterMarksheets()">
+                            <option value="">All Subjects</option>
+                            <option value="physics">Physics</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="biology">Biology</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Exam Type</label>
+                        <select class="form-select" onchange="filterMarksheets()">
+                            <option value="">All Exams</option>
+                            <option value="midterm">Midterm</option>
+                            <option value="final">Final</option>
+                            <option value="quiz">Quiz</option>
+                        </select>
+                    </div>
+                    <button onclick="searchMarksheets()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+            
+            <div class="marksheets-list">
+                <div class="marksheet-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--primary);">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">John Smith - Grade 10</h4>
+                            <p style="color: #666; margin-bottom: 0.5rem;">
+                                <strong>Student ID:</strong> S1001 • 
+                                <strong>Academic Year:</strong> 2024-2025
+                            </p>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                                <div>
+                                    <strong>Overall Percentage:</strong>
+                                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">87.5%</div>
+                                </div>
+                                <div>
+                                    <strong>Final Grade:</strong>
+                                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">A</div>
+                                </div>
+                                <div>
+                                    <strong>Rank:</strong>
+                                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--info);">2/45</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <button onclick="viewStudentMarksheet('S1001')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button onclick="downloadMarksheet('S1001')" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> PDF
+                            </button>
+                            <button onclick="printMarksheet('S1001')" class="btn btn-info btn-sm">
+                                <i class="fas fa-print"></i> Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="marksheet-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--info);">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--info); margin-bottom: 0.5rem;">Sarah Johnson - Grade 10</h4>
+                            <p style="color: #666; margin-bottom: 0.5rem;">
+                                <strong>Student ID:</strong> S1002 • 
+                                <strong>Academic Year:</strong> 2024-2025
+                            </p>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                                <div>
+                                    <strong>Overall Percentage:</strong>
+                                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">76.2%</div>
+                                </div>
+                                <div>
+                                    <strong>Final Grade:</strong>
+                                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">B</div>
+                                </div>
+                                <div>
+                                    <strong>Rank:</strong>
+                                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--info);">15/45</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <button onclick="viewStudentMarksheet('S1002')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button onclick="downloadMarksheet('S1002')" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> PDF
+                            </button>
+                            <button onclick="printMarksheet('S1002')" class="btn btn-info btn-sm">
+                                <i class="fas fa-print"></i> Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Generate Reports Section
+window.showGenerateReports = function() {
+    const dynamicContent = document.getElementById('marksheets-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-chart-bar"></i> Generate Academic Reports</h3>
+                <div>
+                    <button onclick="generateCustomReport()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Custom Report
+                    </button>
+                    <button onclick="closeMarksheetsDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="reports-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="report-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; cursor: pointer;" onclick="generateReport('class_performance')">
+                    <i class="fas fa-users" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Class Performance</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Overall class performance analysis</p>
+                    <div class="report-info" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-clock"></i> Last run: 1 week ago</span>
+                    </div>
+                </div>
+                
+                <div class="report-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; cursor: pointer;" onclick="generateReport('subject_analysis')">
+                    <i class="fas fa-book" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--info); margin-bottom: 0.5rem;">Subject Analysis</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Subject-wise performance report</p>
+                    <div class="report-info" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-clock"></i> Last run: 3 days ago</span>
+                    </div>
+                </div>
+                
+                <div class="report-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; cursor: pointer;" onclick="generateReport('progress_report')">
+                    <i class="fas fa-chart-line" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--success); margin-bottom: 0.5rem;">Progress Report</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Student progress over time</p>
+                    <div class="report-info" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-clock"></i> Last run: 2 days ago</span>
+                    </div>
+                </div>
+                
+                <div class="report-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; cursor: pointer;" onclick="generateReport('ranking_report')">
+                    <i class="fas fa-trophy" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--warning); margin-bottom: 0.5rem;">Ranking Report</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Student ranking and merit list</p>
+                    <div class="report-info" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-clock"></i> Last run: 5 days ago</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recent-reports">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">Recent Reports</h4>
+                <div class="reports-list">
+                    <div class="report-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div>
+                            <strong>Grade 10 Final Exam Report - Semester 1</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">Generated on March 15, 2025</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="viewReport('grade10_sem1')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button onclick="downloadReport('grade10_sem1')" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="report-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div>
+                            <strong>Physics Subject Analysis - All Grades</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">Generated on March 10, 2025</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="viewReport('physics_analysis')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button onclick="downloadReport('physics_analysis')" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Grade Setup Section
+window.showGradeSetup = function() {
+    const dynamicContent = document.getElementById('marksheets-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-cog"></i> Grade System Setup</h3>
+                <button onclick="closeMarksheetsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <form id="gradeSetupForm" onsubmit="saveGradeSystem(event)">
+                <div class="grade-system-section" style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-sliders-h"></i> Grading Scale
+                    </h4>
+                    
+                    <div class="grade-table" style="margin-bottom: 1.5rem;">
+                        <div class="table-header" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 2fr 80px; gap: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px 8px 0 0; font-weight: bold;">
+                            <div>Grade</div>
+                            <div>From %</div>
+                            <div>To %</div>
+                            <div>Grade Point</div>
+                            <div>Description</div>
+                            <div>Action</div>
+                        </div>
+                        
+                        <div id="gradeScaleItems">
+                            <div class="table-row" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 2fr 80px; gap: 1rem; padding: 1rem; border-bottom: 1px solid #eee; align-items: center;">
+                                <div><strong>A+</strong></div>
+                                <input type="number" class="form-input" value="90" min="0" max="100">
+                                <input type="number" class="form-input" value="100" min="0" max="100">
+                                <input type="number" class="form-input" value="4.0" step="0.1" min="0">
+                                <input type="text" class="form-input" value="Excellent" placeholder="Grade description">
+                                <button type="button" onclick="removeGradeItem(this)" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="table-row" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 2fr 80px; gap: 1rem; padding: 1rem; border-bottom: 1px solid #eee; align-items: center;">
+                                <div><strong>A</strong></div>
+                                <input type="number" class="form-input" value="80" min="0" max="100">
+                                <input type="number" class="form-input" value="89" min="0" max="100">
+                                <input type="number" class="form-input" value="3.7" step="0.1" min="0">
+                                <input type="text" class="form-input" value="Very Good" placeholder="Grade description">
+                                <button type="button" onclick="removeGradeItem(this)" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-footer" style="padding: 1rem; background: #f8f9fa; border-radius: 0 0 8px 8px;">
+                            <button type="button" onclick="addGradeItem()" class="btn btn-secondary btn-sm">
+                                <i class="fas fa-plus"></i> Add Grade
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section" style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-percentage"></i> Passing Criteria
+                    </h4>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Minimum Passing Percentage</label>
+                            <input type="number" class="form-input" id="passingPercentage" value="40" min="0" max="100">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Minimum Grade Point</label>
+                            <input type="number" class="form-input" id="minGradePoint" value="2.0" step="0.1" min="0">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section" style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-calculator"></i> Calculation Method
+                    </h4>
+                    
+                    <div class="form-group">
+                        <label class="radio-label" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <input type="radio" name="calculationMethod" value="weighted" checked>
+                            Weighted Average (Based on credit hours)
+                        </label>
+                        <label class="radio-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="radio" name="calculationMethod" value="simple">
+                            Simple Average
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" onclick="closeMarksheetsDynamicContent()" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Grade System
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+};
+
+// Performance Analysis Section
+window.showPerformanceAnalysis = function() {
+    const dynamicContent = document.getElementById('marksheets-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-chart-line"></i> Performance Analysis</h3>
+                <div>
+                    <button onclick="exportAnalysisReport()" class="btn btn-success btn-sm">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button onclick="closeMarksheetsDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="analysis-filters" style="margin-bottom: 2rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: end;">
+                    <div class="form-group">
+                        <label class="form-label">Class</label>
+                        <select class="form-select" onchange="updateAnalysis()">
+                            <option value="grade10">Grade 10</option>
+                            <option value="grade11">Grade 11</option>
+                            <option value="grade12">Grade 12</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <select class="form-select" onchange="updateAnalysis()">
+                            <option value="all">All Subjects</option>
+                            <option value="physics">Physics</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="biology">Biology</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time Period</label>
+                        <select class="form-select" onchange="updateAnalysis()">
+                            <option value="current_semester">Current Semester</option>
+                            <option value="last_semester">Last Semester</option>
+                            <option value="current_year">Current Year</option>
+                        </select>
+                    </div>
+                    <button onclick="refreshAnalysis()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="performance-stats" style="margin-bottom: 2rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="stat-card" style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">78.5%</div>
+                        <div style="color: #666;">Average Percentage</div>
+                    </div>
+                    <div class="stat-card" style="background: #f0f9f0; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">85%</div>
+                        <div style="color: #666;">Pass Rate</div>
+                    </div>
+                    <div class="stat-card" style="background: #fffbf0; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--warning);">12.5%</div>
+                        <div style="color: #666;">Improvement Rate</div>
+                    </div>
+                    <div class="stat-card" style="background: #fff5f5; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--danger);">15%</div>
+                        <div style="color: #666;">Students Needing Help</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                <div class="grade-distribution">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem;">Grade Distribution</h4>
+                    <div class="distribution-list">
+                        <div class="distribution-item">
+                            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
+                                <span>A+ (90-100%)</span>
+                                <span style="font-weight: bold; color: var(--success);">8 students</span>
+                            </div>
+                            <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; background: var(--success); width: 20%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="distribution-item" style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
+                                <span>A (80-89%)</span>
+                                <span style="font-weight: bold; color: var(--info);">12 students</span>
+                            </div>
+                            <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; background: var(--info); width: 30%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="distribution-item" style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
+                                <span>B (70-79%)</span>
+                                <span style="font-weight: bold; color: var(--warning);">15 students</span>
+                            </div>
+                            <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; background: var(--warning); width: 37.5%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subject-performance">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem;">Subject-wise Performance</h4>
+                    <div class="subject-list">
+                        <div class="subject-item" style="display: flex; justify-content: between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 0.5rem;">
+                            <span>Physics</span>
+                            <span style="font-weight: bold; color: var(--success);">82.3%</span>
+                        </div>
+                        <div class="subject-item" style="display: flex; justify-content: between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 0.5rem;">
+                            <span>Chemistry</span>
+                            <span style="font-weight: bold; color: var(--info);">79.8%</span>
+                        </div>
+                        <div class="subject-item" style="display: flex; justify-content: between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 0.5rem;">
+                            <span>Biology</span>
+                            <span style="font-weight: bold; color: var(--warning);">75.6%</span>
+                        </div>
+                        <div class="subject-item" style="display: flex; justify-content: between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px;">
+                            <span>Mathematics</span>
+                            <span style="font-weight: bold; color: var(--danger);">70.2%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="top-performers">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">Top Performers</h4>
+                <div class="performers-list">
+                    <div class="performer-item" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div style="background: var(--warning); color: white; padding: 0.5rem; border-radius: 50%; margin-right: 1rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                            1
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Emma Wilson</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">Grade 10 • Overall: 94.5% • Rank: 1/40</p>
+                        </div>
+                        <span style="color: var(--success); font-weight: bold;">A+</span>
+                    </div>
+                    
+                    <div class="performer-item" style="display: flex; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div style="background: var(--info); color: white; padding: 0.5rem; border-radius: 50%; margin-right: 1rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                            2
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>John Smith</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">Grade 10 • Overall: 92.3% • Rank: 2/40</p>
+                        </div>
+                        <span style="color: var(--success); font-weight: bold;">A+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Upload Marks Section
+window.showUploadMarks = function() {
+    const dynamicContent = document.getElementById('marksheets-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-cloud-upload-alt"></i> Upload Marks Data</h3>
+                <button onclick="closeMarksheetsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <form onsubmit="uploadMarksFile(event)">
+                <div class="upload-area" style="border: 2px dashed var(--primary); border-radius: 8px; padding: 3rem; text-align: center; margin-bottom: 1.5rem; background: #f8fdff; cursor: pointer;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <p>Click to browse or drag and drop marks file here</p>
+                    <p style="font-size: 0.9rem; color: #666;">Supported formats: Excel (.xlsx, .xls), CSV</p>
+                    <input type="file" id="marksFileUpload" accept=".xlsx,.xls,.csv" style="display: none;">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label">Class *</label>
+                        <select class="form-select" id="uploadClass" required>
+                            <option value="">-- Select Class --</option>
+                            <option value="grade10">Grade 10</option>
+                            <option value="grade11">Grade 11</option>
+                            <option value="grade12">Grade 12</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Exam Type *</label>
+                        <select class="form-select" id="uploadExamType" required>
+                            <option value="">-- Select Exam --</option>
+                            <option value="midterm">Midterm Exam</option>
+                            <option value="final">Final Exam</option>
+                            <option value="quiz">Quiz</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="uploadDescription" rows="3" 
+                              placeholder="Brief description of the marks data..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="overwriteExisting">
+                        Overwrite existing marks for this exam
+                    </label>
+                </div>
+                
+                <div class="upload-instructions" style="background: #fffbf0; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--warning); margin-bottom: 1.5rem;">
+                    <h5 style="color: var(--warning); margin-bottom: 0.5rem;">File Format Requirements:</h5>
+                    <ul style="margin: 0; padding-left: 1.5rem; color: #666;">
+                        <li>First column: Student ID</li>
+                        <li>Second column: Student Name</li>
+                        <li>Third column: Marks Obtained</li>
+                        <li>File should not contain headers</li>
+                        <li>Maximum file size: 5MB</li>
+                    </ul>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" onclick="closeMarksheetsDynamicContent()" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Upload Marks
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    // Add file input handler
+    const uploadArea = document.querySelector('.upload-area');
+    const fileInput = document.getElementById('marksFileUpload');
+    
+    uploadArea.addEventListener('click', () => fileInput.click());
+    
+    fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            uploadArea.querySelector('p').textContent = `Selected: ${this.files[0].name}`;
+        }
+    });
+};
+
+// Helper functions for Marksheets section
+window.closeMarksheetsDynamicContent = function() {
+    const dynamicContent = document.getElementById('marksheets-dynamic-content');
+    if (dynamicContent) {
+        dynamicContent.innerHTML = '';
+    }
+};
+
+window.calculateGrade = function(input) {
+    const row = input.closest('.table-row');
+    const marks = parseFloat(input.value) || 0;
+    const maxMarks = parseFloat(document.getElementById('maxMarks').value) || 100;
+    const percentage = ((marks / maxMarks) * 100).toFixed(1);
+    
+    const percentageElement = row.querySelector('.percentage');
+    const gradeElement = row.querySelector('.grade');
+    
+    percentageElement.textContent = percentage + '%';
+    
+    // Simple grade calculation
+    let grade = 'F';
+    let color = 'var(--danger)';
+    
+    if (percentage >= 90) {
+        grade = 'A+';
+        color = 'var(--success)';
+    } else if (percentage >= 80) {
+        grade = 'A';
+        color = 'var(--success)';
+    } else if (percentage >= 70) {
+        grade = 'B';
+        color = 'var(--warning)';
+    } else if (percentage >= 60) {
+        grade = 'C';
+        color = 'var(--warning)';
+    } else if (percentage >= 50) {
+        grade = 'D';
+        color = 'var(--info)';
+    } else if (percentage >= 40) {
+        grade = 'E';
+        color = 'var(--info)';
+    }
+    
+    gradeElement.textContent = grade;
+    gradeElement.style.color = color;
+    percentageElement.style.color = color;
+};
+
+window.loadStudentsForClass = function() {
+    console.log('Loading students for selected class...');
+};
+
+window.saveMarks = function(event) {
+    event.preventDefault();
+    alert('✅ Marks saved successfully!');
+    closeMarksheetsDynamicContent();
+};
+
+window.filterMarksheets = function() {
+    console.log('Filtering marksheets...');
+};
+
+window.searchMarksheets = function() {
+    console.log('Searching marksheets...');
+};
+
+window.viewStudentMarksheet = function(studentId) {
+    alert(`Viewing marksheet for student: ${studentId}`);
+};
+
+window.downloadMarksheet = function(studentId) {
+    alert(`Downloading marksheet for student: ${studentId}`);
+};
+
+window.printMarksheet = function(studentId) {
+    alert(`Printing marksheet for student: ${studentId}`);
+};
+
+window.printAllMarksheets = function() {
+    alert('Printing all marksheets...');
+};
+
+window.generateReport = function(reportType) {
+    alert(`Generating ${reportType} report...`);
+};
+
+window.generateCustomReport = function() {
+    alert('Opening custom report generator...');
+};
+
+window.viewReport = function(reportId) {
+    alert(`Viewing report: ${reportId}`);
+};
+
+window.downloadReport = function(reportId) {
+    alert(`Downloading report: ${reportId}`);
+};
+
+window.addGradeItem = function() {
+    const container = document.getElementById('gradeScaleItems');
+    const newItem = document.createElement('div');
+    newItem.className = 'table-row';
+    newItem.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 2fr 80px; gap: 1rem; padding: 1rem; border-bottom: 1px solid #eee; align-items: center;';
+    newItem.innerHTML = `
+        <input type="text" class="form-input" value="B+" placeholder="Grade">
+        <input type="number" class="form-input" value="70" min="0" max="100">
+        <input type="number" class="form-input" value="79" min="0" max="100">
+        <input type="number" class="form-input" value="3.3" step="0.1" min="0">
+        <input type="text" class="form-input" value="Good" placeholder="Grade description">
+        <button type="button" onclick="removeGradeItem(this)" class="btn btn-danger btn-sm">
+            <i class="fas fa-trash"></i>
+        </button>
+    `;
+    container.appendChild(newItem);
+};
+
+window.removeGradeItem = function(button) {
+    const container = document.getElementById('gradeScaleItems');
+    if (container.children.length > 1) {
+        button.closest('.table-row').remove();
+    } else {
+        alert('You must have at least one grade item.');
+    }
+};
+
+window.saveGradeSystem = function(event) {
+    event.preventDefault();
+    alert('✅ Grade system saved successfully!');
+    closeMarksheetsDynamicContent();
+};
+
+window.updateAnalysis = function() {
+    console.log('Updating performance analysis...');
+};
+
+window.refreshAnalysis = function() {
+    alert('Refreshing analysis data...');
+};
+
+window.exportAnalysisReport = function() {
+    alert('Exporting analysis report...');
+};
+
+window.uploadMarksFile = function(event) {
+    event.preventDefault();
+    alert('✅ Marks file uploaded successfully!');
+    closeMarksheetsDynamicContent();
+};
+
