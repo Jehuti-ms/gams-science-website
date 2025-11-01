@@ -1,4 +1,18 @@
-// ===== GAMS SCIENCE DEPARTMENT - ENHANCED JAVASCRIPT =====
+// ===== DOCUMENTS SECTION =====
+function loadDocumentsSection(container) {
+    console.log('📄 Documents section function called');
+    
+    try {
+        container.innerHTML = `
+            <div class="section-content">
+                <div class="drive-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3><i class="fas fa-file-alt"></i> Department Documents</h3>
+                        <button onclick="returnToOverview()" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left"></i> Back to Overview
+                        </button>
+                    </div>
+                    <p>Access national// ===== GAMS SCIENCE DEPARTMENT - ENHANCED JAVASCRIPT =====
 
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
