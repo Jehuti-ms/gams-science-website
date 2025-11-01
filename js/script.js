@@ -837,6 +837,555 @@ function formatDate(date) {
 }
 
 // ===== MISSING FUNCTION IMPLEMENTATIONS =====
+// ===== SUBJECT RESOURCES SECTION =====
+function loadSubjectResourcesSection(container) {
+    console.log('🔍 Loading Subject Resources section...');
+    
+    container.innerHTML = `
+        <div class="section-content" id="section-subject-resources">
+            <div class="drive-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3><i class="fas fa-book-open"></i> Subject Resources</h3>
+                    <button onclick="returnToOverview()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Overview
+                    </button>
+                </div>
+                <p>Access curriculum materials, lesson plans, and teaching resources organized by subject.</p>
+                
+                <div class="resources-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                    <div class="action-card" onclick="showCurriculumResources()">
+                        <i class="fas fa-graduation-cap" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h4>Curriculum</h4>
+                        <p>Schemes of work and curriculum planning</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showAllSubjects()">
+                        <i class="fas fa-atom" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                        <h4>All Subjects</h4>
+                        <p>Browse resources by subject</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showUploadResources()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                        <h4>Upload Resources</h4>
+                        <p>Share new teaching materials</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showResourceSearch()">
+                        <i class="fas fa-search" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                        <h4>Search Resources</h4>
+                        <p>Find specific materials</p>
+                    </div>
+                </div>
+                
+                <div id="subject-resources-dynamic-content">
+                    <div style="text-align: center; padding: 3rem; color: #999;">
+                        <i class="fas fa-book-open" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                        <p>Select an option above to access subject resources</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    console.log('✅ Subject Resources section loaded successfully');
+}
+
+// Curriculum Resources
+window.showCurriculumResources = function() {
+    const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-graduation-cap"></i> Curriculum Resources</h3>
+                <button onclick="closeSubjectResourcesDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="curriculum-sections" style="display: grid; gap: 2rem;">
+                <div class="curriculum-section">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-calendar-alt"></i> Schemes of Work
+                    </h4>
+                    <div class="resource-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; cursor: pointer;" onclick="viewResource('sow_2025', '2024-2025 Annual Scheme', 'syllabus')">
+                            <i class="fas fa-file-alt" style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;"></i>
+                            <h5>2024-2025 Annual Scheme</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Complete annual teaching plan</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Mar 15, 2025</span>
+                                <span style="color: var(--success); font-size: 0.8rem;">PDF</span>
+                            </div>
+                        </div>
+                        
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; cursor: pointer;" onclick="viewResource('sow_term1', 'Term 1 Detailed Plan', 'syllabus')">
+                            <i class="fas fa-file-alt" style="font-size: 2rem; color: var(--info); margin-bottom: 0.5rem;"></i>
+                            <h5>Term 1 Detailed Plan</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Weekly breakdown for Term 1</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Jan 10, 2025</span>
+                                <span style="color: var(--success); font-size: 0.8rem;">DOCX</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="curriculum-section">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-clipboard-list"></i> Lesson Plans
+                    </h4>
+                    <div class="resource-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; cursor: pointer;" onclick="viewResource('lesson_template', 'Standard Lesson Plan Template', 'lesson_plans')">
+                            <i class="fas fa-clipboard" style="font-size: 2rem; color: var(--success); margin-bottom: 0.5rem;"></i>
+                            <h5>Standard Lesson Plan Template</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Universal lesson plan format</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Feb 1, 2025</span>
+                                <span style="color: var(--warning); font-size: 0.8rem;">DOCX</span>
+                            </div>
+                        </div>
+                        
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; cursor: pointer;" onclick="viewResource('assessment_rubrics', 'Assessment Rubrics', 'lesson_plans')">
+                            <i class="fas fa-check-circle" style="font-size: 2rem; color: var(--danger); margin-bottom: 0.5rem;"></i>
+                            <h5>Assessment Rubrics</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Grading and evaluation criteria</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Mar 1, 2025</span>
+                                <span style="color: var(--success); font-size: 0.8rem;">PDF</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// All Subjects Overview
+window.showAllSubjects = function() {
+    const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-atom"></i> Resources by Subject</h3>
+                <button onclick="closeSubjectResourcesDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="subjects-grid" style="display: grid; gap: 1.5rem;">
+                <!-- Integrated Science -->
+                <div class="subject-card" style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--primary);">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">
+                                <i class="fas fa-flask"></i> Integrated Science
+                            </h4>
+                            <p style="color: #666; margin-bottom: 1rem;">General science curriculum resources</p>
+                            <div class="resource-types" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                <span class="resource-tag" onclick="showSubjectDetail('integrated_science', 'syllabus')" style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Syllabus</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('integrated_science', 'lesson_plans')" style="background: var(--info); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Lesson Plans</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('integrated_science', 'past_papers')" style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Past Papers</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('integrated_science', 'notes')" style="background: var(--warning); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Notes/Handouts</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('integrated_science', 'videos')" style="background: var(--danger); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Videos</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('integrated_science', 'powerpoints')" style="background: var(--secondary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">PowerPoints</span>
+                            </div>
+                        </div>
+                        <button onclick="showSubjectDetail('integrated_science', 'all')" class="btn btn-primary btn-sm">
+                            <i class="fas fa-folder-open"></i> View All
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Agricultural Science -->
+                <div class="subject-card" style="background: #f0f9f0; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--success);">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--success); margin-bottom: 0.5rem;">
+                                <i class="fas fa-seedling"></i> Agricultural Science
+                            </h4>
+                            <p style="color: #666; margin-bottom: 1rem;">Agriculture and farming science resources</p>
+                            <div class="resource-types" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                <span class="resource-tag" onclick="showSubjectDetail('agricultural_science', 'syllabus')" style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Syllabus</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('agricultural_science', 'lesson_plans')" style="background: var(--info); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Lesson Plans</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('agricultural_science', 'past_papers')" style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Past Papers</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('agricultural_science', 'notes')" style="background: var(--warning); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Notes/Handouts</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('agricultural_science', 'videos')" style="background: var(--danger); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Videos</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('agricultural_science', 'powerpoints')" style="background: var(--secondary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">PowerPoints</span>
+                            </div>
+                        </div>
+                        <button onclick="showSubjectDetail('agricultural_science', 'all')" class="btn btn-success btn-sm">
+                            <i class="fas fa-folder-open"></i> View All
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Human & Social Biology -->
+                <div class="subject-card" style="background: #fff0f0; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--danger);">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--danger); margin-bottom: 0.5rem;">
+                                <i class="fas fa-user-friends"></i> Human & Social Biology
+                            </h4>
+                            <p style="color: #666; margin-bottom: 1rem;">Human biology and social context resources</p>
+                            <div class="resource-types" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                <span class="resource-tag" onclick="showSubjectDetail('human_biology', 'syllabus')" style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Syllabus</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('human_biology', 'lesson_plans')" style="background: var(--info); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Lesson Plans</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('human_biology', 'past_papers')" style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Past Papers</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('human_biology', 'notes')" style="background: var(--warning); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Notes/Handouts</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('human_biology', 'videos')" style="background: var(--danger); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Videos</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('human_biology', 'powerpoints')" style="background: var(--secondary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">PowerPoints</span>
+                            </div>
+                        </div>
+                        <button onclick="showSubjectDetail('human_biology', 'all')" class="btn btn-danger btn-sm">
+                            <i class="fas fa-folder-open"></i> View All
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Biology -->
+                <div class="subject-card" style="background: #f0fff0; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: #28a745; margin-bottom: 0.5rem;">
+                                <i class="fas fa-dna"></i> Biology
+                            </h4>
+                            <p style="color: #666; margin-bottom: 1rem;">Life sciences and biological systems</p>
+                            <div class="resource-types" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                <span class="resource-tag" onclick="showSubjectDetail('biology', 'syllabus')" style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Syllabus</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('biology', 'lesson_plans')" style="background: var(--info); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Lesson Plans</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('biology', 'past_papers')" style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Past Papers</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('biology', 'notes')" style="background: var(--warning); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Notes/Handouts</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('biology', 'videos')" style="background: var(--danger); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Videos</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('biology', 'powerpoints')" style="background: var(--secondary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">PowerPoints</span>
+                            </div>
+                        </div>
+                        <button onclick="showSubjectDetail('biology', 'all')" class="btn btn-success btn-sm">
+                            <i class="fas fa-folder-open"></i> View All
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Chemistry -->
+                <div class="subject-card" style="background: #fff0f5; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #e83e8c;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: #e83e8c; margin-bottom: 0.5rem;">
+                                <i class="fas fa-vial"></i> Chemistry
+                            </h4>
+                            <p style="color: #666; margin-bottom: 1rem;">Chemical reactions and properties</p>
+                            <div class="resource-types" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                <span class="resource-tag" onclick="showSubjectDetail('chemistry', 'syllabus')" style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Syllabus</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('chemistry', 'lesson_plans')" style="background: var(--info); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Lesson Plans</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('chemistry', 'past_papers')" style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Past Papers</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('chemistry', 'notes')" style="background: var(--warning); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Notes/Handouts</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('chemistry', 'videos')" style="background: var(--danger); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Videos</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('chemistry', 'powerpoints')" style="background: var(--secondary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">PowerPoints</span>
+                            </div>
+                        </div>
+                        <button onclick="showSubjectDetail('chemistry', 'all')" class="btn btn-sm" style="background: #e83e8c; color: white; border: none;">
+                            <i class="fas fa-folder-open"></i> View All
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Physics -->
+                <div class="subject-card" style="background: #f0f8ff; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #007bff;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: #007bff; margin-bottom: 0.5rem;">
+                                <i class="fas fa-atom"></i> Physics
+                            </h4>
+                            <p style="color: #666; margin-bottom: 1rem;">Physical laws and phenomena</p>
+                            <div class="resource-types" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                <span class="resource-tag" onclick="showSubjectDetail('physics', 'syllabus')" style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Syllabus</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('physics', 'lesson_plans')" style="background: var(--info); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Lesson Plans</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('physics', 'past_papers')" style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Past Papers</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('physics', 'notes')" style="background: var(--warning); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Notes/Handouts</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('physics', 'videos')" style="background: var(--danger); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Videos</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('physics', 'powerpoints')" style="background: var(--secondary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">PowerPoints</span>
+                            </div>
+                        </div>
+                        <button onclick="showSubjectDetail('physics', 'all')" class="btn btn-primary btn-sm">
+                            <i class="fas fa-folder-open"></i> View All
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Amenity Horticulture -->
+                <div class="subject-card" style="background: #fffaf0; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: #ffc107; margin-bottom: 0.5rem;">
+                                <i class="fas fa-leaf"></i> Amenity Horticulture
+                            </h4>
+                            <p style="color: #666; margin-bottom: 1rem;">Landscape and ornamental horticulture</p>
+                            <div class="resource-types" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                <span class="resource-tag" onclick="showSubjectDetail('horticulture', 'syllabus')" style="background: var(--primary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Syllabus</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('horticulture', 'clusters')" style="background: var(--info); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Clusters</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('horticulture', 'evidence')" style="background: var(--success); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Evidence Upload</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('horticulture', 'lesson_plans')" style="background: var(--warning); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Lesson Plans</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('horticulture', 'notes')" style="background: var(--danger); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">Notes/Handouts</span>
+                                <span class="resource-tag" onclick="showSubjectDetail('horticulture', 'powerpoints')" style="background: var(--secondary); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">PowerPoints</span>
+                            </div>
+                        </div>
+                        <button onclick="showSubjectDetail('horticulture', 'all')" class="btn btn-warning btn-sm">
+                            <i class="fas fa-folder-open"></i> View All
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Upload Resources
+window.showUploadResources = function() {
+    const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-cloud-upload-alt"></i> Upload Teaching Resources</h3>
+                <button onclick="closeSubjectResourcesDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <form onsubmit="uploadResource(event)">
+                <div class="upload-area" style="border: 2px dashed var(--primary); border-radius: 8px; padding: 3rem; text-align: center; margin-bottom: 1.5rem; background: #f8fdff; cursor: pointer;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <p>Click to browse or drag and drop files here</p>
+                    <p style="font-size: 0.9rem; color: #666;">Supported formats: PDF, DOCX, PPT, MP4, JPG</p>
+                    <input type="file" id="resourceFileUpload" multiple style="display: none;">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label">Subject *</label>
+                        <select class="form-select" id="resourceSubject" required>
+                            <option value="">-- Select Subject --</option>
+                            <option value="integrated_science">Integrated Science</option>
+                            <option value="agricultural_science">Agricultural Science</option>
+                            <option value="human_biology">Human & Social Biology</option>
+                            <option value="biology">Biology</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="physics">Physics</option>
+                            <option value="horticulture">Amenity Horticulture</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Resource Type *</label>
+                        <select class="form-select" id="resourceType" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="syllabus">Syllabus</option>
+                            <option value="lesson_plans">Lesson Plans</option>
+                            <option value="past_papers">Past Papers</option>
+                            <option value="notes">Notes/Handouts</option>
+                            <option value="videos">Videos</option>
+                            <option value="powerpoints">PowerPoints</option>
+                            <option value="clusters">Clusters (Horticulture)</option>
+                            <option value="evidence">Evidence (Horticulture)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Resource Title *</label>
+                    <input type="text" class="form-input" id="resourceTitle" required 
+                           placeholder="e.g., Grade 10 Physics Syllabus 2025">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="resourceDescription" rows="3" 
+                              placeholder="Brief description of the resource..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Grade Level</label>
+                    <select class="form-select" id="resourceGrade">
+                        <option value="">-- Select Grade --</option>
+                        <option value="grade10">Grade 10</option>
+                        <option value="grade11">Grade 11</option>
+                        <option value="grade12">Grade 12</option>
+                        <option value="all">All Grades</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" onclick="closeSubjectResourcesDynamicContent()" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Upload Resource
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    // Add file input handler
+    const uploadArea = document.querySelector('.upload-area');
+    const fileInput = document.getElementById('resourceFileUpload');
+    
+    uploadArea.addEventListener('click', () => fileInput.click());
+    
+    fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            const fileNames = Array.from(this.files).map(file => file.name).join(', ');
+            uploadArea.querySelector('p').textContent = `Selected: ${fileNames}`;
+        }
+    });
+};
+
+// Resource Search
+window.showResourceSearch = function() {
+    const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+    
+    // Check if element exists
+    if (!dynamicContent) {
+        console.error('Subject resources dynamic content element not found');
+        return;
+    }
+    
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-search"></i> Search Resources</h3>
+                <button onclick="closeSubjectResourcesDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="search-form">
+                <div class="form-group">
+                    <input type="text" class="form-input" id="resourceSearch" placeholder="Search for resources..." 
+                           style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <select class="form-select" id="searchSubject">
+                            <option value="">All Subjects</option>
+                            <option value="integrated_science">Integrated Science</option>
+                            <option value="agricultural_science">Agricultural Science</option>
+                            <option value="human_biology">Human & Social Biology</option>
+                            <option value="biology">Biology</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="physics">Physics</option>
+                            <option value="horticulture">Amenity Horticulture</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Resource Type</label>
+                        <select class="form-select" id="searchType">
+                            <option value="">All Types</option>
+                            <option value="syllabus">Syllabus</option>
+                            <option value="lesson_plans">Lesson Plans</option>
+                            <option value="past_papers">Past Papers</option>
+                            <option value="notes">Notes/Handouts</option>
+                            <option value="videos">Videos</option>
+                            <option value="powerpoints">PowerPoints</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button onclick="performResourceSearch()" class="btn btn-primary" style="width: 100%; padding: 1rem;">
+                    <i class="fas fa-search"></i> Search Resources
+                </button>
+            </div>
+            
+            <div id="search-results" style="margin-top: 2rem;">
+                <div style="text-align: center; padding: 2rem; color: #999;">
+                    <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Enter search criteria to find resources</p>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// ===== SUBJECT RESOURCES HELPER FUNCTIONS =====
+
+// Close Subject Resources Dynamic Content
+window.closeSubjectResourcesDynamicContent = function() {
+    const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+    if (dynamicContent) {
+        dynamicContent.innerHTML = '<div style="text-align: center; padding: 3rem; color: #999;"><i class="fas fa-book-open" style="font-size: 4rem; margin-bottom: 1rem;"></i><p>Select an option above to access subject resources</p></div>';
+    }
+};
+
+// Perform Resource Search
+window.performResourceSearch = function() {
+    const searchTerm = document.getElementById('resourceSearch').value;
+    const subject = document.getElementById('searchSubject').value;
+    const type = document.getElementById('searchType').value;
+    
+    // Simulate search results
+    const results = [
+        { title: 'Grade 10 Physics Syllabus', subject: 'physics', type: 'syllabus', date: '2025-03-15' },
+        { title: 'Chemical Reactions Lesson Plan', subject: 'chemistry', type: 'lesson_plans', date: '2025-03-10' },
+        { title: 'Biology Past Papers 2024', subject: 'biology', type: 'past_papers', date: '2025-02-28' }
+    ].filter(item => {
+        return (!searchTerm || item.title.toLowerCase().includes(searchTerm.toLowerCase())) &&
+               (!subject || item.subject === subject) &&
+               (!type || item.type === type);
+    });
+    
+    const resultsContainer = document.getElementById('search-results');
+    
+    if (results.length === 0) {
+        resultsContainer.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: #999;">
+                <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <p>No resources found matching your criteria</p>
+            </div>
+        `;
+    } else {
+        resultsContainer.innerHTML = `
+            <h4 style="color: var(--primary); margin-bottom: 1rem;">Search Results (${results.length})</h4>
+            <div class="results-list">
+                ${results.map(item => `
+                    <div class="result-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div style="flex: 1;">
+                            <strong>${item.title}</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">
+                                ${item.subject} • ${item.type} • ${new Date(item.date).toLocaleDateString()}
+                            </p>
+                        </div>
+                        <button onclick="viewResource('${item.title.replace(/\s+/g, '_')}', '${item.title}', '${item.type}')" class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+};
+
+// View Resource Function
+window.viewResource = function(resourceId, resourceName, resourceType) {
+    console.log('Viewing resource:', resourceId, resourceName, resourceType);
+    
+    // Show a modal or navigate to resource view
+    alert(`Opening resource: ${resourceName || resourceId}\n\nType: ${resourceType}\n\nIn a real implementation, this would open the resource viewer.`);
+};
+
+// Upload Resource Function
+window.uploadResource = function(event) {
+    event.preventDefault();
+    alert('✅ Resource uploaded successfully!');
+    closeSubjectResourcesDynamicContent();
+};
+
+// Show Subject Detail
+window.showSubjectDetail = function(subject, type) {
+    alert(`Showing ${type} resources for ${subject}\n\nThis would display specific resources for the selected subject and type.`);
+};
 
 // Resource Search Function
 window.showResourceSearch = function() {
