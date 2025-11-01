@@ -7212,5 +7212,17 @@ window.showUploadResources = function() {
 // Resource Search
 window.showResourceSearch = function() {
     const dynamicContent = document.getElementById('subject-resources-dynamic-content');
-    dynamic
-}
+    
+    // Check if element exists
+    if (!dynamicContent) {
+        console.error('Subject resources dynamic content element not found');
+        return;
+    }
+    
+    // Add your actual functionality here
+    // For example:
+    dynamicContent.innerHTML = '<p>Resource search functionality would go here...</p>';
+    
+    // Or whatever your intended functionality was
+    console.log('Resource search function called');
+};
