@@ -2642,8 +2642,8 @@ window.showCreateEstimate = function() {
                         <div class="table-header" style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr 80px; gap: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px 8px 0 0; font-weight: bold;">
                             <div>Item Description</div>
                             <div>Quantity</div>
-                            <div>Unit Price (₹)</div>
-                            <div>Total (₹)</div>
+                            <div>Unit Price ($)</div>
+                            <div>Total ($)</div>
                             <div>Action</div>
                         </div>
                         
@@ -2670,15 +2670,15 @@ window.showCreateEstimate = function() {
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div>
                                 <strong>Subtotal:</strong>
-                                <div id="estimateSubtotal" style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">₹0.00</div>
+                                <div id="estimateSubtotal" style="font-size: 1.2rem; font-weight: bold; color: var(--primary);">$0.00</div>
                             </div>
                             <div>
                                 <strong>Tax (18%):</strong>
-                                <div id="estimateTax" style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">₹0.00</div>
+                                <div id="estimateTax" style="font-size: 1.2rem; font-weight: bold; color: var(--warning);">$0.00</div>
                             </div>
                             <div>
                                 <strong>Total Estimate:</strong>
-                                <div id="estimateTotal" style="font-size: 1.5rem; font-weight: bold; color: var(--success);">₹0.00</div>
+                                <div id="estimateTotal" style="font-size: 1.5rem; font-weight: bold; color: var(--success);">$0.00</div>
                             </div>
                         </div>
                     </div>
@@ -2743,7 +2743,7 @@ window.showPendingEstimates = function() {
                                     <div style="display: flex; gap: 2rem;">
                                         <div>
                                             <strong>Total Amount:</strong>
-                                            <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">₹${estimate.total.toLocaleString()}</div>
+                                            <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">$${estimate.total.toLocaleString()}</div>
                                         </div>
                                         <div>
                                             <strong>Status:</strong>
@@ -2792,7 +2792,7 @@ window.showApprovedEstimates = function() {
             
             <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
                 <div class="stat-card" style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid var(--primary);">
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">₹${calculateTotalApproved().toLocaleString()}</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">$${calculateTotalApproved().toLocaleString()}</div>
                     <div style="color: #666;">Total Approved</div>
                 </div>
                 <div class="stat-card" style="background: #f0f9f0; padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid var(--success);">
@@ -2800,7 +2800,7 @@ window.showApprovedEstimates = function() {
                     <div style="color: #666;">Approved Estimates</div>
                 </div>
                 <div class="stat-card" style="background: #fffbf0; padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid var(--warning);">
-                    <div style="font-size: 2rem; font-weight: bold; color: var(--warning);">₹${calculateAverageEstimate().toLocaleString()}</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--warning);">$${calculateAverageEstimate().toLocaleString()}</div>
                     <div style="color: #666;">Average Estimate</div>
                 </div>
             </div>
@@ -2825,7 +2825,7 @@ window.showApprovedEstimates = function() {
                                     <div style="display: flex; gap: 2rem;">
                                         <div>
                                             <strong>Total Amount:</strong>
-                                            <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">₹${estimate.total.toLocaleString()}</div>
+                                            <div style="font-size: 1.2rem; font-weight: bold; color: var(--success);">$${estimate.total.toLocaleString()}</div>
                                         </div>
                                         <div>
                                             <strong>Approved By:</strong>
@@ -2927,15 +2927,15 @@ window.showBudgetTracking = function() {
             <div class="budget-overview" style="margin-bottom: 2rem;">
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                     <div class="budget-card" style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; text-align: center;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">₹2,50,000</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">$2,50,000</div>
                         <div style="color: #666;">Total Budget</div>
                     </div>
                     <div class="budget-card" style="background: #fffbf0; padding: 1.5rem; border-radius: 8px; text-align: center;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--warning);">₹1,75,000</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--warning);">$1,75,000</div>
                         <div style="color: #666;">Allocated</div>
                     </div>
                     <div class="budget-card" style="background: #f0f9f0; padding: 1.5rem; border-radius: 8px; text-align: center;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">₹75,000</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">$75,000</div>
                         <div style="color: #666;">Available</div>
                     </div>
                     <div class="budget-card" style="background: #fff5f5; padding: 1.5rem; border-radius: 8px; text-align: center;">
@@ -2951,7 +2951,7 @@ window.showBudgetTracking = function() {
                     <div class="department-item">
                         <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
                             <span style="font-weight: bold;">Physics Department</span>
-                            <span style="color: var(--success);">₹75,000 / ₹1,00,000</span>
+                            <span style="color: var(--success);">$75,000 / $1,00,000</span>
                         </div>
                         <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
                             <div style="height: 100%; background: var(--success); width: 75%;"></div>
@@ -2961,7 +2961,7 @@ window.showBudgetTracking = function() {
                     <div class="department-item">
                         <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
                             <span style="font-weight: bold;">Chemistry Department</span>
-                            <span style="color: var(--warning);">₹60,000 / ₹80,000</span>
+                            <span style="color: var(--warning);">$60,000 / $80,000</span>
                         </div>
                         <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
                             <div style="height: 100%; background: var(--warning); width: 75%;"></div>
@@ -2971,7 +2971,7 @@ window.showBudgetTracking = function() {
                     <div class="department-item">
                         <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
                             <span style="font-weight: bold;">Biology Department</span>
-                            <span style="color: var(--info);">₹40,000 / ₹70,000</span>
+                            <span style="color: var(--info);">$40,000 / $70,000</span>
                         </div>
                         <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
                             <div style="height: 100%; background: var(--info); width: 57%;"></div>
@@ -2989,7 +2989,7 @@ window.showBudgetTracking = function() {
                         </div>
                         <div style="flex: 1;">
                             <strong>Physics Lab Equipment</strong> approved
-                            <p style="margin: 0.25rem 0 0 0; color: #666;">₹25,000 • ${new Date().toLocaleDateString()}</p>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">$25,000 • ${new Date().toLocaleDateString()}</p>
                         </div>
                         <span style="color: var(--success); font-weight: bold;">Approved</span>
                     </div>
@@ -3000,7 +3000,7 @@ window.showBudgetTracking = function() {
                         </div>
                         <div style="flex: 1;">
                             <strong>Chemical Supplies Q2</strong> pending review
-                            <p style="margin: 0.25rem 0 0 0; color: #666;">₹18,500 • ${new Date().toLocaleDateString()}</p>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">$18,500 • ${new Date().toLocaleDateString()}</p>
                         </div>
                         <span style="color: var(--warning); font-weight: bold;">Pending</span>
                     </div>
@@ -3061,7 +3061,7 @@ window.showUploadEstimate = function() {
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Total Amount (₹)</label>
+                    <label class="form-label">Total Amount ($)</label>
                     <input type="number" class="form-input" id="uploadAmount" step="0.01" min="0" 
                            placeholder="0.00">
                 </div>
@@ -3144,9 +3144,9 @@ window.calculateEstimateTotals = function() {
     const tax = subtotal * 0.18; // 18% tax
     const total = subtotal + tax;
     
-    document.getElementById('estimateSubtotal').textContent = '₹' + subtotal.toLocaleString();
-    document.getElementById('estimateTax').textContent = '₹' + tax.toLocaleString();
-    document.getElementById('estimateTotal').textContent = '₹' + total.toLocaleString();
+    document.getElementById('estimateSubtotal').textContent = '$' + subtotal.toLocaleString();
+    document.getElementById('estimateTax').textContent = '$' + tax.toLocaleString();
+    document.getElementById('estimateTotal').textContent = '$' + total.toLocaleString();
 };
 
 window.saveEstimate = function(event) {
@@ -3158,7 +3158,7 @@ window.saveEstimate = function(event) {
     const quarter = document.getElementById('estimateQuarter').value;
     const purpose = document.getElementById('estimatePurpose').value;
     const notes = document.getElementById('estimateNotes').value;
-    const total = parseFloat(document.getElementById('estimateTotal').textContent.replace('₹', '').replace(/,/g, '')) || 0;
+    const total = parseFloat(document.getElementById('estimateTotal').textContent.replace('$', '').replace(/,/g, '')) || 0;
     
     // Collect items
     const items = [];
@@ -3263,16 +3263,16 @@ window.viewEstimate = function(estimateId) {
                     <div class="table-header" style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; gap: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px 8px 0 0; font-weight: bold;">
                         <div>Item Description</div>
                         <div>Quantity</div>
-                        <div>Unit Price (₹)</div>
-                        <div>Total (₹)</div>
+                        <div>Unit Price ($)</div>
+                        <div>Total ($)</div>
                     </div>
                     
                     ${estimate.items.map(item => `
                         <div class="table-row" style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; gap: 1rem; padding: 1rem; border-bottom: 1px solid #eee;">
                             <div>${item.description}</div>
                             <div>${item.quantity}</div>
-                            <div>₹${item.unitPrice.toLocaleString()}</div>
-                            <div style="font-weight: bold; color: var(--success);">₹${item.total.toLocaleString()}</div>
+                            <div>$${item.unitPrice.toLocaleString()}</div>
+                            <div style="font-weight: bold; color: var(--success);">$${item.total.toLocaleString()}</div>
                         </div>
                     `).join('')}
                     
@@ -3281,19 +3281,19 @@ window.viewEstimate = function(estimateId) {
                             <div></div>
                             <div></div>
                             <div>Subtotal:</div>
-                            <div>₹${estimate.subtotal.toLocaleString()}</div>
+                            <div>$${estimate.subtotal.toLocaleString()}</div>
                         </div>
                         <div style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; gap: 1rem;">
                             <div></div>
                             <div></div>
                             <div>Tax (18%):</div>
-                            <div>₹${estimate.tax.toLocaleString()}</div>
+                            <div>$${estimate.tax.toLocaleString()}</div>
                         </div>
                         <div style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; gap: 1rem; font-size: 1.1rem;">
                             <div></div>
                             <div></div>
                             <div>Total:</div>
-                            <div style="color: var(--success); font-weight: bold;">₹${estimate.total.toLocaleString()}</div>
+                            <div style="color: var(--success); font-weight: bold;">$${estimate.total.toLocaleString()}</div>
                         </div>
                     </div>
                 </div>
