@@ -1815,6 +1815,706 @@ window.nextMonth = function() {
 window.addCalendarEvent = function() {
     alert('Adding new calendar event...');
 };
+
+// ===== TIMETABLES SECTION =====
+function loadTimetablesSection(container) {
+    container.innerHTML = `
+        <div class="section-content" id="section-timetables">
+            <div class="drive-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3><i class="fas fa-clock"></i> Department Timetables</h3>
+                    <button onclick="returnToOverview()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Overview
+                    </button>
+                </div>
+                <p>Manage and view class schedules, teacher timetables, and room allocations.</p>
+                
+                <div class="timetable-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                    <div class="action-card" onclick="showClassTimetables()">
+                        <i class="fas fa-chalkboard-teacher" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h4>Class Timetables</h4>
+                        <p>View and manage class schedules</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showTeacherTimetables()">
+                        <i class="fas fa-user-tie" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                        <h4>Teacher Schedules</h4>
+                        <p>Individual teacher timetables</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showRoomAllocations()">
+                        <i class="fas fa-door-open" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                        <h4>Room Allocations</h4>
+                        <p>Classroom and lab schedules</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showGenerateTimetable()">
+                        <i class="fas fa-plus-circle" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                        <h4>Generate Timetable</h4>
+                        <p>Create new timetables</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showTimetableRequests()">
+                        <i class="fas fa-exchange-alt" style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                        <h4>Change Requests</h4>
+                        <p>Manage timetable modifications</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showUploadTimetable()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;"></i>
+                        <h4>Upload Timetable</h4>
+                        <p>Upload existing timetable files</p>
+                    </div>
+                </div>
+                
+                <div id="timetables-dynamic-content"></div>
+            </div>
+        </div>
+    `;
+}
+
+// Class Timetables Section
+window.showClassTimetables = function() {
+    const dynamicContent = document.getElementById('timetables-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-chalkboard-teacher"></i> Class Timetables</h3>
+                <div>
+                    <button onclick="printTimetable()" class="btn btn-success btn-sm">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                    <button onclick="closeTimetablesDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="class-selector" style="margin-bottom: 2rem;">
+                <div class="form-group">
+                    <label class="form-label">Select Class</label>
+                    <select class="form-select" onchange="loadClassTimetable(this.value)" style="width: 300px;">
+                        <option value="">-- Select a Class --</option>
+                        <option value="grade10_science">Grade 10 Science</option>
+                        <option value="grade11_math">Grade 11 Mathematics</option>
+                        <option value="grade12_physics">Grade 12 Physics</option>
+                        <option value="grade10_chemistry">Grade 10 Chemistry</option>
+                        <option value="grade11_biology">Grade 11 Biology</option>
+                        <option value="grade12_chemistry">Grade 12 Chemistry</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="class-timetable-display">
+                <div class="timetable-placeholder" style="text-align: center; padding: 3rem; color: #999; background: #f8f9fa; border-radius: 8px;">
+                    <i class="fas fa-table" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                    <p>Select a class to view its timetable</p>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Teacher Timetables Section
+window.showTeacherTimetables = function() {
+    const dynamicContent = document.getElementById('timetables-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-user-tie"></i> Teacher Schedules</h3>
+                <div>
+                    <button onclick="exportAllTeacherSchedules()" class="btn btn-success btn-sm">
+                        <i class="fas fa-download"></i> Export All
+                    </button>
+                    <button onclick="closeTimetablesDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="teacher-search" style="margin-bottom: 2rem;">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Search teachers..." 
+                           onkeyup="searchTeachers(this.value)" style="width: 100%;">
+                </div>
+            </div>
+            
+            <div class="teachers-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="teacher-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--primary);">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Dr. Sarah Johnson</h4>
+                            <p style="color: #666; margin-bottom: 0.5rem;">Physics Department</p>
+                            <p style="color: #999; font-size: 0.9rem;">
+                                <i class="fas fa-clock"></i> 18 periods/week
+                            </p>
+                        </div>
+                        <button onclick="viewTeacherTimetable('sarah_johnson')" class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="teacher-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--info);">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--info); margin-bottom: 0.5rem;">Prof. Michael Chen</h4>
+                            <p style="color: #666; margin-bottom: 0.5rem;">Chemistry Department</p>
+                            <p style="color: #999; font-size: 0.9rem;">
+                                <i class="fas fa-clock"></i> 20 periods/week
+                            </p>
+                        </div>
+                        <button onclick="viewTeacherTimetable('michael_chen')" class="btn btn-info btn-sm">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="teacher-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--success);">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--success); margin-bottom: 0.5rem;">Dr. Emily Davis</h4>
+                            <p style="color: #666; margin-bottom: 0.5rem;">Biology Department</p>
+                            <p style="color: #999; font-size: 0.9rem;">
+                                <i class="fas fa-clock"></i> 16 periods/week
+                            </p>
+                        </div>
+                        <button onclick="viewTeacherTimetable('emily_davis')" class="btn btn-success btn-sm">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="teacher-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--warning);">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--warning); margin-bottom: 0.5rem;">Mr. Robert Brown</h4>
+                            <p style="color: #666; margin-bottom: 0.5rem;">Mathematics Department</p>
+                            <p style="color: #999; font-size: 0.9rem;">
+                                <i class="fas fa-clock"></i> 22 periods/week
+                            </p>
+                        </div>
+                        <button onclick="viewTeacherTimetable('robert_brown')" class="btn btn-warning btn-sm">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Room Allocations Section
+window.showRoomAllocations = function() {
+    const dynamicContent = document.getElementById('timetables-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-door-open"></i> Room Allocations</h3>
+                <div>
+                    <button onclick="showRoomBooking()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-book"></i> Book Room
+                    </button>
+                    <button onclick="closeTimetablesDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="room-selector" style="margin-bottom: 2rem;">
+                <div class="form-group">
+                    <label class="form-label">Select Room</label>
+                    <select class="form-select" onchange="loadRoomSchedule(this.value)" style="width: 300px;">
+                        <option value="">-- Select a Room --</option>
+                        <option value="science_lab_1">Science Lab 1</option>
+                        <option value="science_lab_2">Science Lab 2</option>
+                        <option value="chemistry_lab">Chemistry Lab</option>
+                        <option value="physics_lab">Physics Lab</option>
+                        <option value="lecture_hall_a">Lecture Hall A</option>
+                        <option value="lecture_hall_b">Lecture Hall B</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="room-schedule-display">
+                <div class="weekly-schedule">
+                    <div class="schedule-header" style="display: grid; grid-template-columns: 100px repeat(5, 1fr); gap: 1px; background: #dee2e6; margin-bottom: 1rem;">
+                        <div style="background: white; padding: 1rem; font-weight: bold;">Time</div>
+                        <div style="background: white; padding: 1rem; font-weight: bold; text-align: center;">Monday</div>
+                        <div style="background: white; padding: 1rem; font-weight: bold; text-align: center;">Tuesday</div>
+                        <div style="background: white; padding: 1rem; font-weight: bold; text-align: center;">Wednesday</div>
+                        <div style="background: white; padding: 1rem; font-weight: bold; text-align: center;">Thursday</div>
+                        <div style="background: white; padding: 1rem; font-weight: bold; text-align: center;">Friday</div>
+                    </div>
+                    
+                    ${generateRoomSchedule()}
+                </div>
+            </div>
+            
+            <div class="room-availability" style="margin-top: 2rem;">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">Room Availability Summary</h4>
+                <div class="availability-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="availability-card" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 2rem; color: var(--success); margin-bottom: 0.5rem;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <strong>Science Lab 1</strong>
+                        <p style="margin: 0.5rem 0 0 0; color: #666;">4 slots available</p>
+                    </div>
+                    
+                    <div class="availability-card" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 2rem; color: var(--warning); margin-bottom: 0.5rem;">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <strong>Chemistry Lab</strong>
+                        <p style="margin: 0.5rem 0 0 0; color: #666;">1 slot available</p>
+                    </div>
+                    
+                    <div class="availability-card" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 2rem; color: var(--danger); margin-bottom: 0.5rem;">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <strong>Physics Lab</strong>
+                        <p style="margin: 0.5rem 0 0 0; color: #666;">Fully booked</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Generate Timetable Section
+window.showGenerateTimetable = function() {
+    const dynamicContent = document.getElementById('timetables-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-plus-circle"></i> Generate New Timetable</h3>
+                <button onclick="closeTimetablesDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <form id="timetableGeneratorForm" onsubmit="generateTimetable(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <label class="form-label">Academic Year *</label>
+                        <select class="form-select" id="academicYear" required>
+                            <option value="">-- Select Year --</option>
+                            <option value="2024-2025">2024-2025</option>
+                            <option value="2025-2026" selected>2025-2026</option>
+                            <option value="2026-2027">2026-2027</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Semester *</label>
+                        <select class="form-select" id="semester" required>
+                            <option value="">-- Select Semester --</option>
+                            <option value="semester1">Semester 1</option>
+                            <option value="semester2" selected>Semester 2</option>
+                            <option value="full_year">Full Year</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Classes to Include</label>
+                    <div class="classes-checklist" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; max-height: 200px; overflow-y: auto;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem;">
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" name="classes" value="grade10_science" checked>
+                                Grade 10 Science
+                            </label>
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" name="classes" value="grade11_math" checked>
+                                Grade 11 Mathematics
+                            </label>
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" name="classes" value="grade12_physics" checked>
+                                Grade 12 Physics
+                            </label>
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" name="classes" value="grade10_chemistry">
+                                Grade 10 Chemistry
+                            </label>
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" name="classes" value="grade11_biology">
+                                Grade 11 Biology
+                            </label>
+                            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" name="classes" value="grade12_chemistry">
+                                Grade 12 Chemistry
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <label class="form-label">Start Time *</label>
+                        <input type="time" class="form-input" id="startTime" value="08:00" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">End Time *</label>
+                        <input type="time" class="form-input" id="endTime" value="16:00" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Period Duration (minutes) *</label>
+                    <input type="number" class="form-input" id="periodDuration" value="45" min="30" max="90" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Break Times</label>
+                    <div id="breakTimes">
+                        <div class="break-time-input" style="display: grid; grid-template-columns: 1fr 1fr 100px; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <input type="text" class="form-input" placeholder="Break name" value="Lunch Break">
+                            <input type="time" class="form-input" value="12:00">
+                            <input type="number" class="form-input" placeholder="Min" value="45">
+                        </div>
+                    </div>
+                    <button type="button" onclick="addBreakTime()" class="btn btn-secondary btn-sm" style="margin-top: 0.5rem;">
+                        <i class="fas fa-plus"></i> Add Break
+                    </button>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" onclick="closeTimetablesDynamicContent()" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-magic"></i> Generate Timetable
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+};
+
+// Timetable Change Requests Section
+window.showTimetableRequests = function() {
+    const dynamicContent = document.getElementById('timetables-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-exchange-alt"></i> Timetable Change Requests</h3>
+                <div>
+                    <button onclick="createNewRequest()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> New Request
+                    </button>
+                    <button onclick="closeTimetablesDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="requests-tabs" style="margin-bottom: 2rem;">
+                <div class="tabs" style="display: flex; border-bottom: 2px solid #eee;">
+                    <button class="tab-btn active" onclick="switchRequestsTab('pending')" style="padding: 0.75rem 1.5rem; border: none; background: none; border-bottom: 3px solid var(--warning);">
+                        Pending (3)
+                    </button>
+                    <button class="tab-btn" onclick="switchRequestsTab('approved')" style="padding: 0.75rem 1.5rem; border: none; background: none;">
+                        Approved
+                    </button>
+                    <button class="tab-btn" onclick="switchRequestsTab('rejected')" style="padding: 0.75rem 1.5rem; border: none; background: none;">
+                        Rejected
+                    </button>
+                </div>
+            </div>
+            
+            <div id="requests-tab-content">
+                <div class="requests-list">
+                    <div class="request-card" style="background: #fffbf0; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--warning);">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--warning); margin-bottom: 0.5rem;">Room Change Request</h4>
+                                <p style="color: #666; margin-bottom: 0.5rem;">
+                                    <strong>From:</strong> Dr. Sarah Johnson • 
+                                    <strong>Date:</strong> ${new Date().toLocaleDateString()} • 
+                                    <strong>Priority:</strong> High
+                                </p>
+                                <p style="color: #999; margin-bottom: 0.5rem;">
+                                    Need larger room for Grade 12 Physics practical - current room too small for equipment
+                                </p>
+                                <p style="color: #666; font-size: 0.9rem;">
+                                    <strong>Current:</strong> Physics Lab (Mon, 10:00 AM) • 
+                                    <strong>Requested:</strong> Lecture Hall A
+                                </p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button onclick="approveRequest('req_001')" class="btn btn-success btn-sm">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button onclick="rejectRequest('req_001')" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="request-card" style="background: #fffbf0; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--warning);">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--warning); margin-bottom: 0.5rem;">Time Slot Change</h4>
+                                <p style="color: #666; margin-bottom: 0.5rem;">
+                                    <strong>From:</strong> Prof. Michael Chen • 
+                                    <strong>Date:</strong> ${new Date().toLocaleDateString()} • 
+                                    <strong>Priority:</strong> Medium
+                                </p>
+                                <p style="color: #999; margin-bottom: 0.5rem;">
+                                    Conflict with department meeting - need to reschedule Grade 11 Chemistry
+                                </p>
+                                <p style="color: #666; font-size: 0.9rem;">
+                                    <strong>Current:</strong> Wednesday 2:00 PM • 
+                                    <strong>Requested:</strong> Wednesday 4:00 PM
+                                </p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button onclick="approveRequest('req_002')" class="btn btn-success btn-sm">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button onclick="rejectRequest('req_002')" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Upload Timetable Section
+window.showUploadTimetable = function() {
+    const dynamicContent = document.getElementById('timetables-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-cloud-upload-alt"></i> Upload Timetable File</h3>
+                <button onclick="closeTimetablesDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <form onsubmit="uploadTimetableFile(event)">
+                <div class="upload-area" style="border: 2px dashed var(--primary); border-radius: 8px; padding: 3rem; text-align: center; margin-bottom: 1.5rem; background: #f8fdff; cursor: pointer;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <p>Click to browse or drag and drop timetable file here</p>
+                    <p style="font-size: 0.9rem; color: #666;">Supported formats: PDF, Excel (.xlsx, .xls), CSV</p>
+                    <input type="file" id="timetableFileUpload" accept=".pdf,.xlsx,.xls,.csv" style="display: none;">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label">Timetable Type *</label>
+                        <select class="form-select" id="timetableType" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="class">Class Timetable</option>
+                            <option value="teacher">Teacher Schedule</option>
+                            <option value="room">Room Allocation</option>
+                            <option value="master">Master Timetable</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Academic Period *</label>
+                        <input type="text" class="form-input" id="academicPeriod" required 
+                               placeholder="e.g., Semester 2 2025">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="timetableDescription" rows="3" 
+                              placeholder="Brief description of the timetable..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="replaceExisting">
+                        Replace existing timetable for this period
+                    </label>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" onclick="closeTimetablesDynamicContent()" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Upload Timetable
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    // Add file input handler
+    const uploadArea = document.querySelector('.upload-area');
+    const fileInput = document.getElementById('timetableFileUpload');
+    
+    uploadArea.addEventListener('click', () => fileInput.click());
+    
+    fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            uploadArea.querySelector('p').textContent = `Selected: ${this.files[0].name}`;
+        }
+    });
+};
+
+// Helper functions for Timetables section
+window.closeTimetablesDynamicContent = function() {
+    const dynamicContent = document.getElementById('timetables-dynamic-content');
+    if (dynamicContent) {
+        dynamicContent.innerHTML = '';
+    }
+};
+
+window.loadClassTimetable = function(classId) {
+    if (!classId) return;
+    
+    const display = document.getElementById('class-timetable-display');
+    display.innerHTML = `
+        <div class="timetable-view">
+            <div class="timetable-header" style="text-align: center; margin-bottom: 1rem;">
+                <h4 style="color: var(--primary);">Grade 10 Science - Semester 2 2025</h4>
+                <p style="color: #666;">Effective from March 1, 2025</p>
+            </div>
+            
+            <div class="weekly-timetable" style="background: #f8f9fa; border-radius: 8px; overflow: hidden;">
+                <div class="timetable-grid" style="display: grid; grid-template-columns: 80px repeat(5, 1fr);">
+                    <!-- Header -->
+                    <div style="background: var(--primary); color: white; padding: 1rem; font-weight: bold; text-align: center;">Time</div>
+                    <div style="background: var(--primary); color: white; padding: 1rem; font-weight: bold; text-align: center;">Monday</div>
+                    <div style="background: var(--primary); color: white; padding: 1rem; font-weight: bold; text-align: center;">Tuesday</div>
+                    <div style="background: var(--primary); color: white; padding: 1rem; font-weight: bold; text-align: center;">Wednesday</div>
+                    <div style="background: var(--primary); color: white; padding: 1rem; font-weight: bold; text-align: center;">Thursday</div>
+                    <div style="background: var(--primary); color: white; padding: 1rem; font-weight: bold; text-align: center;">Friday</div>
+                    
+                    <!-- Time slots -->
+                    ${generateClassTimetableSlots()}
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+window.generateClassTimetableSlots = function() {
+    const timeSlots = [
+        { time: '8:00-8:45', mon: 'Physics', tue: 'Chemistry', wed: 'Biology', thu: 'Physics', fri: 'Mathematics' },
+        { time: '8:45-9:30', mon: 'Physics', tue: 'Chemistry', wed: 'Biology', thu: 'Physics', fri: 'Mathematics' },
+        { time: '9:30-10:15', mon: 'Mathematics', tue: 'Physics', wed: 'Chemistry', thu: 'Biology', fri: 'Physics' },
+        { time: '10:15-11:00', mon: 'Mathematics', tue: 'Physics', wed: 'Chemistry', thu: 'Biology', fri: 'Physics' },
+        { time: '11:00-11:15', mon: 'BREAK', tue: 'BREAK', wed: 'BREAK', thu: 'BREAK', fri: 'BREAK' },
+        { time: '11:15-12:00', mon: 'Chemistry', tue: 'Biology', wed: 'Physics', thu: 'Chemistry', fri: 'Biology' },
+        { time: '12:00-12:45', mon: 'Chemistry', tue: 'Biology', wed: 'Physics', thu: 'Chemistry', fri: 'Biology' },
+        { time: '12:45-13:45', mon: 'LUNCH', tue: 'LUNCH', wed: 'LUNCH', thu: 'LUNCH', fri: 'LUNCH' },
+        { time: '13:45-14:30', mon: 'Biology', tue: 'Mathematics', wed: 'Mathematics', thu: 'Mathematics', fri: 'Chemistry' },
+        { time: '14:30-15:15', mon: 'Biology', tue: 'Mathematics', wed: 'Mathematics', thu: 'Mathematics', fri: 'Chemistry' },
+    ];
+    
+    return timeSlots.map(slot => `
+        <div style="background: white; padding: 0.75rem; border-bottom: 1px solid #eee; font-weight: bold; text-align: center;">${slot.time}</div>
+        <div style="background: white; padding: 0.75rem; border-bottom: 1px solid #eee; text-align: center; ${slot.mon === 'BREAK' || slot.mon === 'LUNCH' ? 'background: #fff3cd;' : ''}">${slot.mon}</div>
+        <div style="background: white; padding: 0.75rem; border-bottom: 1px solid #eee; text-align: center; ${slot.tue === 'BREAK' || slot.tue === 'LUNCH' ? 'background: #fff3cd;' : ''}">${slot.tue}</div>
+        <div style="background: white; padding: 0.75rem; border-bottom: 1px solid #eee; text-align: center; ${slot.wed === 'BREAK' || slot.wed === 'LUNCH' ? 'background: #fff3cd;' : ''}">${slot.wed}</div>
+        <div style="background: white; padding: 0.75rem; border-bottom: 1px solid #eee; text-align: center; ${slot.thu === 'BREAK' || slot.thu === 'LUNCH' ? 'background: #fff3cd;' : ''}">${slot.thu}</div>
+        <div style="background: white; padding: 0.75rem; border-bottom: 1px solid #eee; text-align: center; ${slot.fri === 'BREAK' || slot.fri === 'LUNCH' ? 'background: #fff3cd;' : ''}">${slot.fri}</div>
+    `).join('');
+};
+
+window.generateRoomSchedule = function() {
+    const timeSlots = [
+        { time: '8:00-9:30', mon: 'Grade 10 Science', tue: 'Grade 11 Physics', wed: 'Available', thu: 'Grade 12 Chem', fri: 'Grade 10 Science' },
+        { time: '9:30-11:00', mon: 'Available', tue: 'Grade 12 Physics', wed: 'Grade 11 Chem', thu: 'Available', fri: 'Grade 11 Biology' },
+        { time: '11:00-12:30', mon: 'Grade 12 Physics', tue: 'Available', wed: 'Grade 10 Chem', thu: 'Grade 11 Physics', fri: 'Available' },
+        { time: '12:30-14:00', mon: 'LUNCH', tue: 'LUNCH', wed: 'LUNCH', thu: 'LUNCH', fri: 'LUNCH' },
+        { time: '14:00-15:30', mon: 'Available', tue: 'Grade 10 Physics', wed: 'Available', thu: 'Grade 12 Biology', fri: 'Grade 11 Physics' },
+    ];
+    
+    return timeSlots.map(slot => `
+        <div style="background: white; padding: 1rem; border-bottom: 1px solid #eee; font-weight: bold;">${slot.time}</div>
+        <div style="background: white; padding: 1rem; border-bottom: 1px solid #eee; text-align: center; ${slot.mon === 'Available' ? 'background: #d1edff;' : slot.mon === 'LUNCH' ? 'background: #fff3cd;' : ''}">${slot.mon}</div>
+        <div style="background: white; padding: 1rem; border-bottom: 1px solid #eee; text-align: center; ${slot.tue === 'Available' ? 'background: #d1edff;' : slot.tue === 'LUNCH' ? 'background: #fff3cd;' : ''}">${slot.tue}</div>
+        <div style="background: white; padding: 1rem; border-bottom: 1px solid #eee; text-align: center; ${slot.wed === 'Available' ? 'background: #d1edff;' : slot.wed === 'LUNCH' ? 'background: #fff3cd;' : ''}">${slot.wed}</div>
+        <div style="background: white; padding: 1rem; border-bottom: 1px solid #eee; text-align: center; ${slot.thu === 'Available' ? 'background: #d1edff;' : slot.thu === 'LUNCH' ? 'background: #fff3cd;' : ''}">${slot.thu}</div>
+        <div style="background: white; padding: 1rem; border-bottom: 1px solid #eee; text-align: center; ${slot.fri === 'Available' ? 'background: #d1edff;' : slot.fri === 'LUNCH' ? 'background: #fff3cd;' : ''}">${slot.fri}</div>
+    `).join('');
+};
+
+// Additional helper functions
+window.viewTeacherTimetable = function(teacherId) {
+    alert(`Viewing timetable for teacher: ${teacherId}`);
+};
+
+window.searchTeachers = function(query) {
+    console.log('Searching teachers:', query);
+};
+
+window.loadRoomSchedule = function(roomId) {
+    console.log('Loading schedule for room:', roomId);
+};
+
+window.showRoomBooking = function() {
+    alert('Opening room booking form...');
+};
+
+window.addBreakTime = function() {
+    const container = document.getElementById('breakTimes');
+    const newBreak = document.createElement('div');
+    newBreak.className = 'break-time-input';
+    newBreak.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr 100px; gap: 0.5rem; margin-bottom: 0.5rem;';
+    newBreak.innerHTML = `
+        <input type="text" class="form-input" placeholder="Break name">
+        <input type="time" class="form-input">
+        <input type="number" class="form-input" placeholder="Min" value="15">
+    `;
+    container.appendChild(newBreak);
+};
+
+window.generateTimetable = function(event) {
+    event.preventDefault();
+    alert('✅ Timetable generation started! This may take a few moments...');
+    // In real implementation, this would call backend service
+};
+
+window.switchRequestsTab = function(tab) {
+    console.log('Switching to requests tab:', tab);
+};
+
+window.approveRequest = function(requestId) {
+    if (confirm('Are you sure you want to approve this request?')) {
+        alert(`✅ Request ${requestId} approved successfully!`);
+    }
+};
+
+window.rejectRequest = function(requestId) {
+    if (confirm('Are you sure you want to reject this request?')) {
+        alert(`❌ Request ${requestId} rejected.`);
+    }
+};
+
+window.createNewRequest = function() {
+    alert('Opening new timetable change request form...');
+};
+
+window.uploadTimetableFile = function(event) {
+    event.preventDefault();
+    alert('✅ Timetable file uploaded successfully!');
+    closeTimetablesDynamicContent();
+};
+
+window.printTimetable = function() {
+    alert('Opening print preview for timetable...');
+};
+
+window.exportAllTeacherSchedules = function() {
+    alert('Exporting all teacher schedules...');
+};
+
 // Show notification (could be enhanced with a toast library)
 function showNotification(message, type = 'info') {
     alert(message); // Simple version - could be replaced with toast notifications
