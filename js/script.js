@@ -5858,3 +5858,911 @@ window.getRecommendationColor = function(recommendation) {
     }
 };
 
+// ===== INVENTORY SECTION =====
+function loadInventorySection(container) {
+    container.innerHTML = `
+        <div class="section-content" id="section-inventory">
+            <div class="drive-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3><i class="fas fa-boxes"></i> Department Inventory</h3>
+                    <button onclick="returnToOverview()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Overview
+                    </button>
+                </div>
+                <p>Manage laboratory equipment, supplies, and inventory tracking across all departments.</p>
+                
+                <div class="inventory-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                    <div class="action-card" onclick="showInventoryOverview()">
+                        <i class="fas fa-chart-bar" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h4>Inventory Overview</h4>
+                        <p>View inventory status and analytics</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showAddItem()">
+                        <i class="fas fa-plus-circle" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                        <h4>Add New Item</h4>
+                        <p>Add items to inventory</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showManageInventory()">
+                        <i class="fas fa-edit" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                        <h4>Manage Inventory</h4>
+                        <p>Update and manage items</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showCheckInOut()">
+                        <i class="fas fa-exchange-alt" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                        <h4>Check In/Out</h4>
+                        <p>Track item movements</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showInventoryReports()">
+                        <i class="fas fa-file-alt" style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                        <h4>Inventory Reports</h4>
+                        <p>Generate inventory reports</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showSupplierManagement()">
+                        <i class="fas fa-truck" style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;"></i>
+                        <h4>Supplier Management</h4>
+                        <p>Manage suppliers and orders</p>
+                    </div>
+                </div>
+                
+                <div id="inventory-dynamic-content"></div>
+            </div>
+        </div>
+    `;
+}
+
+// Inventory Overview Section
+window.showInventoryOverview = function() {
+    const dynamicContent = document.getElementById('inventory-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-chart-bar"></i> Inventory Overview</h3>
+                <div>
+                    <button onclick="refreshInventoryData()" class="btn btn-success btn-sm">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button onclick="closeInventoryDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="inventory-summary" style="margin-bottom: 2rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="summary-card" style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid var(--primary);">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">1,247</div>
+                        <div style="color: #666;">Total Items</div>
+                    </div>
+                    <div class="summary-card" style="background: #fffbf0; padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid var(--warning);">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--warning);">$125,680</div>
+                        <div style="color: #666;">Total Value</div>
+                    </div>
+                    <div class="summary-card" style="background: #f0f9f0; padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid var(--success);">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">45</div>
+                        <div style="color: #666;">Low Stock Items</div>
+                    </div>
+                    <div class="summary-card" style="background: #fff5f5; padding: 1.5rem; border-radius: 8px; text-align: center; border-left: 4px solid var(--danger);">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--danger);">12</div>
+                        <div style="color: #666;">Out of Stock</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                <div class="department-inventory">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem;">Department-wise Inventory</h4>
+                    <div class="department-list">
+                        <div class="department-item">
+                            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
+                                <span style="font-weight: bold;">Physics Department</span>
+                                <span style="color: var(--success);">425 items</span>
+                            </div>
+                            <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; background: var(--success); width: 34%;"></div>
+                            </div>
+                            <div style="display: flex; justify-content: between; font-size: 0.8rem; color: #666; margin-top: 0.25rem;">
+                                <span>Value: $45,200</span>
+                                <span>34% of total</span>
+                            </div>
+                        </div>
+                        
+                        <div class="department-item" style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
+                                <span style="font-weight: bold;">Chemistry Department</span>
+                                <span style="color: var(--info);">380 items</span>
+                            </div>
+                            <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; background: var(--info); width: 30%;"></div>
+                            </div>
+                            <div style="display: flex; justify-content: between; font-size: 0.8rem; color: #666; margin-top: 0.25rem;">
+                                <span>Value: $52,150</span>
+                                <span>30% of total</span>
+                            </div>
+                        </div>
+                        
+                        <div class="department-item" style="margin-top: 1rem;">
+                            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
+                                <span style="font-weight: bold;">Biology Department</span>
+                                <span style="color: var(--warning);">320 items</span>
+                            </div>
+                            <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; background: var(--warning); width: 26%;"></div>
+                            </div>
+                            <div style="display: flex; justify-content: between; font-size: 0.8rem; color: #666; margin-top: 0.25rem;">
+                                <span>Value: $28,330</span>
+                                <span>26% of total</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="category-breakdown">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem;">Inventory by Category</h4>
+                    <div class="category-list">
+                        <div class="category-item" style="display: flex; justify-content: between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 0.5rem;">
+                            <span>Laboratory Equipment</span>
+                            <span style="font-weight: bold; color: var(--primary);">185 items</span>
+                        </div>
+                        <div class="category-item" style="display: flex; justify-content: between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 0.5rem;">
+                            <span>Chemical Supplies</span>
+                            <span style="font-weight: bold; color: var(--info);">420 items</span>
+                        </div>
+                        <div class="category-item" style="display: flex; justify-content: between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 0.5rem;">
+                            <span>Glassware</span>
+                            <span style="font-weight: bold; color: var(--success);">315 items</span>
+                        </div>
+                        <div class="category-item" style="display: flex; justify-content: between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px; margin-bottom: 0.5rem;">
+                            <span>Safety Equipment</span>
+                            <span style="font-weight: bold; color: var(--warning);">127 items</span>
+                        </div>
+                        <div class="category-item" style="display: flex; justify-content: between; align-items: center; padding: 0.75rem; background: #f8f9fa; border-radius: 6px;">
+                            <span>Teaching Aids</span>
+                            <span style="font-weight: bold; color: var(--danger);">200 items</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="low-stock-alerts">
+                <h4 style="color: var(--danger); margin-bottom: 1rem;">
+                    <i class="fas fa-exclamation-triangle"></i> Low Stock Alerts
+                </h4>
+                <div class="alerts-list">
+                    <div class="alert-item" style="display: flex; align-items: center; padding: 1rem; background: #fff5f5; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div style="background: var(--danger); color: white; padding: 0.5rem; border-radius: 50%; margin-right: 1rem;">
+                            <i class="fas fa-exclamation"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Beakers (250ml)</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">Physics Department • Current: 5 • Minimum: 20</p>
+                        </div>
+                        <span style="color: var(--danger); font-weight: bold;">Critical</span>
+                    </div>
+                    
+                    <div class="alert-item" style="display: flex; align-items: center; padding: 1rem; background: #fffbf0; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div style="background: var(--warning); color: white; padding: 0.5rem; border-radius: 50%; margin-right: 1rem;">
+                            <i class="fas fa-exclamation"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Hydrochloric Acid</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">Chemistry Department • Current: 8 • Minimum: 15</p>
+                        </div>
+                        <span style="color: var(--warning); font-weight: bold;">Low</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Add New Item Section
+window.showAddItem = function() {
+    const dynamicContent = document.getElementById('inventory-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-plus-circle"></i> Add New Inventory Item</h3>
+                <button onclick="closeInventoryDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <form id="addItemForm" onsubmit="saveInventoryItem(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label">Item Name *</label>
+                        <input type="text" class="form-input" id="itemName" required 
+                               placeholder="e.g., Digital Microscope">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Category *</label>
+                        <select class="form-select" id="itemCategory" required>
+                            <option value="">-- Select Category --</option>
+                            <option value="equipment">Laboratory Equipment</option>
+                            <option value="chemicals">Chemical Supplies</option>
+                            <option value="glassware">Glassware</option>
+                            <option value="safety">Safety Equipment</option>
+                            <option value="teaching">Teaching Aids</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label">Department *</label>
+                        <select class="form-select" id="itemDepartment" required>
+                            <option value="">-- Select Department --</option>
+                            <option value="physics">Physics Department</option>
+                            <option value="chemistry">Chemistry Department</option>
+                            <option value="biology">Biology Department</option>
+                            <option value="general">General Science</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Location *</label>
+                        <input type="text" class="form-input" id="itemLocation" required 
+                               placeholder="e.g., Physics Lab 1, Shelf B">
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label">Quantity *</label>
+                        <input type="number" class="form-input" id="itemQuantity" value="1" min="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Unit Price ($)</label>
+                        <input type="number" class="form-input" id="itemPrice" step="0.01" min="0" 
+                               placeholder="0.00">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Minimum Stock Level</label>
+                        <input type="number" class="form-input" id="minStock" value="5" min="1">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Supplier Information</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <input type="text" class="form-input" placeholder="Supplier Name">
+                        <input type="text" class="form-input" placeholder="Supplier Contact">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Item Description</label>
+                    <textarea class="form-textarea" id="itemDescription" rows="3" 
+                              placeholder="Detailed description of the item, specifications, and usage..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Additional Notes</label>
+                    <textarea class="form-textarea" id="itemNotes" rows="2" 
+                              placeholder="Any special handling instructions or notes..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="requiresMaintenance">
+                        Item requires regular maintenance
+                    </label>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" onclick="closeInventoryDynamicContent()" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Add Item
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+};
+
+// Manage Inventory Section
+window.showManageInventory = function() {
+    const items = JSON.parse(localStorage.getItem('inventoryItems')) || [];
+    const dynamicContent = document.getElementById('inventory-dynamic-content');
+    
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-edit"></i> Manage Inventory</h3>
+                <div>
+                    <button onclick="exportInventory()" class="btn btn-success btn-sm">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button onclick="closeInventoryDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="search-filters" style="margin-bottom: 2rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: end;">
+                    <div class="form-group">
+                        <label class="form-label">Department</label>
+                        <select class="form-select" onchange="filterInventory()">
+                            <option value="">All Departments</option>
+                            <option value="physics">Physics</option>
+                            <option value="chemistry">Chemistry</option>
+                            <option value="biology">Biology</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" onchange="filterInventory()">
+                            <option value="">All Categories</option>
+                            <option value="equipment">Equipment</option>
+                            <option value="chemicals">Chemicals</option>
+                            <option value="glassware">Glassware</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Stock Status</label>
+                        <select class="form-select" onchange="filterInventory()">
+                            <option value="">All Items</option>
+                            <option value="low">Low Stock</option>
+                            <option value="out">Out of Stock</option>
+                            <option value="adequate">Adequate Stock</option>
+                        </select>
+                    </div>
+                    <button onclick="searchInventory()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+            
+            ${items.length === 0 ? 
+                '<div class="empty-state" style="text-align: center; padding: 3rem; color: #999;">' +
+                    '<i class="fas fa-box-open" style="font-size: 4rem; margin-bottom: 1rem;"></i>' +
+                    '<p>No inventory items found.</p>' +
+                    '<button onclick="showAddItem()" class="btn btn-primary">Add First Item</button>' +
+                '</div>' :
+                `<div class="inventory-table">
+                    <div class="table-header" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 120px; gap: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px 8px 0 0; font-weight: bold;">
+                        <div>Item Name</div>
+                        <div>Category</div>
+                        <div>Department</div>
+                        <div>Quantity</div>
+                        <div>Location</div>
+                        <div>Status</div>
+                        <div>Actions</div>
+                    </div>
+                    
+                    ${items.map(item => `
+                        <div class="table-row" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 120px; gap: 1rem; padding: 1rem; border-bottom: 1px solid #eee; align-items: center;">
+                            <div>
+                                <strong>${item.name}</strong>
+                                <div style="font-size: 0.8rem; color: #666;">${item.description.substring(0, 30)}...</div>
+                            </div>
+                            <div>${getCategoryLabel(item.category)}</div>
+                            <div>${getDepartmentLabel(item.department)}</div>
+                            <div>
+                                <span style="font-weight: bold; color: ${getStockColor(item.quantity, item.minStock)};">
+                                    ${item.quantity}
+                                </span>
+                                ${item.quantity <= item.minStock ? 
+                                    `<div style="font-size: 0.7rem; color: var(--danger);">Min: ${item.minStock}</div>` : 
+                                    ''
+                                }
+                            </div>
+                            <div style="font-size: 0.9rem; color: #666;">${item.location}</div>
+                            <div>
+                                <span style="background: ${getStatusColor(item.quantity, item.minStock)}; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">
+                                    ${getStockStatus(item.quantity, item.minStock)}
+                                </span>
+                            </div>
+                            <div style="display: flex; gap: 0.25rem;">
+                                <button onclick="editItem('${item.id}')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="viewItem('${item.id}')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button onclick="deleteItem('${item.id}')" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>`
+            }
+        </div>
+    `;
+};
+
+// Check In/Out Section
+window.showCheckInOut = function() {
+    const dynamicContent = document.getElementById('inventory-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-exchange-alt"></i> Item Check In/Out</h3>
+                <div>
+                    <button onclick="showCheckoutHistory()" class="btn btn-info btn-sm">
+                        <i class="fas fa-history"></i> History
+                    </button>
+                    <button onclick="closeInventoryDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="checkinout-tabs" style="margin-bottom: 2rem;">
+                <div class="tabs" style="display: flex; border-bottom: 2px solid #eee;">
+                    <button class="tab-btn active" onclick="switchCheckTab('checkout')" style="padding: 0.75rem 1.5rem; border: none; background: none; border-bottom: 3px solid var(--warning);">
+                        Check Out Item
+                    </button>
+                    <button class="tab-btn" onclick="switchCheckTab('checkin')" style="padding: 0.75rem 1.5rem; border: none; background: none;">
+                        Check In Item
+                    </button>
+                </div>
+            </div>
+            
+            <div id="check-tab-content">
+                <form id="checkoutForm" onsubmit="processCheckout(event)">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Select Item *</label>
+                            <select class="form-select" id="checkoutItem" required>
+                                <option value="">-- Select Item --</option>
+                                <option value="microscope_001">Digital Microscope - Physics Lab</option>
+                                <option value="beaker_250ml">Beaker 250ml - Chemistry Lab</option>
+                                <option value="thermometer">Digital Thermometer - Biology Lab</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Quantity *</label>
+                            <input type="number" class="form-input" id="checkoutQuantity" value="1" min="1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Available Stock</label>
+                            <div style="padding: 0.5rem; background: #f8f9fa; border-radius: 4px; text-align: center; font-weight: bold; color: var(--success);">
+                                15
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Borrower *</label>
+                            <select class="form-select" id="borrower" required>
+                                <option value="">-- Select Borrower --</option>
+                                <option value="teacher">Teacher</option>
+                                <option value="student">Student</option>
+                                <option value="staff">Staff</option>
+                                <option value="external">External User</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Borrower Name *</label>
+                            <input type="text" class="form-input" id="borrowerName" required 
+                                   placeholder="Full name of borrower">
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Check-out Date *</label>
+                            <input type="date" class="form-input" id="checkoutDate" 
+                                   value="${new Date().toISOString().split('T')[0]}" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Expected Return Date *</label>
+                            <input type="date" class="form-input" id="expectedReturn" 
+                                   value="${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Purpose of Use</label>
+                        <textarea class="form-textarea" id="checkoutPurpose" rows="2" 
+                                  placeholder="Describe the purpose for borrowing this item..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                        <button type="button" onclick="closeInventoryDynamicContent()" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-sign-out-alt"></i> Check Out
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="current-checkouts" style="margin-top: 2rem;">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">Currently Checked Out Items</h4>
+                <div class="checkouts-list">
+                    <div class="checkout-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div style="flex: 1;">
+                            <strong>Digital Microscope</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">
+                                Borrowed by: Dr. Sarah Johnson • Due: ${new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                            </p>
+                        </div>
+                        <span style="color: var(--warning); font-weight: bold;">Due in 2 days</span>
+                    </div>
+                    
+                    <div class="checkout-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <div style="flex: 1;">
+                            <strong>Beaker Set (250ml)</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">
+                                Borrowed by: Prof. Michael Chen • Due: ${new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                            </p>
+                        </div>
+                        <span style="color: var(--danger); font-weight: bold;">Overdue</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Inventory Reports Section
+window.showInventoryReports = function() {
+    const dynamicContent = document.getElementById('inventory-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-file-alt"></i> Inventory Reports</h3>
+                <div>
+                    <button onclick="generateCustomReport()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Custom Report
+                    </button>
+                    <button onclick="closeInventoryDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="reports-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="report-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; cursor: pointer;" onclick="generateReport('stock_status')">
+                    <i class="fas fa-boxes" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Stock Status Report</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Current stock levels and status overview</p>
+                    <div class="report-info" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-clock"></i> Last run: 1 day ago</span>
+                    </div>
+                </div>
+                
+                <div class="report-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; cursor: pointer;" onclick="generateReport('low_stock')">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--warning); margin-bottom: 0.5rem;">Low Stock Alert</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Items below minimum stock levels</p>
+                    <div class="report-info" style="display: flex; justify-content; center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-clock"></i> Last run: 2 days ago</span>
+                    </div>
+                </div>
+                
+                <div class="report-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; cursor: pointer;" onclick="generateReport('movement')">
+                    <i class="fas fa-exchange-alt" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--info); margin-bottom: 0.5rem;">Movement Report</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Item check-in/out activity</p>
+                    <div class="report-info" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-clock"></i> Last run: 3 days ago</span>
+                    </div>
+                </div>
+                
+                <div class="report-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; cursor: pointer;" onclick="generateReport('valuation')">
+                    <i class="fas fa-dollar-sign" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--success); margin-bottom: 0.5rem;">Valuation Report</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Total inventory value and depreciation</p>
+                    <div class="report-info" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-clock"></i> Last run: 1 week ago</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recent-reports">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">Recent Reports</h4>
+                <div class="reports-list">
+                    <div class="report-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div>
+                            <strong>Monthly Stock Status - March 2025</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">Generated on March 31, 2025</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="viewReport('stock_mar_2025')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button onclick="downloadReport('stock_mar_2025')" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="report-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div>
+                            <strong>Low Stock Alert Report</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">Generated on March 28, 2025</p>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="viewReport('low_stock_alert')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button onclick="downloadReport('low_stock_alert')" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Supplier Management Section
+window.showSupplierManagement = function() {
+    const dynamicContent = document.getElementById('inventory-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-truck"></i> Supplier Management</h3>
+                <div>
+                    <button onclick="addNewSupplier()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> New Supplier
+                    </button>
+                    <button onclick="closeInventoryDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            <div class="suppliers-list">
+                <div class="supplier-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--primary);">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Science Equipment Ltd.</h4>
+                            <p style="color: #666; margin-bottom: 0.5rem;">
+                                <strong>Contact:</strong> John Smith • 
+                                <strong>Phone:</strong> (555) 123-4567 • 
+                                <strong>Email:</strong> john@scienceequip.com
+                            </p>
+                            <p style="color: #999; margin-bottom: 0.5rem;">Specializes in laboratory equipment and scientific instruments</p>
+                            <div style="display: flex; gap: 2rem;">
+                                <div>
+                                    <strong>Items Supplied:</strong>
+                                    <div style="color: #666;">25 items</div>
+                                </div>
+                                <div>
+                                    <strong>Last Order:</strong>
+                                    <div style="color: #666;">${new Date().toLocaleDateString()}</div>
+                                </div>
+                                <div>
+                                    <strong>Rating:</strong>
+                                    <div style="color: var(--success); font-weight: bold;">4.8/5</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <button onclick="viewSupplier('supplier_001')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button onclick="placeOrder('supplier_001')" class="btn btn-success btn-sm">
+                                <i class="fas fa-shopping-cart"></i> Order
+                            </button>
+                            <button onclick="editSupplier('supplier_001')" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="supplier-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--info);">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h4 style="color: var(--info); margin-bottom: 0.5rem;">Chemical Supplies Inc.</h4>
+                            <p style="color: #666; margin-bottom: 0.5rem;">
+                                <strong>Contact:</strong> Maria Garcia • 
+                                <strong>Phone:</strong> (555) 987-6543 • 
+                                <strong>Email:</strong> maria@chemsupplies.com
+                            </p>
+                            <p style="color: #999; margin-bottom: 0.5rem;">Chemical reagents, solvents, and laboratory consumables</p>
+                            <div style="display: flex; gap: 2rem;">
+                                <div>
+                                    <strong>Items Supplied:</strong>
+                                    <div style="color: #666;">42 items</div>
+                                </div>
+                                <div>
+                                    <strong>Last Order:</strong>
+                                    <div style="color: #666;">${new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}</div>
+                                </div>
+                                <div>
+                                    <strong>Rating:</strong>
+                                    <div style="color: var(--success); font-weight: bold;">4.6/5</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <button onclick="viewSupplier('supplier_002')" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button onclick="placeOrder('supplier_002')" class="btn btn-success btn-sm">
+                                <i class="fas fa-shopping-cart"></i> Order
+                            </button>
+                            <button onclick="editSupplier('supplier_002')" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pending-orders" style="margin-top: 2rem;">
+                <h4 style="color: var(--primary); margin-bottom: 1rem;">Pending Orders</h4>
+                <div class="orders-list">
+                    <div class="order-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #fffbf0; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <div style="flex: 1;">
+                            <strong>Order #ORD-2025-001</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">
+                                Science Equipment Ltd. • 15 items • Total: $2,450 • Ordered: ${new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                            </p>
+                        </div>
+                        <span style="color: var(--warning); font-weight: bold;">Processing</span>
+                    </div>
+                    
+                    <div class="order-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #fffbf0; border-radius: 8px;">
+                        <div style="flex: 1;">
+                            <strong>Order #ORD-2025-002</strong>
+                            <p style="margin: 0.25rem 0 0 0; color: #666;">
+                                Chemical Supplies Inc. • 8 items • Total: $1,280 • Ordered: ${new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                            </p>
+                        </div>
+                        <span style="color: var(--info); font-weight: bold;">Confirmed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Helper functions for Inventory section
+window.closeInventoryDynamicContent = function() {
+    const dynamicContent = document.getElementById('inventory-dynamic-content');
+    if (dynamicContent) {
+        dynamicContent.innerHTML = '';
+    }
+};
+
+window.saveInventoryItem = function(event) {
+    event.preventDefault();
+    alert('✅ Inventory item added successfully!');
+    closeInventoryDynamicContent();
+};
+
+window.filterInventory = function() {
+    console.log('Filtering inventory...');
+};
+
+window.searchInventory = function() {
+    console.log('Searching inventory...');
+};
+
+window.editItem = function(itemId) {
+    alert(`Editing item: ${itemId}`);
+};
+
+window.viewItem = function(itemId) {
+    alert(`Viewing item: ${itemId}`);
+};
+
+window.deleteItem = function(itemId) {
+    if (confirm('Are you sure you want to delete this item?')) {
+        alert(`Item ${itemId} deleted.`);
+    }
+};
+
+window.switchCheckTab = function(tab) {
+    console.log('Switching to tab:', tab);
+};
+
+window.processCheckout = function(event) {
+    event.preventDefault();
+    alert('✅ Item checked out successfully!');
+    closeInventoryDynamicContent();
+};
+
+window.showCheckoutHistory = function() {
+    alert('Showing checkout history...');
+};
+
+window.generateReport = function(reportType) {
+    alert(`Generating ${reportType} report...`);
+};
+
+window.generateCustomReport = function() {
+    alert('Opening custom report generator...');
+};
+
+window.viewReport = function(reportId) {
+    alert(`Viewing report: ${reportId}`);
+};
+
+window.downloadReport = function(reportId) {
+    alert(`Downloading report: ${reportId}`);
+};
+
+window.addNewSupplier = function() {
+    alert('Adding new supplier...');
+};
+
+window.viewSupplier = function(supplierId) {
+    alert(`Viewing supplier: ${supplierId}`);
+};
+
+window.placeOrder = function(supplierId) {
+    alert(`Placing order with supplier: ${supplierId}`);
+};
+
+window.editSupplier = function(supplierId) {
+    alert(`Editing supplier: ${supplierId}`);
+};
+
+window.exportInventory = function() {
+    alert('Exporting inventory data...');
+};
+
+window.refreshInventoryData = function() {
+    alert('Refreshing inventory data...');
+};
+
+// Helper functions for inventory management
+window.getCategoryLabel = function(category) {
+    const categories = {
+        'equipment': 'Equipment',
+        'chemicals': 'Chemicals',
+        'glassware': 'Glassware',
+        'safety': 'Safety',
+        'teaching': 'Teaching Aids',
+        'other': 'Other'
+    };
+    return categories[category] || category;
+};
+
+window.getDepartmentLabel = function(department) {
+    const departments = {
+        'physics': 'Physics',
+        'chemistry': 'Chemistry',
+        'biology': 'Biology',
+        'general': 'General'
+    };
+    return departments[department] || department;
+};
+
+window.getStockColor = function(quantity, minStock) {
+    if (quantity === 0) return 'var(--danger)';
+    if (quantity <= minStock) return 'var(--warning)';
+    return 'var(--success)';
+};
+
+window.getStatusColor = function(quantity, minStock) {
+    if (quantity === 0) return 'var(--danger)';
+    if (quantity <= minStock) return 'var(--warning)';
+    return 'var(--success)';
+};
+
+window.getStockStatus = function(quantity, minStock) {
+    if (quantity === 0) return 'Out of Stock';
+    if (quantity <= minStock) return 'Low Stock';
+    return 'In Stock';
+};
+
+
