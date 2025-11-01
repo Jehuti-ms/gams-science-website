@@ -56,18 +56,18 @@
                 <div class="sidebar-item active">
                     <a href="subject-resources.html"><i class="fas fa-book"></i> Subject Resources</a>
                     <div class="sidebar-submenu">
-                        <a href="subject-resources.html#curriculum">Curriculum</a>
-                        <a href="subject-resources.html#schemes">Schemes of work</a>
-                        <a href="subject-resources.html#syllabus">Syllabus</a>
-                        <a href="subject-resources.html#lesson-plans">Lesson plans</a>
-                        <a href="subject-resources.html#work-log">Work log</a>
-                        <a href="subject-resources.html#integrated-science">Integrated Science</a>
-                        <a href="subject-resources.html#biology">Biology</a>
-                        <a href="subject-resources.html#chemistry">Chemistry</a>
-                        <a href="subject-resources.html#physics">Physics</a>
-                        <a href="subject-resources.html#agricultural">Agricultural Science</a>
-                        <a href="subject-resources.html#hsb">Human & Social Biology</a>
-                        <a href="subject-resources.html#horticulture">Amenity Horticulture</a>
+                        <a href="#" onclick="showCurriculumResources(); return false;">Curriculum Resources</a>
+                        <a href="#" onclick="showAllSubjects(); return false;">All Subjects</a>
+                        <a href="#" onclick="showUploadResources(); return false;">Upload Resources</a>
+                        <a href="#" onclick="showResourceSearch(); return false;">Search Resources</a>
+                        <div class="sidebar-submenu-divider"></div>
+                        <a href="#" onclick="showSubjectDetail('integrated_science', 'all'); return false;">Integrated Science</a>
+                        <a href="#" onclick="showSubjectDetail('agricultural_science', 'all'); return false;">Agricultural Science</a>
+                        <a href="#" onclick="showSubjectDetail('human_biology', 'all'); return false;">Human & Social Biology</a>
+                        <a href="#" onclick="showSubjectDetail('biology', 'all'); return false;">Biology</a>
+                        <a href="#" onclick="showSubjectDetail('chemistry', 'all'); return false;">Chemistry</a>
+                        <a href="#" onclick="showSubjectDetail('physics', 'all'); return false;">Physics</a>
+                        <a href="#" onclick="showSubjectDetail('horticulture', 'all'); return false;">Amenity Horticulture</a>
                     </div>
                 </div>
 
@@ -98,6 +98,8 @@
                     <div class="sidebar-submenu">
                         <a href="library.html#orders">Text Books Order</a>
                         <a href="library.html#resources">Book Resources</a>
+                        <a href="library.html#digital">Digital Resources</a>
+                        <a href="library.html#research">Research Materials</a>
                     </div>
                 </div>
 
@@ -107,12 +109,17 @@
                         <a href="shop.html#vegetables">Vegetables</a>
                         <a href="shop.html#plants">Plants</a>
                         <a href="shop.html#chickens">Chickens</a>
+                        <a href="shop.html#eggs">Eggs</a>
+                        <a href="shop.html#tools">Garden Tools</a>
                     </div>
                 </div>
 
                 <div class="sidebar-item">
                     <a href="blog.html"><i class="fas fa-blog"></i> Blog</a>
                     <div class="sidebar-submenu">
+                        <a href="blog.html#news">Department News</a>
+                        <a href="blog.html#events">Events</a>
+                        <a href="blog.html#achievements">Achievements</a>
                         <a href="blog.html#instagram">Instagram</a>
                         <a href="blog.html#facebook">Facebook</a>
                     </div>
@@ -128,264 +135,223 @@
                 </div>
             </div>
 
-            <div class="cards">
-                <div class="card">
-                    <div class="card-header" style="background: linear-gradient(45deg, #28a745, #20c997);">
-                        <h3><i class="fas fa-seedling"></i> Integrated Science</h3>
+            <div class="section-content" id="section-subject-resources">
+                <div class="drive-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-book-open"></i> Subject Resources</h3>
+                        <button onclick="returnToOverview()" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left"></i> Back to Overview
+                        </button>
                     </div>
-                    <div class="card-body">
-                        <p>Comprehensive introduction to fundamental scientific concepts across biology, chemistry, and physics.</p>
-                        <div class="subject-stats">
-                            <div class="stat">
-                                <strong>Grade 7-9</strong>
-                                <span>Levels</span>
-                            </div>
-                            <div class="stat">
-                                <strong>3</strong>
-                                <span>Teachers</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a href="#integrated-science" class="btn btn-primary">View Resources</a>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header" style="background: linear-gradient(45deg, #17a2b8, #6f42c1);">
-                        <h3><i class="fas fa-dna"></i> Human & Social Biology</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Study of human biology and its relationship to health, society, and the environment.</p>
-                        <div class="subject-stats">
-                            <div class="stat">
-                                <strong>Grade 10-11</strong>
-                                <span>Levels</span>
-                            </div>
-                            <div class="stat">
-                                <strong>2</strong>
-                                <span>Teachers</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a href="#hsb" class="btn btn-primary">View Resources</a>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header" style="background: linear-gradient(45deg, #28a745, #007bff);">
-                        <h3><i class="fas fa-leaf"></i> Biology</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>In-depth study of living organisms, ecosystems, and biological processes.</p>
-                        <div class="subject-stats">
-                            <div class="stat">
-                                <strong>Grade 10-12</strong>
-                                <span>Levels</span>
-                            </div>
-                            <div class="stat">
-                                <strong>3</strong>
-                                <span>Teachers</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a href="#biology" class="btn btn-primary">View Resources</a>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header" style="background: linear-gradient(45deg, #fd7e14, #dc3545);">
-                        <h3><i class="fas fa-atom"></i> Chemistry</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Exploration of matter, chemical reactions, and laboratory techniques.</p>
-                        <div class="subject-stats">
-                            <div class="stat">
-                                <strong>Grade 10-12</strong>
-                                <span>Levels</span>
-                            </div>
-                            <div class="stat">
-                                <strong>2</strong>
-                                <span>Teachers</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a href="#chemistry" class="btn btn-primary">View Resources</a>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header" style="background: linear-gradient(45deg, #6f42c1, #e83e8c);">
-                        <h3><i class="fas fa-bolt"></i> Physics</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Study of matter, energy, motion, and the fundamental laws of the universe.</p>
-                        <div class="subject-stats">
-                            <div class="stat">
-                                <strong>Grade 10-12</strong>
-                                <span>Levels</span>
-                            </div>
-                            <div class="stat">
-                                <strong>2</strong>
-                                <span>Teachers</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a href="#physics" class="btn btn-primary">View Resources</a>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header" style="background: linear-gradient(45deg, #20c997, #28a745);">
-                        <h3><i class="fas fa-tractor"></i> Agricultural Science</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Principles of crop production, animal husbandry, and sustainable agriculture.</p>
-                        <div class="subject-stats">
-                            <div class="stat">
-                                <strong>Grade 10-12</strong>
-                                <span>Levels</span>
-                            </div>
-                            <div class="stat">
-                                <strong>1</strong>
-                                <span>Teachers</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a href="#agricultural" class="btn btn-primary">View Resources</a>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header" style="background: linear-gradient(45deg, #87ceeb, #32cd32);">
-                        <h3><i class="fas fa-spa"></i> Amenity Horticulture</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Study of ornamental plants, landscape design, and horticultural management.</p>
-                        <div class="subject-stats">
-                            <div class="stat">
-                                <strong>Grade 11-12</strong>
-                                <span>Levels</span>
-                            </div>
-                            <div class="stat">
-                                <strong>1</strong>
-                                <span>Teachers</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a href="#horticulture" class="btn btn-primary">View Resources</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="drive-section">
-                <h3><i class="fas fa-chart-bar"></i> Subject Overview</h3>
-                <div class="subject-overview">
-                    <div class="overview-card">
-                        <h4>Enrollment Statistics</h4>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-value">142</div>
-                                <div class="stat-label">Biology Students</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">98</div>
-                                <div class="stat-label">Chemistry Students</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">87</div>
-                                <div class="stat-label">Physics Students</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">156</div>
-                                <div class="stat-label">Integrated Science</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="drive-section">
-                <h3><i class="fas fa-download"></i> Subject Resources</h3>
-                <div class="file-grid">
-                    <a href="#" class="file-item">
-                        <div class="file-icon">
-                            <i class="fas fa-file-pdf"></i>
-                        </div>
-                        <div class="file-name">Biology Syllabus Guide</div>
-                        <div class="file-meta">PDF • 2.8 MB</div>
-                    </a>
+                    <p>Access curriculum materials, lesson plans, and teaching resources organized by subject.</p>
                     
-                    <a href="#" class="file-item">
-                        <div class="file-icon">
-                            <i class="fas fa-file-pdf"></i>
+                    <div class="resources-actions">
+                        <div class="action-card" onclick="showCurriculumResources()">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h4>Curriculum</h4>
+                            <p>Schemes of work and curriculum planning</p>
                         </div>
-                        <div class="file-name">Chemistry Lab Manual</div>
-                        <div class="file-meta">PDF • 3.1 MB</div>
-                    </a>
-                    
-                    <a href="#" class="file-item">
-                        <div class="file-icon">
-                            <i class="fas fa-file-pdf"></i>
+                        
+                        <div class="action-card" onclick="showAllSubjects()">
+                            <i class="fas fa-atom"></i>
+                            <h4>All Subjects</h4>
+                            <p>Browse resources by subject</p>
                         </div>
-                        <div class="file-name">Physics Formula Sheet</div>
-                        <div class="file-meta">PDF • 1.2 MB</div>
-                    </a>
-                    
-                    <a href="#" class="file-item">
-                        <div class="file-icon">
-                            <i class="fas fa-file-word"></i>
+                        
+                        <div class="action-card" onclick="showUploadResources()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h4>Upload Resources</h4>
+                            <p>Share new teaching materials</p>
                         </div>
-                        <div class="file-name">Agricultural Science Projects</div>
-                        <div class="file-meta">DOCX • 2.5 MB</div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="drive-section">
-                <h3><i class="fas fa-video"></i> Laboratory Resources</h3>
-                <div class="cards">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4><i class="fas fa-vial"></i> Biology Lab</h4>
-                        </div>
-                        <div class="card-body">
-                            <p>Microscopes, dissection equipment, and biological specimens</p>
-                            <div class="resource-info">
-                                <strong>Capacity:</strong> 24 students<br>
-                                <strong>Equipment:</strong> 15 microscopes
-                            </div>
+                        
+                        <div class="action-card" onclick="showResourceSearch()">
+                            <i class="fas fa-search"></i>
+                            <h4>Search Resources</h4>
+                            <p>Find specific materials</p>
                         </div>
                     </div>
+                    
+                    <div id="subject-resources-dynamic-content">
+                        <div class="cards">
+                            <div class="card">
+                                <div class="card-header integrated-science">
+                                    <h3><i class="fas fa-seedling"></i> Integrated Science</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p>Comprehensive introduction to fundamental scientific concepts across biology, chemistry, and physics.</p>
+                                    <div class="subject-stats">
+                                        <div class="stat">
+                                            <strong>Grade 7-9</strong>
+                                            <span>Levels</span>
+                                        </div>
+                                        <div class="stat">
+                                            <strong>3</strong>
+                                            <span>Teachers</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button onclick="showSubjectDetail('integrated_science', 'all')" class="btn btn-primary">View Resources</button>
+                                </div>
+                            </div>
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h4><i class="fas fa-flask"></i> Chemistry Lab</h4>
-                        </div>
-                        <div class="card-body">
-                            <p>Chemical reagents, glassware, and safety equipment</p>
-                            <div class="resource-info">
-                                <strong>Capacity:</strong> 20 students<br>
-                                <strong>Fume Hoods:</strong> 2 units
+                            <div class="card">
+                                <div class="card-header human-biology">
+                                    <h3><i class="fas fa-dna"></i> Human & Social Biology</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p>Study of human biology and its relationship to health, society, and the environment.</p>
+                                    <div class="subject-stats">
+                                        <div class="stat">
+                                            <strong>Grade 10-11</strong>
+                                            <span>Levels</span>
+                                        </div>
+                                        <div class="stat">
+                                            <strong>2</strong>
+                                            <span>Teachers</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button onclick="showSubjectDetail('human_biology', 'all')" class="btn btn-primary">View Resources</button>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header biology">
+                                    <h3><i class="fas fa-leaf"></i> Biology</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p>In-depth study of living organisms, ecosystems, and biological processes.</p>
+                                    <div class="subject-stats">
+                                        <div class="stat">
+                                            <strong>Grade 10-12</strong>
+                                            <span>Levels</span>
+                                        </div>
+                                        <div class="stat">
+                                            <strong>3</strong>
+                                            <span>Teachers</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button onclick="showSubjectDetail('biology', 'all')" class="btn btn-primary">View Resources</button>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header chemistry">
+                                    <h3><i class="fas fa-atom"></i> Chemistry</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p>Exploration of matter, chemical reactions, and laboratory techniques.</p>
+                                    <div class="subject-stats">
+                                        <div class="stat">
+                                            <strong>Grade 10-12</strong>
+                                            <span>Levels</span>
+                                        </div>
+                                        <div class="stat">
+                                            <strong>2</strong>
+                                            <span>Teachers</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button onclick="showSubjectDetail('chemistry', 'all')" class="btn btn-primary">View Resources</button>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header physics">
+                                    <h3><i class="fas fa-bolt"></i> Physics</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p>Study of matter, energy, motion, and the fundamental laws of the universe.</p>
+                                    <div class="subject-stats">
+                                        <div class="stat">
+                                            <strong>Grade 10-12</strong>
+                                            <span>Levels</span>
+                                        </div>
+                                        <div class="stat">
+                                            <strong>2</strong>
+                                            <span>Teachers</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button onclick="showSubjectDetail('physics', 'all')" class="btn btn-primary">View Resources</button>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header agricultural-science">
+                                    <h3><i class="fas fa-tractor"></i> Agricultural Science</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p>Principles of crop production, animal husbandry, and sustainable agriculture.</p>
+                                    <div class="subject-stats">
+                                        <div class="stat">
+                                            <strong>Grade 10-12</strong>
+                                            <span>Levels</span>
+                                        </div>
+                                        <div class="stat">
+                                            <strong>1</strong>
+                                            <span>Teachers</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button onclick="showSubjectDetail('agricultural_science', 'all')" class="btn btn-primary">View Resources</button>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header horticulture">
+                                    <h3><i class="fas fa-spa"></i> Amenity Horticulture</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p>Study of ornamental plants, landscape design, and horticultural management.</p>
+                                    <div class="subject-stats">
+                                        <div class="stat">
+                                            <strong>Grade 11-12</strong>
+                                            <span>Levels</span>
+                                        </div>
+                                        <div class="stat">
+                                            <strong>1</strong>
+                                            <span>Teachers</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button onclick="showSubjectDetail('horticulture', 'all')" class="btn btn-primary">View Resources</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h4><i class="fas fa-bolt"></i> Physics Lab</h4>
-                        </div>
-                        <div class="card-body">
-                            <p>Measurement instruments, electrical equipment, and optics</p>
-                            <div class="resource-info">
-                                <strong>Capacity:</strong> 22 students<br>
-                                <strong>Workstations:</strong> 8 stations
+                        <div class="drive-section">
+                            <h3><i class="fas fa-chart-bar"></i> Subject Overview</h3>
+                            <div class="subject-overview">
+                                <div class="overview-card">
+                                    <h4>Enrollment Statistics</h4>
+                                    <div class="stats-grid">
+                                        <div class="stat-item">
+                                            <div class="stat-value">142</div>
+                                            <div class="stat-label">Biology Students</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-value">98</div>
+                                            <div class="stat-label">Chemistry Students</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-value">87</div>
+                                            <div class="stat-label">Physics Students</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-value">156</div>
+                                            <div class="stat-label">Integrated Science</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -439,6 +405,232 @@
         </div>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script>
+        // Initialize the page with default content
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDefaultContent();
+        });
+
+        function loadDefaultContent() {
+            // Default content is already loaded in the HTML
+            // This function is kept for consistency with the JavaScript functions
+        }
+
+        function showCurriculumResources() {
+            const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+            dynamicContent.innerHTML = `
+                <div class="form-container">
+                    <div class="form-header">
+                        <h3><i class="fas fa-graduation-cap"></i> Curriculum Resources</h3>
+                        <button onclick="loadDefaultContent()" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                    <p>Access schemes of work, lesson plans, and curriculum planning documents.</p>
+                    
+                    <div class="resource-grid">
+                        <div class="resource-card">
+                            <h4><i class="fas fa-calendar-alt"></i> Schemes of Work</h4>
+                            <p>Annual and term-based teaching plans</p>
+                            <button onclick="viewResource('schemes')" class="btn btn-primary btn-sm">View Resources</button>
+                        </div>
+                        
+                        <div class="resource-card">
+                            <h4><i class="fas fa-clipboard-list"></i> Lesson Plans</h4>
+                            <p>Detailed lesson planning templates and examples</p>
+                            <button onclick="viewResource('lesson_plans')" class="btn btn-success btn-sm">View Resources</button>
+                        </div>
+                        
+                        <div class="resource-card">
+                            <h4><i class="fas fa-file-alt"></i> Syllabus Documents</h4>
+                            <p>Official syllabus and curriculum guides</p>
+                            <button onclick="viewResource('syllabus')" class="btn btn-info btn-sm">View Resources</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showAllSubjects() {
+            const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+            dynamicContent.innerHTML = `
+                <div class="form-container">
+                    <div class="form-header">
+                        <h3><i class="fas fa-atom"></i> All Science Subjects</h3>
+                        <button onclick="loadDefaultContent()" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                    <p>Browse resources organized by specific science subjects.</p>
+                    
+                    <div class="subjects-list">
+                        <div class="subject-item">
+                            <div>
+                                <h4>Integrated Science</h4>
+                                <p>Click to view all resources for this subject</p>
+                            </div>
+                            <button onclick="showSubjectDetail('integrated_science', 'all')" class="btn btn-primary btn-sm">
+                                View Resources
+                            </button>
+                        </div>
+                        <div class="subject-item">
+                            <div>
+                                <h4>Agricultural Science</h4>
+                                <p>Click to view all resources for this subject</p>
+                            </div>
+                            <button onclick="showSubjectDetail('agricultural_science', 'all')" class="btn btn-primary btn-sm">
+                                View Resources
+                            </button>
+                        </div>
+                        <div class="subject-item">
+                            <div>
+                                <h4>Human & Social Biology</h4>
+                                <p>Click to view all resources for this subject</p>
+                            </div>
+                            <button onclick="showSubjectDetail('human_biology', 'all')" class="btn btn-primary btn-sm">
+                                View Resources
+                            </button>
+                        </div>
+                        <div class="subject-item">
+                            <div>
+                                <h4>Biology</h4>
+                                <p>Click to view all resources for this subject</p>
+                            </div>
+                            <button onclick="showSubjectDetail('biology', 'all')" class="btn btn-primary btn-sm">
+                                View Resources
+                            </button>
+                        </div>
+                        <div class="subject-item">
+                            <div>
+                                <h4>Chemistry</h4>
+                                <p>Click to view all resources for this subject</p>
+                            </div>
+                            <button onclick="showSubjectDetail('chemistry', 'all')" class="btn btn-primary btn-sm">
+                                View Resources
+                            </button>
+                        </div>
+                        <div class="subject-item">
+                            <div>
+                                <h4>Physics</h4>
+                                <p>Click to view all resources for this subject</p>
+                            </div>
+                            <button onclick="showSubjectDetail('physics', 'all')" class="btn btn-primary btn-sm">
+                                View Resources
+                            </button>
+                        </div>
+                        <div class="subject-item">
+                            <div>
+                                <h4>Amenity Horticulture</h4>
+                                <p>Click to view all resources for this subject</p>
+                            </div>
+                            <button onclick="showSubjectDetail('horticulture', 'all')" class="btn btn-primary btn-sm">
+                                View Resources
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showUploadResources() {
+            const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+            dynamicContent.innerHTML = `
+                <div class="form-container">
+                    <div class="form-header">
+                        <h3><i class="fas fa-cloud-upload-alt"></i> Upload Resources</h3>
+                        <button onclick="loadDefaultContent()" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                    <p>Upload new teaching resources to share with the department.</p>
+                    
+                    <div class="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h4>Upload Area</h4>
+                        <p>Drag and drop files here or click to browse</p>
+                        <button class="btn btn-primary">Select Files</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showResourceSearch() {
+            const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+            dynamicContent.innerHTML = `
+                <div class="form-container">
+                    <div class="form-header">
+                        <h3><i class="fas fa-search"></i> Search Resources</h3>
+                        <button onclick="loadDefaultContent()" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                    <p>Search for specific resources across all subjects.</p>
+                    
+                    <div class="search-container">
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="Search for resources...">
+                        </div>
+                        <button class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showSubjectDetail(subject, type) {
+            const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+            const subjectName = formatSubjectName(subject);
+            dynamicContent.innerHTML = `
+                <div class="form-container">
+                    <div class="form-header">
+                        <h3><i class="fas fa-book"></i> ${subjectName} Resources</h3>
+                        <button onclick="loadDefaultContent()" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                    <p>Available resources for ${subjectName}.</p>
+                    
+                    <div class="resource-list">
+                        <div class="resource-item">
+                            <h4>${subjectName} Syllabus 2024</h4>
+                            <p>Official syllabus document</p>
+                            <span class="file-type">PDF • 2.3 MB</span>
+                        </div>
+                        <div class="resource-item">
+                            <h4>Lesson Plan Template</h4>
+                            <p>Standard lesson plan format</p>
+                            <span class="file-type">DOCX • 1.1 MB</span>
+                        </div>
+                        <div class="resource-item">
+                            <h4>Past Examination Papers</h4>
+                            <p>Previous years' exam papers</p>
+                            <span class="file-type">PDF • 4.7 MB</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatSubjectName(subject) {
+            const names = {
+                'integrated_science': 'Integrated Science',
+                'agricultural_science': 'Agricultural Science',
+                'human_biology': 'Human & Social Biology',
+                'biology': 'Biology',
+                'chemistry': 'Chemistry',
+                'physics': 'Physics',
+                'horticulture': 'Amenity Horticulture'
+            };
+            return names[subject] || subject;
+        }
+
+        function viewResource(type) {
+            alert(`Viewing ${type} resources - this would open the resource viewer`);
+        }
+
+        function returnToOverview() {
+            // Reload the page to show default content
+            location.reload();
+        }
+    </script>
 </body>
 </html>
