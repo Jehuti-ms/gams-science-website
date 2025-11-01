@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subject Resources - Gams Science Department</title>
+    <title>Gams Science Department - Home</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -17,11 +17,12 @@
             <button class="nav-toggle">
                 <i class="fas fa-bars"></i>
             </button>
+            <!-- ✅ FIXED NAVIGATION - No more science-subjects.html or csec-subjects.html -->
             <nav>
                 <ul>
-                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html" class="nav-link active">Home</a></li>
                     <li><a href="department-admin.html" class="nav-link">Department Admin</a></li>
-                    <li><a href="subject-resources.html" class="nav-link active">Subject Resources</a></li>
+                    <li><a href="subject-resources.html" class="nav-link">Subject Resources</a></li>
                     <li><a href="examinations.html" class="nav-link">Examinations</a></li>
                     <li><a href="human-resources.html" class="nav-link">Human Resources</a></li>
                     <li><a href="library.html" class="nav-link">Library</a></li>
@@ -33,9 +34,10 @@
     </header>
 
     <div class="main-container">
+        <!-- ✅ FIXED SIDEBAR - Removed "Science Subjects" and "CSEC Subjects" sections -->
         <aside class="sidebar">
             <div class="sidebar-menu">
-                <div class="sidebar-item">
+                <div class="sidebar-item active">
                     <a href="index.html"><i class="fas fa-home"></i> Home</a>
                 </div>
                 
@@ -53,21 +55,21 @@
                     </div>
                 </div>
 
-                <div class="sidebar-item active">
+                <div class="sidebar-item">
                     <a href="subject-resources.html"><i class="fas fa-book"></i> Subject Resources</a>
                     <div class="sidebar-submenu">
-                        <a href="javascript:void(0)" onclick="showCurriculumResources()">Curriculum Resources</a>
-                        <a href="javascript:void(0)" onclick="showAllSubjects()">All Subjects</a>
-                        <a href="javascript:void(0)" onclick="showUploadResources()">Upload Resources</a>
-                        <a href="javascript:void(0)" onclick="showResourceSearch()">Search Resources</a>
-                        <div class="sidebar-submenu-divider"></div>
-                        <a href="javascript:void(0)" onclick="showSubjectDetail('integrated_science', 'all')">Integrated Science</a>
-                        <a href="javascript:void(0)" onclick="showSubjectDetail('agricultural_science', 'all')">Agricultural Science</a>
-                        <a href="javascript:void(0)" onclick="showSubjectDetail('human_biology', 'all')">Human & Social Biology</a>
-                        <a href="javascript:void(0)" onclick="showSubjectDetail('biology', 'all')">Biology</a>
-                        <a href="javascript:void(0)" onclick="showSubjectDetail('chemistry', 'all')">Chemistry</a>
-                        <a href="javascript:void(0)" onclick="showSubjectDetail('physics', 'all')">Physics</a>
-                        <a href="javascript:void(0)" onclick="showSubjectDetail('horticulture', 'all')">Amenity Horticulture</a>
+                        <a href="subject-resources.html#curriculum">Curriculum</a>
+                        <a href="subject-resources.html#schemes">Schemes of work</a>
+                        <a href="subject-resources.html#syllabus">Syllabus</a>
+                        <a href="subject-resources.html#lesson-plans">Lesson plans</a>
+                        <a href="subject-resources.html#work-log">Work log</a>
+                        <a href="subject-resources.html#integrated-science">Integrated Science</a>
+                        <a href="subject-resources.html#biology">Biology</a>
+                        <a href="subject-resources.html#chemistry">Chemistry</a>
+                        <a href="subject-resources.html#physics">Physics</a>
+                        <a href="subject-resources.html#agricultural">Agricultural Science</a>
+                        <a href="subject-resources.html#hsb">Human & Social Biology</a>
+                        <a href="subject-resources.html#horticulture">Amenity Horticulture</a>
                     </div>
                 </div>
 
@@ -98,8 +100,6 @@
                     <div class="sidebar-submenu">
                         <a href="library.html#orders">Text Books Order</a>
                         <a href="library.html#resources">Book Resources</a>
-                        <a href="library.html#digital">Digital Resources</a>
-                        <a href="library.html#research">Research Materials</a>
                     </div>
                 </div>
 
@@ -109,17 +109,12 @@
                         <a href="shop.html#vegetables">Vegetables</a>
                         <a href="shop.html#plants">Plants</a>
                         <a href="shop.html#chickens">Chickens</a>
-                        <a href="shop.html#eggs">Eggs</a>
-                        <a href="shop.html#tools">Garden Tools</a>
                     </div>
                 </div>
 
                 <div class="sidebar-item">
                     <a href="blog.html"><i class="fas fa-blog"></i> Blog</a>
                     <div class="sidebar-submenu">
-                        <a href="blog.html#news">Department News</a>
-                        <a href="blog.html#events">Events</a>
-                        <a href="blog.html#achievements">Achievements</a>
                         <a href="blog.html#instagram">Instagram</a>
                         <a href="blog.html#facebook">Facebook</a>
                     </div>
@@ -129,240 +124,242 @@
 
         <section class="content">
             <div class="content-header">
-                <h2>Subject Resources & Science Subjects</h2>
+                <h2>Welcome to Gams Science Department</h2>
                 <div class="breadcrumb">
-                    <a href="index.html">Home</a> / <span>Subject Resources</span>
+                    <a href="index.html">Home</a> / <span>Dashboard</span>
                 </div>
             </div>
 
-            <!-- Dynamic Subject Resources Section -->
-            <div class="section-content" id="section-subject-resources">
-                <div class="drive-section">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h3><i class="fas fa-book-open"></i> Subject Resources</h3>
-                        <button onclick="returnToOverview()" class="btn btn-secondary btn-sm">
-                            <i class="fas fa-arrow-left"></i> Back to Overview
+            <div class="compact-calendar">
+                <div class="calendar-header">
+                    <h3><i class="fas fa-calendar-alt"></i> Department Calendar</h3>
+                    <div class="calendar-nav">
+                        <button class="btn btn-sm btn-primary" id="prevMonth">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h4 id="currentMonth">March 2024</h4>
+                        <button class="btn btn-sm btn-primary" id="nextMonth">
+                            <i class="fas fa-chevron-right"></i>
                         </button>
                     </div>
-                    <p>Access curriculum materials, lesson plans, and teaching resources organized by subject.</p>
-                    
-                    <div class="resources-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
-                        <div class="action-card" onclick="showCurriculumResources()">
-                            <i class="fas fa-graduation-cap" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
-                            <h4>Curriculum</h4>
-                            <p>Schemes of work and curriculum planning</p>
+                </div>
+
+                <div class="calendar-grid" id="calendar"></div>
+
+                <div class="event-form">
+                    <h4>Add New Event</h4>
+                    <form id="eventForm">
+                        <div class="form-group">
+                            <label class="form-label">Event Title</label>
+                            <input type="text" class="form-control" id="eventTitle" required>
                         </div>
-                        
-                        <div class="action-card" onclick="showAllSubjects()">
-                            <i class="fas fa-atom" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
-                            <h4>All Subjects</h4>
-                            <p>Browse resources by subject</p>
+                        <div class="form-group">
+                            <label class="form-label">Event Date</label>
+                            <input type="date" class="form-control" id="eventDate" required>
                         </div>
-                        
-                        <div class="action-card" onclick="showUploadResources()">
-                            <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
-                            <h4>Upload Resources</h4>
-                            <p>Share new teaching materials</p>
+                        <button type="submit" class="btn btn-success btn-sm">Add Event</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="cards">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-cogs"></i> Department Admin</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Access meetings, documents, timetables, budgets, and administrative resources.</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="department-admin.html" class="btn btn-primary">Access Admin</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-book"></i> Subject Resources</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Lesson plans, curriculum materials, and teaching resources for all science subjects.</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="subject-resources.html" class="btn btn-primary">View Resources</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-file-alt"></i> Examinations</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Internal and external examination resources, past papers, and SBA materials.</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="examinations.html" class="btn btn-primary">Exam Resources</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-users"></i> Human Resources</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Professional development, job opportunities, and staff resources.</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="human-resources.html" class="btn btn-primary">HR Portal</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="drive-section">
+                <h3><i class="fas fa-atom"></i> Our Science Subjects</h3>
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-header" style="background: var(--success);">
+                            <h4>Integrated Science</h4>
                         </div>
-                        
-                        <div class="action-card" onclick="showResourceSearch()">
-                            <i class="fas fa-search" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
-                            <h4>Search Resources</h4>
-                            <p>Find specific materials</p>
+                        <div class="card-body">
+                            <p><strong>Forms:</strong> 1st Form - U5th Form</p>
+                            <p>Foundational science education covering basic principles.</p>
                         </div>
                     </div>
-                    
-                    <div id="subject-resources-dynamic-content">
-                        <!-- Subject Cards Overview -->
-                        <div class="cards">
-                            <div class="card">
-                                <div class="card-header" style="background: linear-gradient(45deg, #28a745, #20c997);">
-                                    <h3><i class="fas fa-seedling"></i> Integrated Science</h3>
-                                </div>
-                                <div class="card-body">
-                                    <p>Comprehensive introduction to fundamental scientific concepts across biology, chemistry, and physics.</p>
-                                    <div class="subject-stats">
-                                        <div class="stat">
-                                            <strong>Grade 7-9</strong>
-                                            <span>Levels</span>
-                                        </div>
-                                        <div class="stat">
-                                            <strong>3</strong>
-                                            <span>Teachers</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button onclick="showSubjectDetail('integrated_science', 'all')" class="btn btn-primary">View Resources</button>
-                                </div>
-                            </div>
 
-                            <div class="card">
-                                <div class="card-header" style="background: linear-gradient(45deg, #17a2b8, #6f42c1);">
-                                    <h3><i class="fas fa-dna"></i> Human & Social Biology</h3>
-                                </div>
-                                <div class="card-body">
-                                    <p>Study of human biology and its relationship to health, society, and the environment.</p>
-                                    <div class="subject-stats">
-                                        <div class="stat">
-                                            <strong>Grade 10-11</strong>
-                                            <span>Levels</span>
-                                        </div>
-                                        <div class="stat">
-                                            <strong>2</strong>
-                                            <span>Teachers</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button onclick="showSubjectDetail('human_biology', 'all')" class="btn btn-primary">View Resources</button>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header" style="background: linear-gradient(45deg, #28a745, #007bff);">
-                                    <h3><i class="fas fa-leaf"></i> Biology</h3>
-                                </div>
-                                <div class="card-body">
-                                    <p>In-depth study of living organisms, ecosystems, and biological processes.</p>
-                                    <div class="subject-stats">
-                                        <div class="stat">
-                                            <strong>Grade 10-12</strong>
-                                            <span>Levels</span>
-                                        </div>
-                                        <div class="stat">
-                                            <strong>3</strong>
-                                            <span>Teachers</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button onclick="showSubjectDetail('biology', 'all')" class="btn btn-primary">View Resources</button>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header" style="background: linear-gradient(45deg, #fd7e14, #dc3545);">
-                                    <h3><i class="fas fa-atom"></i> Chemistry</h3>
-                                </div>
-                                <div class="card-body">
-                                    <p>Exploration of matter, chemical reactions, and laboratory techniques.</p>
-                                    <div class="subject-stats">
-                                        <div class="stat">
-                                            <strong>Grade 10-12</strong>
-                                            <span>Levels</span>
-                                        </div>
-                                        <div class="stat">
-                                            <strong>2</strong>
-                                            <span>Teachers</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button onclick="showSubjectDetail('chemistry', 'all')" class="btn btn-primary">View Resources</button>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header" style="background: linear-gradient(45deg, #6f42c1, #e83e8c);">
-                                    <h3><i class="fas fa-bolt"></i> Physics</h3>
-                                </div>
-                                <div class="card-body">
-                                    <p>Study of matter, energy, motion, and the fundamental laws of the universe.</p>
-                                    <div class="subject-stats">
-                                        <div class="stat">
-                                            <strong>Grade 10-12</strong>
-                                            <span>Levels</span>
-                                        </div>
-                                        <div class="stat">
-                                            <strong>2</strong>
-                                            <span>Teachers</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button onclick="showSubjectDetail('physics', 'all')" class="btn btn-primary">View Resources</button>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header" style="background: linear-gradient(45deg, #20c997, #28a745);">
-                                    <h3><i class="fas fa-tractor"></i> Agricultural Science</h3>
-                                </div>
-                                <div class="card-body">
-                                    <p>Principles of crop production, animal husbandry, and sustainable agriculture.</p>
-                                    <div class="subject-stats">
-                                        <div class="stat">
-                                            <strong>Grade 10-12</strong>
-                                            <span>Levels</span>
-                                        </div>
-                                        <div class="stat">
-                                            <strong>1</strong>
-                                            <span>Teachers</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button onclick="showSubjectDetail('agricultural_science', 'all')" class="btn btn-primary">View Resources</button>
-                                </div>
-                            </div>
-
-                            <div class="card">
-                                <div class="card-header" style="background: linear-gradient(45deg, #87ceeb, #32cd32);">
-                                    <h3><i class="fas fa-spa"></i> Amenity Horticulture</h3>
-                                </div>
-                                <div class="card-body">
-                                    <p>Study of ornamental plants, landscape design, and horticultural management.</p>
-                                    <div class="subject-stats">
-                                        <div class="stat">
-                                            <strong>Grade 11-12</strong>
-                                            <span>Levels</span>
-                                        </div>
-                                        <div class="stat">
-                                            <strong>1</strong>
-                                            <span>Teachers</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button onclick="showSubjectDetail('horticulture', 'all')" class="btn btn-primary">View Resources</button>
-                                </div>
-                            </div>
+                    <div class="card">
+                        <div class="card-header" style="background: var(--primary);">
+                            <h4>Biology</h4>
                         </div>
-
-                        <!-- Statistics Section -->
-                        <div class="drive-section" style="margin-top: 2rem;">
-                            <h3><i class="fas fa-chart-bar"></i> Subject Overview</h3>
-                            <div class="subject-overview">
-                                <div class="overview-card">
-                                    <h4>Enrollment Statistics</h4>
-                                    <div class="stats-grid">
-                                        <div class="stat-item">
-                                            <div class="stat-value">142</div>
-                                            <div class="stat-label">Biology Students</div>
-                                        </div>
-                                        <div class="stat-item">
-                                            <div class="stat-value">98</div>
-                                            <div class="stat-label">Chemistry Students</div>
-                                        </div>
-                                        <div class="stat-item">
-                                            <div class="stat-value">87</div>
-                                            <div class="stat-label">Physics Students</div>
-                                        </div>
-                                        <div class="stat-item">
-                                            <div class="stat-value">156</div>
-                                            <div class="stat-label">Integrated Science</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="card-body">
+                            <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                            <p>Study of living organisms and life processes.</p>
                         </div>
                     </div>
+
+                    <div class="card">
+                        <div class="card-header" style="background: #6f42c1;">
+                            <h4>Chemistry</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                            <p>Properties and interactions of matter and substances.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" style="background: #fd7e14;">
+                            <h4>Physics</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                            <p>Fundamental forces, matter, energy, and motion.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" style="background: #20c997;">
+                            <h4>Agricultural Science</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                            <p>Soil science, crop production, and agricultural techniques.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" style="background: #e83e8c;">
+                            <h4>Human & Social Biology</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                            <p>Human body systems and health sciences.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" style="background: #ffc107; color: var(--dark);">
+                            <h4>Amenity Horticulture</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Forms:</strong> 4th Year - U5th Year</p>
+                            <p>Ornamental plants, landscape design, and horticultural science.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="drive-section">
+                <h3><i class="fas fa-file-download"></i> Recent Resources</h3>
+                <div class="file-grid">
+                    <a href="#" class="file-item">
+                        <div class="file-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="file-name">Chemistry Syllabus</div>
+                        <div class="file-meta">PDF • 2.4 MB</div>
+                    </a>
+                    
+                    <a href="#" class="file-item">
+                        <div class="file-icon">
+                            <i class="fas fa-file-word"></i>
+                        </div>
+                        <div class="file-name">Physics Lesson Plan</div>
+                        <div class="file-meta">DOCX • 1.2 MB</div>
+                    </a>
+                    
+                    <a href="#" class="file-item">
+                        <div class="file-icon">
+                            <i class="fas fa-file-excel"></i>
+                        </div>
+                        <div class="file-name">Exam Timetable</div>
+                        <div class="file-meta">XLSX • 0.8 MB</div>
+                    </a>
+                    
+                    <a href="#" class="file-item">
+                        <div class="file-icon">
+                            <i class="fas fa-file-powerpoint"></i>
+                        </div>
+                        <div class="file-name">Biology Presentation</div>
+                        <div class="file-meta">PPTX • 5.7 MB</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="drive-section">
+                <h3><i class="fas fa-shopping-cart"></i> Science Department Shop</h3>
+                <p>Fresh produce and plants available for purchase</p>
+                <div class="shop-grid">
+                    <div class="shop-item">
+                        <div class="shop-icon">
+                            <i class="fas fa-carrot"></i>
+                        </div>
+                        <h4>Vegetables</h4>
+                        <p>Fresh, locally grown vegetables</p>
+                    </div>
+                    
+                    <div class="shop-item">
+                        <div class="shop-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h4>Plants</h4>
+                        <p>Ornamental and edible plants</p>
+                    </div>
+                    
+                    <div class="shop-item">
+                        <div class="shop-icon">
+                            <i class="fas fa-egg"></i>
+                        </div>
+                        <h4>Chickens</h4>
+                        <p>Fresh eggs and poultry</p>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="shop.html" class="btn btn-success">Visit Shop</a>
                 </div>
             </div>
         </section>
     </div>
 
+    <!-- ✅ FIXED FOOTER -->
     <footer>
         <div class="container footer-content">
             <div class="footer-section">
