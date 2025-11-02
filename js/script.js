@@ -6703,4 +6703,474 @@ window.getStockStatus = function(quantity, minStock) {
     return 'In Stock';
 };
 
+function loadAppraisalsSection(container) {
+    console.log('🔍 Loading Teacher Appraisals section...');
+    
+    // Initialize sample data if not exists
+    initializeAppraisalData();
+    
+    container.innerHTML = `
+        <div class="section-content" id="section-appraisals">
+            <div class="drive-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h3><i class="fas fa-user-check"></i> Teacher Appraisals</h3>
+                    <button onclick="returnToOverview()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Overview
+                    </button>
+                </div>
+                <p>Manage teacher performance evaluations, feedback, and professional development tracking.</p>
+                
+                <div class="appraisals-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                    <div class="action-card" onclick="showStartAppraisal()">
+                        <i class="fas fa-play-circle" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h4>Start Appraisal</h4>
+                        <p>Begin new teacher evaluation</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showOngoingAppraisals()">
+                        <i class="fas fa-spinner" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                        <h4>Ongoing Appraisals</h4>
+                        <p>View in-progress evaluations</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showCompletedAppraisals()">
+                        <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                        <h4>Completed Appraisals</h4>
+                        <p>Review finished evaluations</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showAppraisalTemplates()">
+                        <i class="fas fa-copy" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                        <h4>Appraisal Templates</h4>
+                        <p>Use evaluation templates</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showPerformanceTrends()">
+                        <i class="fas fa-chart-line" style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                        <h4>Performance Trends</h4>
+                        <p>Analyze performance data</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showAppraisalSettings()">
+                        <i class="fas fa-cog" style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;"></i>
+                        <h4>Appraisal Settings</h4>
+                        <p>Configure evaluation criteria</p>
+                    </div>
+                </div>
+                
+                <div id="appraisals-dynamic-content">
+                    <div style="text-align: center; padding: 3rem; color: #999;">
+                        <i class="fas fa-user-check" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                        <p>Select an option above to manage teacher appraisals</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    console.log('✅ Teacher Appraisals section loaded successfully');
+}
+
+// Initialize sample data
+function initializeAppraisalData() {
+    console.log('📊 Initializing appraisal data...');
+    
+    if (!localStorage.getItem('ongoingAppraisals')) {
+        const sampleAppraisals = [
+            {
+                id: 'appr_001',
+                teacherName: 'Dr. Sarah Johnson',
+                type: 'Annual Appraisal',
+                startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                dueDate: new Date(Date.now() + 23 * 24 * 60 * 60 * 1000).toISOString(),
+                progress: 45,
+                objectives: 'Comprehensive annual performance review focusing on teaching methodology and student outcomes',
+                currentStage: 'Classroom Observation',
+                evaluators: ['Head of Department', 'Senior Teacher'],
+                department: 'Physics'
+            },
+            {
+                id: 'appr_002',
+                teacherName: 'Prof. Michael Chen',
+                type: 'Promotion Assessment',
+                startDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+                dueDate: new Date(Date.now() + 27 * 24 * 60 * 60 * 1000).toISOString(),
+                progress: 20,
+                objectives: 'Assessment for senior lecturer promotion focusing on research and leadership',
+                currentStage: 'Document Review',
+                evaluators: ['Principal', 'External Evaluator'],
+                department: 'Chemistry'
+            }
+        ];
+        localStorage.setItem('ongoingAppraisals', JSON.stringify(sampleAppraisals));
+        console.log('✅ Created sample ongoing appraisals');
+    }
+
+    if (!localStorage.getItem('completedAppraisals')) {
+        const sampleCompleted = [
+            {
+                id: 'comp_001',
+                teacherName: 'Dr. Emily Davis',
+                type: 'Annual Appraisal',
+                completionDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+                overallRating: 4.7,
+                summary: 'Excellent performance across all evaluation criteria with notable achievements in student engagement and research publications.',
+                recommendation: 'Promotion Recommended',
+                evaluatedBy: 'Head of Department',
+                department: 'Biology'
+            },
+            {
+                id: 'comp_002',
+                teacherName: 'Mr. Robert Brown',
+                type: 'Probation Review',
+                completionDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+                overallRating: 3.8,
+                summary: 'Satisfactory performance with areas identified for professional development in classroom management and assessment techniques.',
+                recommendation: 'Continue Current Role',
+                evaluatedBy: 'Principal',
+                department: 'Mathematics'
+            }
+        ];
+        localStorage.setItem('completedAppraisals', JSON.stringify(sampleCompleted));
+        console.log('✅ Created sample completed appraisals');
+    }
+}
+
+// Appraisal action functions
+window.showStartAppraisal = function() {
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-play-circle"></i> Start New Teacher Appraisal</h3>
+                <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <form id="startAppraisalForm" onsubmit="startAppraisalProcess(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label">Teacher *</label>
+                        <select class="form-select" id="appraisalTeacher" required>
+                            <option value="">-- Select Teacher --</option>
+                            <option value="sarah_johnson">Dr. Sarah Johnson - Physics</option>
+                            <option value="michael_chen">Prof. Michael Chen - Chemistry</option>
+                            <option value="emily_davis">Dr. Emily Davis - Biology</option>
+                            <option value="robert_brown">Mr. Robert Brown - Mathematics</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Appraisal Type *</label>
+                        <select class="form-select" id="appraisalType" required>
+                            <option value="">-- Select Type --</option>
+                            <option value="annual">Annual Appraisal</option>
+                            <option value="probation">Probation Review</option>
+                            <option value="promotion">Promotion Assessment</option>
+                            <option value="performance">Performance Improvement</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Appraisal Objectives</label>
+                    <textarea class="form-textarea" id="appraisalObjectives" rows="3" 
+                              placeholder="Describe the main objectives and focus areas for this appraisal..."></textarea>
+                </div>
+                
+                <div class="form-actions" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                    <button type="button" onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Start Appraisal
+                    </button>
+                </div>
+            </form>
+        </div>
+    `;
+};
+
+window.showOngoingAppraisals = function() {
+    const appraisals = JSON.parse(localStorage.getItem('ongoingAppraisals')) || [];
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
+    
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-spinner"></i> Ongoing Appraisals</h3>
+                <div>
+                    <button onclick="exportOngoingAppraisals()" class="btn btn-success btn-sm">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            ${appraisals.length === 0 ? 
+                '<div class="empty-state" style="text-align: center; padding: 3rem; color: #999;">' +
+                    '<i class="fas fa-spinner" style="font-size: 4rem; margin-bottom: 1rem;"></i>' +
+                    '<p>No ongoing appraisals found.</p>' +
+                    '<button onclick="showStartAppraisal()" class="btn btn-primary">Start First Appraisal</button>' +
+                '</div>' :
+                `<div class="appraisals-list">
+                    ${appraisals.map(appraisal => `
+                        <div class="appraisal-card" style="background: #fffbf0; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--warning);">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div style="flex: 1;">
+                                    <h4 style="color: var(--warning); margin-bottom: 0.5rem;">${appraisal.teacherName} - ${appraisal.type}</h4>
+                                    <p style="color: #666; margin-bottom: 0.5rem;">
+                                        <strong>Department:</strong> ${appraisal.department} • 
+                                        <strong>Started:</strong> ${new Date(appraisal.startDate).toLocaleDateString()} • 
+                                        <strong>Due:</strong> ${new Date(appraisal.dueDate).toLocaleDateString()}
+                                    </p>
+                                    <p style="color: #999; margin-bottom: 0.5rem;">${appraisal.objectives}</p>
+                                    <div style="margin-bottom: 0.5rem;">
+                                        <strong>Progress: ${appraisal.progress}%</strong>
+                                        <div class="progress" style="height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden; margin-top: 0.5rem;">
+                                            <div style="height: 100%; background: var(--warning); width: ${appraisal.progress}%;"></div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 2rem; font-size: 0.9rem;">
+                                        <span style="color: #666;">Current Stage: ${appraisal.currentStage}</span>
+                                        <span style="color: #666;">Evaluators: ${appraisal.evaluators.join(', ')}</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <button onclick="continueAppraisal('${appraisal.id}')" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-edit"></i> Continue
+                                    </button>
+                                    <button onclick="viewAppraisal('${appraisal.id}')" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>`
+            }
+        </div>
+    `;
+};
+
+window.showCompletedAppraisals = function() {
+    const appraisals = JSON.parse(localStorage.getItem('completedAppraisals')) || [];
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
+    
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-check-circle"></i> Completed Appraisals</h3>
+                <div>
+                    <button onclick="exportCompletedAppraisals()" class="btn btn-success btn-sm">
+                        <i class="fas fa-download"></i> Export All
+                    </button>
+                    <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            
+            ${appraisals.length === 0 ? 
+                '<div class="empty-state" style="text-align: center; padding: 3rem; color: #999;">' +
+                    '<i class="fas fa-check-circle" style="font-size: 4rem; margin-bottom: 1rem;"></i>' +
+                    '<p>No completed appraisals found.</p>' +
+                '</div>' :
+                `<div class="appraisals-grid" style="display: grid; gap: 1.5rem;">
+                    ${appraisals.map(appraisal => `
+                        <div class="appraisal-card" style="background: #f0f9f0; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--success);">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div style="flex: 1;">
+                                    <h4 style="color: var(--success); margin-bottom: 0.5rem;">${appraisal.teacherName} - ${appraisal.type}</h4>
+                                    <p style="color: #666; margin-bottom: 0.5rem;">
+                                        <strong>Department:</strong> ${appraisal.department} • 
+                                        <strong>Completed:</strong> ${new Date(appraisal.completionDate).toLocaleDateString()} • 
+                                        <strong>Overall Rating:</strong> 
+                                        <span style="color: ${getRatingColor(appraisal.overallRating)}; font-weight: bold;">
+                                            ${appraisal.overallRating}/5
+                                        </span>
+                                    </p>
+                                    <p style="color: #999; margin-bottom: 0.5rem;">${appraisal.summary}</p>
+                                    <div style="display: flex; gap: 2rem;">
+                                        <div>
+                                            <strong>Recommendation:</strong>
+                                            <div style="color: ${getRecommendationColor(appraisal.recommendation)}; font-weight: bold;">
+                                                ${appraisal.recommendation}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <strong>Evaluated By:</strong>
+                                            <div style="color: #666;">${appraisal.evaluatedBy}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <button onclick="viewCompletedAppraisal('${appraisal.id}')" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                    <button onclick="downloadAppraisal('${appraisal.id}')" class="btn btn-success btn-sm">
+                                        <i class="fas fa-download"></i> PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>`
+            }
+        </div>
+    `;
+};
+
+window.showAppraisalTemplates = function() {
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-copy"></i> Appraisal Templates</h3>
+                <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="templates-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="template-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; border: 2px dashed #dee2e6; cursor: pointer;" onclick="useAppraisalTemplate('comprehensive')">
+                    <i class="fas fa-clipboard-check" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Comprehensive Evaluation</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Full teacher evaluation covering all performance areas</p>
+                    <div class="template-stats" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-list"></i> 8 sections</span>
+                        <span style="color: #999;"><i class="fas fa-clock"></i> 45 min</span>
+                    </div>
+                </div>
+                
+                <div class="template-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; border: 2px dashed #dee2e6; cursor: pointer;" onclick="useAppraisalTemplate('classroom')">
+                    <i class="fas fa-chalkboard-teacher" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--info); margin-bottom: 0.5rem;">Classroom Observation</h4>
+                    <p style="color: #666; margin-bottom: 1rem;">Focus on teaching methodology and classroom management</p>
+                    <div class="template-stats" style="display: flex; justify-content: center; gap: 1rem;">
+                        <span style="color: #999;"><i class="fas fa-list"></i> 5 sections</span>
+                        <span style="color: #999;"><i class="fas fa-clock"></i> 30 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+window.showPerformanceTrends = function() {
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-chart-line"></i> Performance Trends</h3>
+                <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="trends-stats" style="margin-bottom: 2rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="stat-card" style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">4.2/5</div>
+                        <div style="color: #666;">Average Rating</div>
+                    </div>
+                    <div class="stat-card" style="background: #f0f9f0; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">12%</div>
+                        <div style="color: #666;">Improvement Rate</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; text-align: center;">
+                <p style="color: #666;">Performance charts and analytics would be displayed here</p>
+            </div>
+        </div>
+    `;
+};
+
+window.showAppraisalSettings = function() {
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-cog"></i> Appraisal Settings</h3>
+                <button onclick="closeAppraisalsDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px;">
+                <p style="color: #666;">Appraisal configuration settings would be displayed here</p>
+            </div>
+        </div>
+    `;
+};
+
+// Helper functions
+window.closeAppraisalsDynamicContent = function() {
+    const dynamicContent = document.getElementById('appraisals-dynamic-content');
+    if (dynamicContent) {
+        dynamicContent.innerHTML = '<div style="text-align: center; padding: 3rem; color: #999;"><i class="fas fa-user-check" style="font-size: 4rem; margin-bottom: 1rem;"></i><p>Select an option above to manage teacher appraisals</p></div>';
+    }
+};
+
+window.startAppraisalProcess = function(event) {
+    event.preventDefault();
+    alert('✅ Appraisal process started successfully!');
+    closeAppraisalsDynamicContent();
+};
+
+window.continueAppraisal = function(appraisalId) {
+    alert(`Continuing appraisal: ${appraisalId}`);
+};
+
+window.viewAppraisal = function(appraisalId) {
+    alert(`Viewing appraisal: ${appraisalId}`);
+};
+
+window.viewCompletedAppraisal = function(appraisalId) {
+    alert(`Viewing completed appraisal: ${appraisalId}`);
+};
+
+window.downloadAppraisal = function(appraisalId) {
+    alert(`Downloading appraisal: ${appraisalId}`);
+};
+
+window.useAppraisalTemplate = function(templateId) {
+    alert(`Using template: ${templateId}`);
+};
+
+window.exportOngoingAppraisals = function() {
+    alert('Exporting ongoing appraisals...');
+};
+
+window.exportCompletedAppraisals = function() {
+    alert('Exporting completed appraisals...');
+};
+
+// Helper functions for ratings
+window.getRatingColor = function(rating) {
+    if (rating >= 4.5) return 'var(--success)';
+    if (rating >= 4.0) return 'var(--info)';
+    if (rating >= 3.5) return 'var(--warning)';
+    return 'var(--danger)';
+};
+
+window.getRecommendationColor = function(recommendation) {
+    switch(recommendation) {
+        case 'Promotion Recommended':
+            return 'var(--success)';
+        case 'Continue Current Role':
+            return 'var(--info)';
+        case 'Development Needed':
+            return 'var(--warning)';
+        case 'Performance Improvement Plan':
+            return 'var(--danger)';
+        default:
+            return '#666';
+    }
+};
 
