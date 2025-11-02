@@ -4,6 +4,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🔬 Gams Science Department - Initializing...');
     
+    
     // Core initializations
     initializeNavigation();
     initializeSidebar();
@@ -7458,6 +7459,7 @@ window.showSubjectDetail = function(subject, resourceType) {
     alert(`📚 ${subjectName} - ${typeName}\n\nIn a real implementation, this would show specific resources for this subject and type.`);
 };
 
+
 // ===== EXAMINATIONS SECTION =====
 
 // Initialize examinations page functionality
@@ -9032,5 +9034,3 @@ window.filterTimetables = function() {
 };
 
 window.reset
-
-
