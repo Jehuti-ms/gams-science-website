@@ -7174,3 +7174,286 @@ window.getRecommendationColor = function(recommendation) {
     }
 };
 
+// Curriculum Resources with working links
+window.showCurriculumResources = function() {
+    const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+    dynamicContent.innerHTML = `
+        <div class="form-container" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-graduation-cap"></i> Curriculum Resources</h3>
+                <button onclick="closeSubjectResourcesDynamicContent()" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="curriculum-sections" style="display: grid; gap: 2rem;">
+                <div class="curriculum-section">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-calendar-alt"></i> Schemes of Work
+                    </h4>
+                    <div class="resource-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                            <i class="fas fa-file-alt" style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;"></i>
+                            <h5>2024-2025 Annual Scheme</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Complete annual teaching plan</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Mar 15, 2025</span>
+                                <span style="color: var(--success); font-size: 0.8rem;">PDF</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button onclick="downloadResource('sow_annual_2025')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                                <button onclick="previewResource('sow_annual_2025')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                            <i class="fas fa-file-alt" style="font-size: 2rem; color: var(--info); margin-bottom: 0.5rem;"></i>
+                            <h5>Term 1 Detailed Plan</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Weekly breakdown for Term 1</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Jan 10, 2025</span>
+                                <span style="color: var(--success); font-size: 0.8rem;">DOCX</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button onclick="downloadResource('sow_term1_2025')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                                <button onclick="previewResource('sow_term1_2025')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                            <i class="fas fa-file-alt" style="font-size: 2rem; color: var(--success); margin-bottom: 0.5rem;"></i>
+                            <h5>Term 2 Detailed Plan</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Weekly breakdown for Term 2</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Apr 5, 2025</span>
+                                <span style="color: var(--success); font-size: 0.8rem;">DOCX</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button onclick="downloadResource('sow_term2_2025')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                                <button onclick="previewResource('sow_term2_2025')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="curriculum-section">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-clipboard-list"></i> Lesson Plans & Templates
+                    </h4>
+                    <div class="resource-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                            <i class="fas fa-clipboard" style="font-size: 2rem; color: var(--success); margin-bottom: 0.5rem;"></i>
+                            <h5>Standard Lesson Plan Template</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Universal lesson plan format</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Feb 1, 2025</span>
+                                <span style="color: var(--warning); font-size: 0.8rem;">DOCX</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button onclick="downloadResource('lesson_template_standard')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                                <button onclick="previewResource('lesson_template_standard')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                            <i class="fas fa-check-circle" style="font-size: 2rem; color: var(--danger); margin-bottom: 0.5rem;"></i>
+                            <h5>Assessment Rubrics</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Grading and evaluation criteria</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Mar 1, 2025</span>
+                                <span style="color: var(--success); font-size: 0.8rem;">PDF</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button onclick="downloadResource('assessment_rubrics')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                                <button onclick="previewResource('assessment_rubrics')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                            <i class="fas fa-chalkboard-teacher" style="font-size: 2rem; color: var(--info); margin-bottom: 0.5rem;"></i>
+                            <h5>Differentiated Instruction Guide</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Strategies for diverse learners</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Jan 20, 2025</span>
+                                <span style="color: var(--success); font-size: 0.8rem;">PDF</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button onclick="downloadResource('differentiated_guide')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                                <button onclick="previewResource('differentiated_guide')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="curriculum-section">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem;">
+                        <i class="fas fa-cogs"></i> Curriculum Framework
+                    </h4>
+                    <div class="resource-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem;">
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                            <i class="fas fa-book" style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;"></i>
+                            <h5>National Curriculum Guide</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Official curriculum framework</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Dec 15, 2024</span>
+                                <span style="color: var(--success); font-size: 0.8rem;">PDF</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button onclick="downloadResource('national_curriculum')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                                <button onclick="previewResource('national_curriculum')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                            <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--warning); margin-bottom: 0.5rem;"></i>
+                            <h5>Learning Progression Maps</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Skill development across grades</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Nov 30, 2024</span>
+                                <span style="color: var(--success); font-size: 0.8rem;">PDF</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button onclick="downloadResource('progression_maps')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                                <button onclick="previewResource('progression_maps')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="resource-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px;">
+                            <i class="fas fa-tasks" style="font-size: 2rem; color: var(--danger); margin-bottom: 0.5rem;"></i>
+                            <h5>Standards & Benchmarks</h5>
+                            <p style="color: #666; font-size: 0.9rem;">Learning standards by grade level</p>
+                            <div style="display: flex; justify-content: between; margin-top: 1rem;">
+                                <span style="color: #999; font-size: 0.8rem;">Updated: Jan 5, 2025</span>
+                                <span style="color: var(--success); font-size: 0.8rem;">PDF</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button onclick="downloadResource('standards_benchmarks')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                                <button onclick="previewResource('standards_benchmarks')" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// Resource download and preview functions
+window.downloadResource = function(resourceId) {
+    const resourceNames = {
+        'sow_annual_2025': 'Annual_Scheme_of_Work_2024-2025.pdf',
+        'sow_term1_2025': 'Term1_Detailed_Plan_2025.docx',
+        'sow_term2_2025': 'Term2_Detailed_Plan_2025.docx',
+        'lesson_template_standard': 'Standard_Lesson_Plan_Template.docx',
+        'assessment_rubrics': 'Assessment_Rubrics_Guide.pdf',
+        'differentiated_guide': 'Differentiated_Instruction_Guide.pdf',
+        'national_curriculum': 'National_Curriculum_Framework.pdf',
+        'progression_maps': 'Learning_Progression_Maps.pdf',
+        'standards_benchmarks': 'Standards_and_Benchmarks.pdf'
+    };
+
+    const fileName = resourceNames[resourceId] || 'resource_file';
+    alert(`📥 Downloading: ${fileName}\n\nIn a real implementation, this would download the actual file.`);
+};
+
+window.previewResource = function(resourceId) {
+    const resourceNames = {
+        'sow_annual_2025': 'Annual Scheme of Work 2024-2025',
+        'sow_term1_2025': 'Term 1 Detailed Plan 2025',
+        'sow_term2_2025': 'Term 2 Detailed Plan 2025',
+        'lesson_template_standard': 'Standard Lesson Plan Template',
+        'assessment_rubrics': 'Assessment Rubrics Guide',
+        'differentiated_guide': 'Differentiated Instruction Guide',
+        'national_curriculum': 'National Curriculum Framework',
+        'progression_maps': 'Learning Progression Maps',
+        'standards_benchmarks': 'Standards and Benchmarks'
+    };
+
+    const resourceName = resourceNames[resourceId] || 'Resource';
+    alert(`👁️ Previewing: ${resourceName}\n\nIn a real implementation, this would open a preview window.`);
+};
+
+// Upload resource function
+window.uploadResource = function(event) {
+    event.preventDefault();
+    const title = document.getElementById('resourceTitle').value;
+    const subject = document.getElementById('resourceSubject').value;
+    const type = document.getElementById('resourceType').value;
+    
+    alert(`✅ Resource "${title}" uploaded successfully!\n\nSubject: ${subject}\nType: ${type}`);
+    closeSubjectResourcesDynamicContent();
+};
+
+// Close function
+window.closeSubjectResourcesDynamicContent = function() {
+    const dynamicContent = document.getElementById('subject-resources-dynamic-content');
+    if (dynamicContent) {
+        dynamicContent.innerHTML = '<div style="text-align: center; padding: 3rem; color: #999;"><i class="fas fa-book-open" style="font-size: 4rem; margin-bottom: 1rem;"></i><p>Select an option above to access subject resources</p></div>';
+    }
+};
+
+// Subject detail function
+window.showSubjectDetail = function(subject, resourceType) {
+    const subjectNames = {
+        'integrated_science': 'Integrated Science',
+        'agricultural_science': 'Agricultural Science',
+        'human_biology': 'Human & Social Biology',
+        'biology': 'Biology',
+        'chemistry': 'Chemistry',
+        'physics': 'Physics',
+        'horticulture': 'Amenity Horticulture'
+    };
+
+    const typeNames = {
+        'syllabus': 'Syllabus',
+        'lesson_plans': 'Lesson Plans',
+        'past_papers': 'Past Papers',
+        'notes': 'Notes/Handouts',
+        'videos': 'Videos',
+        'powerpoints': 'PowerPoints',
+        'clusters': 'Clusters',
+        'evidence': 'Evidence Upload',
+        'all': 'All Resources'
+    };
+
+    const subjectName = subjectNames[subject] || subject;
+    const typeName = typeNames[resourceType] || resourceType;
+    
+    alert(`📚 ${subjectName} - ${typeName}\n\nIn a real implementation, this would show specific resources for this subject and type.`);
+};
