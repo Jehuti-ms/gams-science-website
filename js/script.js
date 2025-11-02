@@ -7457,3 +7457,1580 @@ window.showSubjectDetail = function(subject, resourceType) {
     
     alert(`📚 ${subjectName} - ${typeName}\n\nIn a real implementation, this would show specific resources for this subject and type.`);
 };
+
+// ===== EXAMINATIONS SECTION =====
+
+// Initialize examinations page functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    if (currentPage === 'examinations.html') {
+        initializeExaminationsPage();
+    }
+});
+
+function initializeExaminationsPage() {
+    console.log('📝 Initializing Examinations page...');
+    
+    // Initialize sample data if not exists
+    initializeExaminationsData();
+    
+    // Add click handlers to examination cards
+    const examCards = document.querySelectorAll('.card .btn');
+    examCards.forEach((btn, index) => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            switch(index) {
+                case 0:
+                    showExamTimetables();
+                    break;
+                case 1:
+                    showPastPapers();
+                    break;
+                case 2:
+                    showSBAResources();
+                    break;
+                case 3:
+                    showCSECResources();
+                    break;
+            }
+        });
+    });
+    
+    console.log('✅ Examinations page initialized');
+}
+
+// Initialize examinations data
+function initializeExaminationsData() {
+    if (!localStorage.getItem('examTimetables')) {
+        const sampleTimetables = [
+            {
+                id: 'tt_001',
+                title: 'Internal Exam - Term 1',
+                examType: 'internal',
+                term: 'Term 1',
+                year: '2025',
+                uploadDate: new Date().toISOString(),
+                fileType: 'pdf',
+                subjects: ['Biology', 'Chemistry', 'Physics']
+            }
+        ];
+        localStorage.setItem('examTimetables', JSON.stringify(sampleTimetables));
+    }
+    
+    if (!localStorage.getItem('pastPapers')) {
+        const samplePapers = [
+            {
+                id: 'pp_001',
+                subject: 'Biology',
+                year: '2024',
+                examType: 'CSEC',
+                paper: 'Paper 1',
+                uploadDate: new Date().toISOString(),
+                fileType: 'pdf',
+                hasMarkingScheme: true
+            }
+        ];
+        localStorage.setItem('pastPapers', JSON.stringify(samplePapers));
+    }
+    
+    if (!localStorage.getItem('sbaRecords')) {
+        localStorage.setItem('sbaRecords', JSON.stringify([]));
+    }
+    
+    if (!localStorage.getItem('csecEntries')) {
+        localStorage.setItem('csecEntries', JSON.stringify([]));
+    }
+}
+
+// ===== EXAM TIMETABLES SECTION =====
+window.showExamTimetables = function() {
+    const content = document.querySelector('.content');
+    const timetables = JSON.parse(localStorage.getItem('examTimetables')) || [];
+    
+    content.innerHTML = `
+        <div class="content-header">
+            <h2>Examination Timetables</h2>
+            <div class="breadcrumb">
+                <a href="examinations.html">Examinations</a> / <span>Timetables</span>
+            </div>
+        </div>
+        
+        <div class="drive-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-calendar-alt"></i> Exam Timetables Management</h3>
+                <div>
+                    <button onclick="uploadExamTimetable()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-upload"></i> Upload Timetable
+                    </button>
+                    <button onclick="location.href='examinations.html'" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                </div>
+            </div>
+            
+            <div class="filter-section" style="margin-bottom: 2rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: end;">
+                    <div class="form-group">
+                        <label class="form-label">Exam Type</label>
+                        <select class="form-select" id="filterExamType" onchange="filterTimetables()">
+                            <option value="">All Types</option>
+                            <option value="internal">Internal</option>
+                            <option value="external">External</option>
+                            <option value="CSEC">CSEC</option>
+                            <option value="CCSLC">CCSLC</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Year</label>
+                        <select class="form-select" id="filterYear" onchange="filterTimetables()">
+                            <option value="">All Years</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Term</label>
+                        <select class="form-select" id="filterTerm" onchange="filterTimetables()">
+                            <option value="">All Terms</option>
+                            <option value="Term 1">Term 1</option>
+                            <option value="Term 2">Term 2</option>
+                            <option value="Term 3">Term 3</option>
+                        </select>
+                    </div>
+                    <button onclick="resetTimetableFilters()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+            
+            ${timetables.length === 0 ? 
+                '<div class="empty-state" style="text-align: center; padding: 3rem; color: #999;">' +
+                    '<i class="fas fa-calendar-times" style="font-size: 4rem; margin-bottom: 1rem;"></i>' +
+                    '<p>No timetables uploaded yet.</p>' +
+                    '<button onclick="uploadExamTimetable()" class="btn btn-primary">Upload First Timetable</button>' +
+                '</div>' :
+                `<div class="timetables-grid" style="display: grid; gap: 1.5rem;">
+                    ${timetables.map(tt => `
+                        <div class="timetable-card" style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-left: 4px solid var(--primary);">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div style="flex: 1;">
+                                    <h4 style="color: var(--primary); margin-bottom: 0.5rem;">${tt.title}</h4>
+                                    <p style="color: #666; margin-bottom: 0.5rem;">
+                                        <strong>Type:</strong> ${tt.examType} • 
+                                        <strong>Year:</strong> ${tt.year} • 
+                                        <strong>Term:</strong> ${tt.term}
+                                    </p>
+                                    <p style="color: #999; font-size: 0.9rem;">
+                                        <strong>Subjects:</strong> ${tt.subjects.join(', ')}
+                                    </p>
+                                    <p style="color: #999; font-size: 0.85rem;">
+                                        Uploaded: ${new Date(tt.uploadDate).toLocaleDateString()}
+                                    </p>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <button onclick="viewTimetable('${tt.id}')" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                    <button onclick="downloadTimetable('${tt.id}')" class="btn btn-success btn-sm">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button onclick="deleteTimetable('${tt.id}')" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>`
+            }
+        </div>
+        
+        <div id="timetable-modal"></div>
+    `;
+};
+
+window.uploadExamTimetable = function() {
+    const modal = document.getElementById('timetable-modal');
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-upload"></i> Upload Exam Timetable</h3>
+                    <button onclick="closeModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadTimetableForm" onsubmit="saveExamTimetable(event)">
+                        <div class="form-group">
+                            <label class="form-label">Timetable Title *</label>
+                            <input type="text" class="form-input" id="ttTitle" required 
+                                   placeholder="e.g., Internal Exam - Term 1 2025">
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label class="form-label">Exam Type *</label>
+                                <select class="form-select" id="ttExamType" required>
+                                    <option value="">-- Select Type --</option>
+                                    <option value="internal">Internal Exam</option>
+                                    <option value="external">External Exam</option>
+                                    <option value="CSEC">CSEC</option>
+                                    <option value="CCSLC">CCSLC</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Year *</label>
+                                <select class="form-select" id="ttYear" required>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Term</label>
+                            <select class="form-select" id="ttTerm">
+                                <option value="">-- Select Term --</option>
+                                <option value="Term 1">Term 1</option>
+                                <option value="Term 2">Term 2</option>
+                                <option value="Term 3">Term 3</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Subjects Included</label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; background: #f8f9fa; padding: 1rem; border-radius: 6px;">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subject" value="Biology" checked> Biology
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subject" value="Chemistry" checked> Chemistry
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subject" value="Physics" checked> Physics
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subject" value="Integrated Science"> Integrated Science
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subject" value="Agricultural Science"> Agricultural Science
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="subject" value="Human & Social Biology"> Human & Social Biology
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Upload Timetable File *</label>
+                            <div class="file-upload-area" style="border: 2px dashed var(--primary); border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer;" onclick="document.getElementById('ttFile').click()">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                                <p>Click to browse or drag and drop</p>
+                                <p style="font-size: 0.9rem; color: #666;">PDF, DOCX, XLSX (Max 10MB)</p>
+                                <input type="file" id="ttFile" accept=".pdf,.docx,.xlsx" style="display: none;" required>
+                            </div>
+                            <div id="fileName" style="margin-top: 0.5rem; color: var(--success);"></div>
+                        </div>
+                        
+                        <div class="modal-actions">
+                            <button type="button" onclick="closeModal()" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload Timetable
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('ttFile').addEventListener('change', function() {
+        if (this.files.length > 0) {
+            document.getElementById('fileName').textContent = `Selected: ${this.files[0].name}`;
+        }
+    });
+};
+
+window.saveExamTimetable = function(event) {
+    event.preventDefault();
+    
+    const subjects = Array.from(document.querySelectorAll('input[name="subject"]:checked'))
+                          .map(cb => cb.value);
+    
+    const newTimetable = {
+        id: 'tt_' + Date.now(),
+        title: document.getElementById('ttTitle').value,
+        examType: document.getElementById('ttExamType').value,
+        year: document.getElementById('ttYear').value,
+        term: document.getElementById('ttTerm').value,
+        subjects: subjects,
+        uploadDate: new Date().toISOString(),
+        fileType: 'pdf'
+    };
+    
+    let timetables = JSON.parse(localStorage.getItem('examTimetables')) || [];
+    timetables.push(newTimetable);
+    localStorage.setItem('examTimetables', JSON.stringify(timetables));
+    
+    closeModal();
+    alert('✅ Timetable uploaded successfully!');
+    showExamTimetables();
+};
+
+// ===== PAST PAPERS SECTION =====
+window.showPastPapers = function() {
+    const content = document.querySelector('.content');
+    const papers = JSON.parse(localStorage.getItem('pastPapers')) || [];
+    
+    content.innerHTML = `
+        <div class="content-header">
+            <h2>Past Examination Papers</h2>
+            <div class="breadcrumb">
+                <a href="examinations.html">Examinations</a> / <span>Past Papers</span>
+            </div>
+        </div>
+        
+        <div class="drive-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-file-pdf"></i> Past Papers Repository</h3>
+                <div>
+                    <button onclick="uploadPastPaper()" class="btn btn-primary btn-sm">
+                        <i class="fas fa-upload"></i> Upload Paper
+                    </button>
+                    <button onclick="location.href='examinations.html'" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                </div>
+            </div>
+            
+            <div class="filter-section" style="margin-bottom: 2rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 1rem; align-items: end;">
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <select class="form-select" id="filterSubject" onchange="filterPastPapers()">
+                            <option value="">All Subjects</option>
+                            <option value="Biology">Biology</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Integrated Science">Integrated Science</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Year</label>
+                        <select class="form-select" id="filterPaperYear" onchange="filterPastPapers()">
+                            <option value="">All Years</option>
+                            ${generateYearOptions()}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Exam Type</label>
+                        <select class="form-select" id="filterPaperType" onchange="filterPastPapers()">
+                            <option value="">All Types</option>
+                            <option value="CSEC">CSEC</option>
+                            <option value="CCSLC">CCSLC</option>
+                            <option value="Internal">Internal</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Paper</label>
+                        <select class="form-select" id="filterPaper" onchange="filterPastPapers()">
+                            <option value="">All Papers</option>
+                            <option value="Paper 1">Paper 1</option>
+                            <option value="Paper 2">Paper 2</option>
+                            <option value="Paper 3">Paper 3</option>
+                        </select>
+                    </div>
+                    <button onclick="resetPaperFilters()" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+            
+            ${papers.length === 0 ? 
+                '<div class="empty-state" style="text-align: center; padding: 3rem; color: #999;">' +
+                    '<i class="fas fa-file-excel" style="font-size: 4rem; margin-bottom: 1rem;"></i>' +
+                    '<p>No past papers uploaded yet.</p>' +
+                    '<button onclick="uploadPastPaper()" class="btn btn-primary">Upload First Paper</button>' +
+                '</div>' :
+                `<div class="papers-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                    ${papers.map(paper => `
+                        <div class="paper-card" style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-top: 4px solid ${getPaperColor(paper.subject)};">
+                            <div style="display: flex; align-items: start; margin-bottom: 1rem;">
+                                <div style="background: ${getPaperColor(paper.subject)}; color: white; padding: 0.5rem; border-radius: 6px; margin-right: 1rem;">
+                                    <i class="fas fa-file-pdf" style="font-size: 2rem;"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <h4 style="color: ${getPaperColor(paper.subject)}; margin-bottom: 0.5rem;">${paper.subject}</h4>
+                                    <p style="color: #666; margin: 0; font-size: 0.9rem;">${paper.examType} ${paper.year}</p>
+                                    <p style="color: #999; margin: 0; font-size: 0.85rem;">${paper.paper}</p>
+                                </div>
+                            </div>
+                            
+                            ${paper.hasMarkingScheme ? 
+                                '<div style="background: #f0f9f0; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; text-align: center;">' +
+                                    '<i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem;"></i>' +
+                                    '<span style="color: var(--success); font-size: 0.9rem;">Marking Scheme Available</span>' +
+                                '</div>' : ''
+                            }
+                            
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button onclick="viewPaper('${paper.id}')" class="btn btn-primary btn-sm" style="flex: 1;">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                <button onclick="downloadPaper('${paper.id}')" class="btn btn-success btn-sm" style="flex: 1;">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>`
+            }
+        </div>
+        
+        <div id="paper-modal"></div>
+    `;
+};
+
+window.uploadPastPaper = function() {
+    const modal = document.getElementById('paper-modal');
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-upload"></i> Upload Past Paper</h3>
+                    <button onclick="closeModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadPaperForm" onsubmit="savePastPaper(event)">
+                        <div class="form-group">
+                            <label class="form-label">Subject *</label>
+                            <select class="form-select" id="paperSubject" required>
+                                <option value="">-- Select Subject --</option>
+                                <option value="Biology">Biology</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Integrated Science">Integrated Science</option>
+                                <option value="Agricultural Science">Agricultural Science</option>
+                                <option value="Human & Social Biology">Human & Social Biology</option>
+                            </select>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label class="form-label">Exam Type *</label>
+                                <select class="form-select" id="paperExamType" required>
+                                    <option value="">-- Select Type --</option>
+                                    <option value="CSEC">CSEC</option>
+                                    <option value="CCSLC">CCSLC</option>
+                                    <option value="Internal">Internal Exam</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Year *</label>
+                                <select class="form-select" id="paperYear" required>
+                                    ${generateYearOptions()}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Paper *</label>
+                            <select class="form-select" id="paperNumber" required>
+                                <option value="">-- Select Paper --</option>
+                                <option value="Paper 1">Paper 1 (Multiple Choice)</option>
+                                <option value="Paper 2">Paper 2 (Essay)</option>
+                                <option value="Paper 3">Paper 3 (SBA/Alternative to SBA)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="hasMarkingScheme">
+                                Marking Scheme Available
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Upload Question Paper *</label>
+                            <div class="file-upload-area" style="border: 2px dashed var(--primary); border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer;" onclick="document.getElementById('paperFile').click()">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                                <p>Click to browse or drag and drop</p>
+                                <p style="font-size: 0.9rem; color: #666;">PDF only (Max 20MB)</p>
+                                <input type="file" id="paperFile" accept=".pdf" style="display: none;" required>
+                            </div>
+                            <div id="paperFileName" style="margin-top: 0.5rem; color: var(--success);"></div>
+                        </div>
+                        
+                        <div class="form-group" id="markingSchemeUpload" style="display: none;">
+                            <label class="form-label">Upload Marking Scheme</label>
+                            <div class="file-upload-area" style="border: 2px dashed var(--success); border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer;" onclick="document.getElementById('schemeFile').click()">
+                                <i class="fas fa-check-circle" style="font-size: 2rem; color: var(--success); margin-bottom: 0.5rem;"></i>
+                                <p style="font-size: 0.9rem;">Upload Marking Scheme (PDF)</p>
+                                <input type="file" id="schemeFile" accept=".pdf" style="display: none;">
+                            </div>
+                            <div id="schemeFileName" style="margin-top: 0.5rem; color: var(--success);"></div>
+                        </div>
+                        
+                        <div class="modal-actions">
+                            <button type="button" onclick="closeModal()" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload Paper
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('hasMarkingScheme').addEventListener('change', function() {
+        document.getElementById('markingSchemeUpload').style.display = this.checked ? 'block' : 'none';
+    });
+    
+    document.getElementById('paperFile').addEventListener('change', function() {
+        if (this.files.length > 0) {
+            document.getElementById('paperFileName').textContent = `Selected: ${this.files[0].name}`;
+        }
+    });
+    
+    document.getElementById('schemeFile').addEventListener('change', function() {
+        if (this.files.length > 0) {
+            document.getElementById('schemeFileName').textContent = `Selected: ${this.files[0].name}`;
+        }
+    });
+};
+
+window.savePastPaper = function(event) {
+    event.preventDefault();
+    
+    const newPaper = {
+        id: 'pp_' + Date.now(),
+        subject: document.getElementById('paperSubject').value,
+        examType: document.getElementById('paperExamType').value,
+        year: document.getElementById('paperYear').value,
+        paper: document.getElementById('paperNumber').value,
+        hasMarkingScheme: document.getElementById('hasMarkingScheme').checked,
+        uploadDate: new Date().toISOString(),
+        fileType: 'pdf'
+    };
+    
+    let papers = JSON.parse(localStorage.getItem('pastPapers')) || [];
+    papers.push(newPaper);
+    localStorage.setItem('pastPapers', JSON.stringify(papers));
+    
+    closeModal();
+    alert('✅ Past paper uploaded successfully!');
+    showPastPapers();
+};
+
+// ===== SBA RESOURCES SECTION =====
+window.showSBAResources = function() {
+    const content = document.querySelector('.content');
+    const sbaRecords = JSON.parse(localStorage.getItem('sbaRecords')) || [];
+    
+    content.innerHTML = `
+        <div class="content-header">
+            <h2>SBA Resources & Management</h2>
+            <div class="breadcrumb">
+                <a href="examinations.html">Examinations</a> / <span>SBA Resources</span>
+            </div>
+        </div>
+        
+        <div class="drive-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-clipboard-check"></i> School-Based Assessment Management</h3>
+                <button onclick="location.href='examinations.html'" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
+            
+            <div class="sba-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                <div class="action-card" onclick="showSBATemplates()">
+                    <i class="fas fa-file-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <h4>SBA Templates</h4>
+                    <p>Download templates by subject</p>
+                </div>
+                
+                <div class="action-card" onclick="showLabBooks()">
+                    <i class="fas fa-book" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                    <h4>Lab Books</h4>
+                    <p>Access lab book templates</p>
+                </div>
+                
+                <div class="action-card" onclick="uploadSBA()">
+                    <i class="fas fa-upload" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                    <h4>Upload SBA</h4>
+                    <p>Upload student SBA work</p>
+                </div>
+                
+                <div class="action-card" onclick="manageSBAScores()">
+                    <i class="fas fa-chart-bar" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                    <h4>SBA Scores</h4>
+                    <p>Manage student scores</p>
+                </div>
+                
+                <div class="action-card" onclick="viewSBAArchive()">
+                    <i class="fas fa-archive" style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                    <h4>SBA Archive</h4>
+                    <p>View past submissions</p>
+                </div>
+                
+                <div class="action-card" onclick="sbaGuidelines()">
+                    <i class="fas fa-info-circle" style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;"></i>
+                    <h4>Guidelines</h4>
+                    <p>SBA requirements & rules</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="sba-modal"></div>
+    `;
+};
+
+window.showSBATemplates = function() {
+    const modal = document.getElementById('sba-modal');
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeSBAModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-file-alt"></i> SBA Templates by Subject</h3>
+                    <button onclick="closeSBAModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="templates-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
+                        ${['Biology', 'Chemistry', 'Physics', 'Integrated Science', 'Agricultural Science', 'Human & Social Biology'].map(subject => `
+                            <div class="template-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; border-top: 4px solid ${getPaperColor(subject)};">
+                                <i class="fas fa-file-download" style="font-size: 3rem; color: ${getPaperColor(subject)}; margin-bottom: 1rem;"></i>
+                                <h4 style="color: ${getPaperColor(subject)}; margin-bottom: 0.5rem;">${subject}</h4>
+                                <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">CSEC SBA Template</p>
+                                <button onclick="downloadSBATemplate('${subject}')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+window.showLabBooks = function() {
+    const modal = document.getElementById('sba-modal');
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeSBAModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-book"></i> Laboratory Books by Subject</h3>
+                    <button onclick="closeSBAModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="templates-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
+                        ${['Biology', 'Chemistry', 'Physics'].map(subject => `
+                            <div class="template-card" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; border-top: 4px solid ${getPaperColor(subject)};">
+                                <i class="fas fa-book-open" style="font-size: 3rem; color: ${getPaperColor(subject)}; margin-bottom: 1rem;"></i>
+                                <h4 style="color: ${getPaperColor(subject)}; margin-bottom: 0.5rem;">${subject}</h4>
+                                <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">Lab Book Template</p>
+                                <button onclick="downloadLabBook('${subject}')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+window.uploadSBA = function() {
+    const modal = document.getElementById('sba-modal');
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeSBAModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-upload"></i> Upload Student SBA</h3>
+                    <button onclick="closeSBAModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadSBAForm" onsubmit="saveSBA(event)">
+                        <div class="form-group">
+                            <label class="form-label">Student Name *</label>
+                            <input type="text" class="form-input" id="sbaStudentName" required 
+                                   placeholder="Enter student full name">
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label class="form-label">Subject *</label>
+                                <select class="form-select" id="sbaSubject" required>
+                                    <option value="">-- Select Subject --</option>
+                                    <option value="Biology">Biology</option>
+                                    <option value="Chemistry">Chemistry</option>
+                                    <option value="Physics">Physics</option>
+                                    <option value="Integrated Science">Integrated Science</option>
+                                    <option value="Agricultural Science">Agricultural Science</option>
+                                    <option value="Human & Social Biology">Human & Social Biology</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Year *</label>
+                                <select class="form-select" id="sbaYear" required>
+                                    ${generateYearOptions()}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">SBA Title *</label>
+                            <input type="text" class="form-input" id="sbaTitle" required 
+                                   placeholder="e.g., Investigation of Photosynthesis">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Upload SBA Document *</label>
+                            <div class="file-upload-area" style="border: 2px dashed var(--primary); border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer;" onclick="document.getElementById('sbaFile').click()">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                                <p>Click to browse or drag and drop</p>
+                                <p style="font-size: 0.9rem; color: #666;">PDF, DOCX (Max 20MB)</p>
+                                <input type="file" id="sbaFile" accept=".pdf,.docx" style="display: none;" required>
+                            </div>
+                            <div id="sbaFileName" style="margin-top: 0.5rem; color: var(--success);"></div>
+                        </div>
+                        
+                        <div class="modal-actions">
+                            <button type="button" onclick="closeSBAModal()" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload SBA
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('sbaFile').addEventListener('change', function() {
+        if (this.files.length > 0) {
+            document.getElementById('sbaFileName').textContent = `Selected: ${this.files[0].name}`;
+        }
+    });
+};
+
+window.saveSBA = function(event) {
+    event.preventDefault();
+    
+    const newSBA = {
+        id: 'sba_' + Date.now(),
+        studentName: document.getElementById('sbaStudentName').value,
+        subject: document.getElementById('sbaSubject').value,
+        year: document.getElementById('sbaYear').value,
+        title: document.getElementById('sbaTitle').value,
+        uploadDate: new Date().toISOString(),
+        score: null
+    };
+    
+    let sbaRecords = JSON.parse(localStorage.getItem('sbaRecords')) || [];
+    sbaRecords.push(newSBA);
+    localStorage.setItem('sbaRecords', JSON.stringify(sbaRecords));
+    
+    closeSBAModal();
+    alert('✅ SBA uploaded successfully!');
+    showSBAResources();
+};
+
+window.manageSBAScores = function() {
+    const sbaRecords = JSON.parse(localStorage.getItem('sbaRecords')) || [];
+    const modal = document.getElementById('sba-modal');
+    
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeSBAModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 900px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-chart-bar"></i> Manage SBA Scores</h3>
+                    <button onclick="closeSBAModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="filter-section" style="margin-bottom: 1.5rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem;">
+                            <select class="form-select" id="filterSBASubject" onchange="filterSBAScores()">
+                                <option value="">All Subjects</option>
+                                <option value="Biology">Biology</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Physics">Physics</option>
+                            </select>
+                            <select class="form-select" id="filterSBAYear" onchange="filterSBAScores()">
+                                <option value="">All Years</option>
+                                ${generateYearOptions()}
+                            </select>
+                            <button onclick="exportSBAScores()" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                    
+                    ${sbaRecords.length === 0 ? 
+                        '<div class="empty-state" style="text-align: center; padding: 2rem; color: #999;">' +
+                            '<p>No SBA records found.</p>' +
+                        '</div>' :
+                        `<div class="table-container" style="max-height: 400px; overflow-y: auto;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead style="background: #f8f9fa; position: sticky; top: 0;">
+                                    <tr>
+                                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Student</th>
+                                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Subject</th>
+                                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Year</th>
+                                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Title</th>
+                                        <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #dee2e6;">Score</th>
+                                        <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #dee2e6;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${sbaRecords.map(sba => `
+                                        <tr style="border-bottom: 1px solid #eee;">
+                                            <td style="padding: 1rem;">${sba.studentName}</td>
+                                            <td style="padding: 1rem;">${sba.subject}</td>
+                                            <td style="padding: 1rem;">${sba.year}</td>
+                                            <td style="padding: 1rem;">${sba.title}</td>
+                                            <td style="padding: 1rem; text-align: center;">
+                                                <input type="number" class="form-input" value="${sba.score || ''}" 
+                                                       min="0" max="100" placeholder="0-100" 
+                                                       onchange="updateSBAScore('${sba.id}', this.value)"
+                                                       style="width: 80px; text-align: center;">
+                                            </td>
+                                            <td style="padding: 1rem; text-align: center;">
+                                                <button onclick="viewSBA('${sba.id}')" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>`
+                    }
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+window.updateSBAScore = function(sbaId, score) {
+    let sbaRecords = JSON.parse(localStorage.getItem('sbaRecords')) || [];
+    const sba = sbaRecords.find(s => s.id === sbaId);
+    if (sba) {
+        sba.score = parseInt(score);
+        localStorage.setItem('sbaRecords', JSON.stringify(sbaRecords));
+    }
+};
+
+// ===== CSEC RESOURCES & MANAGEMENT =====
+window.showCSECResources = function() {
+    const content = document.querySelector('.content');
+    
+    content.innerHTML = `
+        <div class="content-header">
+            <h2>CSEC Examination Management</h2>
+            <div class="breadcrumb">
+                <a href="examinations.html">Examinations</a> / <span>CSEC Resources</span>
+            </div>
+        </div>
+        
+        <div class="drive-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3><i class="fas fa-graduation-cap"></i> CSEC Examination Resources</h3>
+                <button onclick="location.href='examinations.html'" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
+            
+            <div class="csec-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+                <div class="action-card" onclick="manageCSECEntries()">
+                    <i class="fas fa-user-plus" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <h4>Manage Entries</h4>
+                    <p>Register students for CSEC</p>
+                </div>
+                
+                <div class="action-card" onclick="viewEntriesBySubject()">
+                    <i class="fas fa-list" style="font-size: 3rem; color: var(--info); margin-bottom: 1rem;"></i>
+                    <h4>Entries by Subject</h4>
+                    <p>View registration lists</p>
+                </div>
+                
+                <div class="action-card" onclick="uploadCSECTimetable()">
+                    <i class="fas fa-calendar-alt" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                    <h4>Exam Timetable</h4>
+                    <p>Upload CSEC timetables</p>
+                </div>
+                
+                <div class="action-card" onclick="uploadCSECResults()">
+                    <i class="fas fa-chart-line" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                    <h4>Results & Statistics</h4>
+                    <p>Upload broadsheets & stats</p>
+                </div>
+                
+                <div class="action-card" onclick="viewCSECResults()">
+                    <i class="fas fa-file-alt" style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                    <h4>View Results</h4>
+                    <p>Access past results</p>
+                </div>
+                
+                <div class="action-card" onclick="csecStatistics()">
+                    <i class="fas fa-chart-pie" style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;"></i>
+                    <h4>Statistics</h4>
+                    <p>Performance analytics</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="csec-modal"></div>
+    `;
+};
+
+window.manageCSECEntries = function() {
+    const modal = document.getElementById('csec-modal');
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeCSECModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 700px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-plus"></i> Register Student for CSEC</h3>
+                    <button onclick="closeCSECModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="csecEntryForm" onsubmit="saveCSECEntry(event)">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label class="form-label">Student First Name *</label>
+                                <input type="text" class="form-input" id="csecFirstName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Student Last Name *</label>
+                                <input type="text" class="form-input" id="csecLastName" required>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label class="form-label">Registration Number</label>
+                                <input type="text" class="form-input" id="csecRegNumber" 
+                                       placeholder="e.g., 12345678">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Examination Year *</label>
+                                <select class="form-select" id="csecExamYear" required>
+                                    ${generateYearOptions()}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Subjects Registered *</label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; background: #f8f9fa; padding: 1rem; border-radius: 6px;">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="csecSubject" value="Biology"> Biology
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="csecSubject" value="Chemistry"> Chemistry
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="csecSubject" value="Physics"> Physics
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="csecSubject" value="Integrated Science"> Integrated Science
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="csecSubject" value="Agricultural Science"> Agricultural Science
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="csecSubject" value="Human & Social Biology"> Human & Social Biology
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Additional Notes</label>
+                            <textarea class="form-textarea" id="csecNotes" rows="2" 
+                                      placeholder="Any special requirements or notes..."></textarea>
+                        </div>
+                        
+                        <div class="modal-actions">
+                            <button type="button" onclick="closeCSECModal()" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Register Student
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+window.saveCSECEntry = function(event) {
+    event.preventDefault();
+    
+    const subjects = Array.from(document.querySelectorAll('input[name="csecSubject"]:checked'))
+                          .map(cb => cb.value);
+    
+    if (subjects.length === 0) {
+        alert('Please select at least one subject');
+        return;
+    }
+    
+    const newEntry = {
+        id: 'csec_' + Date.now(),
+        firstName: document.getElementById('csecFirstName').value,
+        lastName: document.getElementById('csecLastName').value,
+        regNumber: document.getElementById('csecRegNumber').value,
+        examYear: document.getElementById('csecExamYear').value,
+        subjects: subjects,
+        notes: document.getElementById('csecNotes').value,
+        registrationDate: new Date().toISOString()
+    };
+    
+    let entries = JSON.parse(localStorage.getItem('csecEntries')) || [];
+    entries.push(newEntry);
+    localStorage.setItem('csecEntries', JSON.stringify(entries));
+    
+    closeCSECModal();
+    alert('✅ Student registered successfully!');
+    viewEntriesBySubject();
+};
+
+window.viewEntriesBySubject = function() {
+    const entries = JSON.parse(localStorage.getItem('csecEntries')) || [];
+    const modal = document.getElementById('csec-modal');
+    
+    // Group entries by subject
+    const entriesBySubject = {};
+    entries.forEach(entry => {
+        entry.subjects.forEach(subject => {
+            if (!entriesBySubject[subject]) {
+                entriesBySubject[subject] = [];
+            }
+            entriesBySubject[subject].push(entry);
+        });
+    });
+    
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeCSECModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 1000px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-list"></i> CSEC Entries by Subject</h3>
+                    <button onclick="closeCSECModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="filter-section" style="margin-bottom: 1.5rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem;">
+                            <select class="form-select" id="filterCSECSubject" onchange="filterCSECEntries()">
+                                <option value="">All Subjects</option>
+                                <option value="Biology">Biology</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Integrated Science">Integrated Science</option>
+                                <option value="Agricultural Science">Agricultural Science</option>
+                                <option value="Human & Social Biology">Human & Social Biology</option>
+                            </select>
+                            <select class="form-select" id="filterCSECYear" onchange="filterCSECEntries()">
+                                <option value="">All Years</option>
+                                ${generateYearOptions()}
+                            </select>
+                            <button onclick="exportCSECEntries()" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                    
+                    ${Object.keys(entriesBySubject).length === 0 ? 
+                        '<div class="empty-state" style="text-align: center; padding: 2rem; color: #999;">' +
+                            '<p>No CSEC entries found.</p>' +
+                            '<button onclick="manageCSECEntries()" class="btn btn-primary">Register Students</button>' +
+                        '</div>' :
+                        Object.keys(entriesBySubject).map(subject => `
+                            <div class="subject-section" style="margin-bottom: 2rem;">
+                                <div style="background: ${getPaperColor(subject)}; color: white; padding: 1rem; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                                    <h4 style="margin: 0;">${subject}</h4>
+                                    <span style="background: rgba(255,255,255,0.2); padding: 0.25rem 0.75rem; border-radius: 20px;">
+                                        ${entriesBySubject[subject].length} students
+                                    </span>
+                                </div>
+                                <div style="background: white; border: 1px solid #dee2e6; border-top: none; border-radius: 0 0 8px 8px;">
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <thead style="background: #f8f9fa;">
+                                            <tr>
+                                                <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #dee2e6;">#</th>
+                                                <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #dee2e6;">Name</th>
+                                                <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #dee2e6;">Reg Number</th>
+                                                <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #dee2e6;">Year</th>
+                                                <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid #dee2e6;">All Subjects</th>
+                                                <th style="padding: 0.75rem; text-align: center; border-bottom: 1px solid #dee2e6;">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${entriesBySubject[subject].map((entry, index) => `
+                                                <tr style="border-bottom: 1px solid #eee;">
+                                                    <td style="padding: 0.75rem;">${index + 1}</td>
+                                                    <td style="padding: 0.75rem;">${entry.firstName} ${entry.lastName}</td>
+                                                    <td style="padding: 0.75rem;">${entry.regNumber || 'N/A'}</td>
+                                                    <td style="padding: 0.75rem;">${entry.examYear}</td>
+                                                    <td style="padding: 0.75rem; font-size: 0.85rem;">${entry.subjects.join(', ')}</td>
+                                                    <td style="padding: 0.75rem; text-align: center;">
+                                                        <button onclick="editCSECEntry('${entry.id}')" class="btn btn-primary btn-sm">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button onclick="deleteCSECEntry('${entry.id}')" class="btn btn-danger btn-sm">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+window.uploadCSECTimetable = function() {
+    const modal = document.getElementById('csec-modal');
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeCSECModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-calendar-alt"></i> Upload CSEC Examination Timetable</h3>
+                    <button onclick="closeCSECModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="csecTimetableForm" onsubmit="saveCSECTimetable(event)">
+                        <div class="form-group">
+                            <label class="form-label">Subject *</label>
+                            <select class="form-select" id="csecTTSubject" required>
+                                <option value="">-- Select Subject --</option>
+                                <option value="Biology">Biology</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Integrated Science">Integrated Science</option>
+                                <option value="Agricultural Science">Agricultural Science</option>
+                                <option value="Human & Social Biology">Human & Social Biology</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Examination Year *</label>
+                            <select class="form-select" id="csecTTYear" required>
+                                ${generateYearOptions()}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Examination Session *</label>
+                            <select class="form-select" id="csecSession" required>
+                                <option value="">-- Select Session --</option>
+                                <option value="May/June">May/June</option>
+                                <option value="January">January</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Upload Timetable *</label>
+                            <div class="file-upload-area" style="border: 2px dashed var(--primary); border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer;" onclick="document.getElementById('csecTTFile').click()">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                                <p>Click to browse or drag and drop</p>
+                                <p style="font-size: 0.9rem; color: #666;">PDF, DOCX, XLSX (Max 10MB)</p>
+                                <input type="file" id="csecTTFile" accept=".pdf,.docx,.xlsx" style="display: none;" required>
+                            </div>
+                            <div id="csecTTFileName" style="margin-top: 0.5rem; color: var(--success);"></div>
+                        </div>
+                        
+                        <div class="modal-actions">
+                            <button type="button" onclick="closeCSECModal()" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload Timetable
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('csecTTFile').addEventListener('change', function() {
+        if (this.files.length > 0) {
+            document.getElementById('csecTTFileName').textContent = `Selected: ${this.files[0].name}`;
+        }
+    });
+};
+
+window.saveCSECTimetable = function(event) {
+    event.preventDefault();
+    
+    const newTimetable = {
+        id: 'csectt_' + Date.now(),
+        subject: document.getElementById('csecTTSubject').value,
+        year: document.getElementById('csecTTYear').value,
+        session: document.getElementById('csecSession').value,
+        uploadDate: new Date().toISOString(),
+        type: 'csec_timetable'
+    };
+    
+    let timetables = JSON.parse(localStorage.getItem('csecTimetables')) || [];
+    timetables.push(newTimetable);
+    localStorage.setItem('csecTimetables', JSON.stringify(timetables));
+    
+    closeCSECModal();
+    alert('✅ CSEC timetable uploaded successfully!');
+};
+
+window.uploadCSECResults = function() {
+    const modal = document.getElementById('csec-modal');
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeCSECModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-chart-line"></i> Upload CSEC Results</h3>
+                    <button onclick="closeCSECModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="csecResultsForm" onsubmit="saveCSECResults(event)">
+                        <div class="form-group">
+                            <label class="form-label">Result Type *</label>
+                            <select class="form-select" id="resultType" required>
+                                <option value="">-- Select Type --</option>
+                                <option value="broadsheet">Broadsheet</option>
+                                <option value="statistics">Statistics Report</option>
+                                <option value="analysis">Performance Analysis</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Subject *</label>
+                            <select class="form-select" id="resultSubject" required>
+                                <option value="">-- Select Subject --</option>
+                                <option value="Biology">Biology</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Integrated Science">Integrated Science</option>
+                                <option value="Agricultural Science">Agricultural Science</option>
+                                <option value="Human & Social Biology">Human & Social Biology</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Examination Year *</label>
+                            <select class="form-select" id="resultYear" required>
+                                ${generateYearOptions()}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Upload Results File *</label>
+                            <div class="file-upload-area" style="border: 2px dashed var(--success); border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer;" onclick="document.getElementById('resultFile').click()">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: var(--success); margin-bottom: 1rem;"></i>
+                                <p>Click to browse or drag and drop</p>
+                                <p style="font-size: 0.9rem; color: #666;">PDF, XLSX (Max 20MB)</p>
+                                <input type="file" id="resultFile" accept=".pdf,.xlsx" style="display: none;" required>
+                            </div>
+                            <div id="resultFileName" style="margin-top: 0.5rem; color: var(--success);"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Summary Notes</label>
+                            <textarea class="form-textarea" id="resultNotes" rows="3" 
+                                      placeholder="Key highlights, pass rates, notable achievements..."></textarea>
+                        </div>
+                        
+                        <div class="modal-actions">
+                            <button type="button" onclick="closeCSECModal()" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload Results
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('resultFile').addEventListener('change', function() {
+        if (this.files.length > 0) {
+            document.getElementById('resultFileName').textContent = `Selected: ${this.files[0].name}`;
+        }
+    });
+};
+
+window.saveCSECResults = function(event) {
+    event.preventDefault();
+    
+    const newResult = {
+        id: 'result_' + Date.now(),
+        type: document.getElementById('resultType').value,
+        subject: document.getElementById('resultSubject').value,
+        year: document.getElementById('resultYear').value,
+        notes: document.getElementById('resultNotes').value,
+        uploadDate: new Date().toISOString()
+    };
+    
+    let results = JSON.parse(localStorage.getItem('csecResults')) || [];
+    results.push(newResult);
+    localStorage.setItem('csecResults', JSON.stringify(results));
+    
+    closeCSECModal();
+    alert('✅ CSEC results uploaded successfully!');
+    viewCSECResults();
+};
+
+window.viewCSECResults = function() {
+    const results = JSON.parse(localStorage.getItem('csecResults')) || [];
+    const modal = document.getElementById('csec-modal');
+    
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeCSECModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 1000px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-file-alt"></i> CSEC Results Archive</h3>
+                    <button onclick="closeCSECModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="filter-section" style="margin-bottom: 1.5rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                            <select class="form-select" id="filterResultSubject" onchange="filterResults()">
+                                <option value="">All Subjects</option>
+                                <option value="Biology">Biology</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Physics">Physics</option>
+                            </select>
+                            <select class="form-select" id="filterResultYear" onchange="filterResults()">
+                                <option value="">All Years</option>
+                                ${generateYearOptions()}
+                            </select>
+                            <select class="form-select" id="filterResultType" onchange="filterResults()">
+                                <option value="">All Types</option>
+                                <option value="broadsheet">Broadsheet</option>
+                                <option value="statistics">Statistics</option>
+                                <option value="analysis">Analysis</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    ${results.length === 0 ? 
+                        '<div class="empty-state" style="text-align: center; padding: 2rem; color: #999;">' +
+                            '<p>No results uploaded yet.</p>' +
+                            '<button onclick="uploadCSECResults()" class="btn btn-primary">Upload Results</button>' +
+                        '</div>' :
+                        `<div class="results-grid" style="display: grid; gap: 1rem;">
+                            ${results.map(result => `
+                                <div class="result-card" style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid ${getPaperColor(result.subject)}; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                                        <div style="flex: 1;">
+                                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                                <h4 style="color: ${getPaperColor(result.subject)}; margin: 0;">${result.subject}</h4>
+                                                <span style="background: ${getResultTypeColor(result.type)}; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem;">
+                                                    ${result.type}
+                                                </span>
+                                            </div>
+                                            <p style="color: #666; margin-bottom: 0.5rem;">
+                                                <strong>Year:</strong> ${result.year} • 
+                                                <strong>Uploaded:</strong> ${new Date(result.uploadDate).toLocaleDateString()}
+                                            </p>
+                                            ${result.notes ? 
+                                                `<p style="color: #999; font-size: 0.9rem; margin-top: 0.5rem;">${result.notes}</p>` : 
+                                                ''
+                                            }
+                                        </div>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <button onclick="viewResult('${result.id}')" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-eye"></i> View
+                                            </button>
+                                            <button onclick="downloadResult('${result.id}')" class="btn btn-success btn-sm">
+                                                <i class="fas fa-download"></i> Download
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>`
+                    }
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+window.csecStatistics = function() {
+    const results = JSON.parse(localStorage.getItem('csecResults')) || [];
+    const entries = JSON.parse(localStorage.getItem('csecEntries')) || [];
+    
+    const modal = document.getElementById('csec-modal');
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeCSECModal()">
+            <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 1000px;">
+                <div class="modal-header">
+                    <h3><i class="fas fa-chart-pie"></i> CSEC Performance Statistics</h3>
+                    <button onclick="closeCSECModal()" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="stats-overview" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                        <div class="stat-card" style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">${entries.length}</div>
+                            <div style="color: #666;">Total Entries</div>
+                        </div>
+                        <div class="stat-card" style="background: #f0f9f0; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--success);">${results.filter(r => r.type === 'broadsheet').length}</div>
+                            <div style="color: #666;">Results Uploaded</div>
+                        </div>
+                        <div class="stat-card" style="background: #fffbf0; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: var(--warning);">6</div>
+                            <div style="color: #666;">Subjects Offered</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; text-align: center;">
+                        <i class="fas fa-chart-bar" style="font-size: 4rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <p style="color: #666;">Detailed statistics and performance charts would be displayed here</p>
+                        <p style="color: #999; font-size: 0.9rem;">Upload more results to view comprehensive analytics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+};
+
+// ===== HELPER FUNCTIONS =====
+
+window.closeModal = function() {
+    const modals = ['timetable-modal', 'paper-modal'];
+    modals.forEach(modalId => {
+        const modal = document.getElementById(modalId);
+        if (modal) modal.innerHTML = '';
+    });
+};
+
+window.closeSBAModal = function() {
+    const modal = document.getElementById('sba-modal');
+    if (modal) modal.innerHTML = '';
+};
+
+window.closeCSECModal = function() {
+    const modal = document.getElementById('csec-modal');
+    if (modal) modal.innerHTML = '';
+};
+
+window.generateYearOptions = function() {
+    const currentYear = new Date().getFullYear();
+    let options = '';
+    for (let i = currentYear + 1; i >= currentYear - 10; i--) {
+        options += `<option value="${i}">${i}</option>`;
+    }
+    return options;
+};
+
+window.getPaperColor = function(subject) {
+    const colors = {
+        'Biology': '#10b981',
+        'Chemistry': '#3b82f6',
+        'Physics': '#8b5cf6',
+        'Integrated Science': '#f59e0b',
+        'Agricultural Science': '#84cc16',
+        'Human & Social Biology': '#ec4899'
+    };
+    return colors[subject] || '#6366f1';
+};
+
+window.getResultTypeColor = function(type) {
+    const colors = {
+        'broadsheet': '#3b82f6',
+        'statistics': '#10b981',
+        'analysis': '#f59e0b'
+    };
+    return colors[type] || '#6366f1';
+};
+
+// Download and view functions
+window.viewTimetable = function(id) {
+    alert(`Viewing timetable: ${id}`);
+};
+
+window.downloadTimetable = function(id) {
+    alert(`Downloading timetable: ${id}`);
+};
+
+window.deleteTimetable = function(id) {
+    if (confirm('Are you sure you want to delete this timetable?')) {
+        let timetables = JSON.parse(localStorage.getItem('examTimetables')) || [];
+        timetables = timetables.filter(tt => tt.id !== id);
+        localStorage.setItem('examTimetables', JSON.stringify(timetables));
+        alert('✅ Timetable deleted successfully!');
+        showExamTimetables();
+    }
+};
+
+window.viewPaper = function(id) {
+    alert(`Viewing past paper: ${id}`);
+};
+
+window.downloadPaper = function(id) {
+    alert(`Downloading past paper: ${id}`);
+};
+
+window.downloadSBATemplate = function(subject) {
+    alert(`Downloading SBA template for ${subject}`);
+};
+
+window.downloadLabBook = function(subject) {
+    alert(`Downloading lab book for ${subject}`);
+};
+
+window.viewSBA = function(id) {
+    alert(`Viewing SBA: ${id}`);
+};
+
+window.viewSBAArchive = function() {
+    alert('Opening SBA archive...');
+};
+
+window.sbaGuidelines = function() {
+    alert('Opening SBA guidelines...');
+};
+
+window.editCSECEntry = function(id) {
+    alert(`Editing CSEC entry: ${id}`);
+};
+
+window.deleteCSECEntry = function(id) {
+    if (confirm('Are you sure you want to delete this entry?')) {
+        let entries = JSON.parse(localStorage.getItem('csecEntries')) || [];
+        entries = entries.filter(e => e.id !== id);
+        localStorage.setItem('csecEntries', JSON.stringify(entries));
+        alert('✅ Entry deleted successfully!');
+        viewEntriesBySubject();
+    }
+};
+
+window.viewResult = function(id) {
+    alert(`Viewing result: ${id}`);
+};
+
+window.downloadResult = function(id) {
+    alert(`Downloading result: ${id}`);
+};
+
+// Filter functions
+window.filterTimetables = function() {
+    console.log('Filtering timetables...');
+};
+
+window.reset
+
+
